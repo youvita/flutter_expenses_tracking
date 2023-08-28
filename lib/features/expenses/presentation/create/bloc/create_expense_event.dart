@@ -46,7 +46,7 @@ class CurrencyChanged extends CreateExpenseEvent {
 class AmountChanged extends CreateExpenseEvent {
   const AmountChanged(this.amount);
 
-  final String amount;
+  final Double amount;
 
   @override
   List<Object> get props => [amount];
