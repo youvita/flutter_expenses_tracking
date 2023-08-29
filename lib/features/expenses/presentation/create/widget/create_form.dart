@@ -15,6 +15,8 @@ class CreateForm extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          _ExpenseTypeSelected(),
+          _IssueDateSelected(),
           _CategoryInput(),
           _SaveButton()
         ],
@@ -28,22 +30,35 @@ class _ExpenseTypeSelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateExpenseBloc, CreateExpenseState>(
-      listener: (context, state) {
-
-      }
+    return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
+        builder: (context, state) {
+          return ElevatedButton(onPressed: () {
+            context.read<CreateExpenseBloc>().add(const ExpensesTypeChanged('1'));
+          }, child: const Text('Expense'));
+        }
     );
   }
 
 }
 
 class _IssueDateSelected extends StatelessWidget {
+  DateTime dateTime = DateTime(2023, 08, 29);
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateExpenseBloc, CreateExpenseState>(
-        listener: (context, state) {
+    return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
+        builder: (context, state) {
+          return ElevatedButton(onPressed: () async {
+            DateTime? newDateTime = await showDatePicker(
+                context: context,
+                initialDate: dateTime,
+                firstDate: DateTime(2023),
+                lastDate: DateTime(2100));
 
+            if (newDateTime == null) return;
+
+            // context.read<CreateExpenseBloc>().add(IssueDateChanged(newDateTime))
+          }, child: const Text('Select Date'));
         }
     );
   }

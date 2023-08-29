@@ -11,7 +11,7 @@ class CreateExpenseState extends Equatable {
 
   CreateExpenseState copyWith({
     String? expenseType,
-    String? issueDate,
+    DateTime? issueDate,
     String? category,
     String? currency,
     Double? amount
@@ -26,7 +26,7 @@ class CreateExpenseState extends Equatable {
   }
 
   final String? expenseType;
-  final String? issueDate;
+  final DateTime? issueDate;
   final String? category;
   final String? currency;
   final Double? amount;

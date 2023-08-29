@@ -2,12 +2,19 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
+
+import '../../../../../db/expenses_database.dart';
 
 part 'create_expense_event.dart';
 part 'create_expense_state.dart';
 
 class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
+
+  final _db = ExpensesDatabase();
+
   CreateExpenseBloc() : super(CreateExpenseInitial()) {
+    _db.init();
     on<CreateExpenseEvent>((event, emit) {
       on<ExpensesTypeChanged>(_onExpenseTypeChanged);
       on<IssueDateChanged>(_onIssueDateChanged);
@@ -77,6 +84,15 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       SaveEvent event,
       Emitter<CreateExpenseState> emit,
       ) async {
-    print(state.category);
+
+    // row to insert
+    Map<String, dynamic> row = {
+      ExpensesDatabase.columnExpenseType: state.expenseType,
+      ExpensesDatabase.columnIssueDate: state.issueDate?.toIso8601String(),
+      ExpensesDatabase.columnCategory: state.category,
+      ExpensesDatabase.columnCurrency: state.currency,
+      ExpensesDatabase.columnAmount: state.amount,
+    };
+    _db.insert(row);
   }
 }
