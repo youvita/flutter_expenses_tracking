@@ -54,6 +54,10 @@ dependencies:
   # implementation and to access the concrete implementation from everywhere in your App
   get_it: ^7.6.0
 
+  # Date format
+  # https://api.flutter.dev/flutter/intl/DateFormat-class.html
+  intl: ^0.18.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

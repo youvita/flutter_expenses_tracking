@@ -19,19 +19,20 @@ class ExpensesTypeChanged extends CreateExpenseEvent {
 class IssueDateChanged extends CreateExpenseEvent {
   const IssueDateChanged(this.issueDate);
 
-  final String issueDate;
+  final DateTime issueDate;
 
   @override
   List<Object> get props => [issueDate];
 }
 
 class CategoryChanged extends CreateExpenseEvent {
-  const CategoryChanged(this.category);
+  const CategoryChanged(this.image, this.category);
 
+  final String image;
   final String category;
 
   @override
-  List<Object> get props => [category];
+  List<Object> get props => [image, category];
 }
 
 class CurrencyChanged extends CreateExpenseEvent {
@@ -46,10 +47,19 @@ class CurrencyChanged extends CreateExpenseEvent {
 class AmountChanged extends CreateExpenseEvent {
   const AmountChanged(this.amount);
 
-  final String amount;
+  final double amount;
 
   @override
   List<Object> get props => [amount];
+}
+
+class RemarkChanged extends CreateExpenseEvent {
+  const RemarkChanged(this.remark);
+
+  final String remark;
+
+  @override
+  List<Object> get props => [remark];
 }
 
 class SaveEvent extends CreateExpenseEvent {

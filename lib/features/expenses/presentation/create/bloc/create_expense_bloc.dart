@@ -2,8 +2,10 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecase.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../../db/expenses_database.dart';
 import '../../../data/model/expenses.dart';
@@ -23,6 +25,7 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       on<CategoryChanged>(_onCategoryChanged);
       on<CurrencyChanged>(_onCurrencyChanged);
       on<AmountChanged>(_onAmountChanged);
+      on<RemarkChanged>(_onRemarkChanged);
       on<SaveEvent>(_onSaved);
     });
   }
@@ -33,7 +36,7 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       ) {
     emit(
       state.copyWith(
-        expenseType: event.expensesType
+        statusType: event.expensesType
       )
     );
   }
@@ -55,6 +58,7 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       ) {
     emit(
         state.copyWith(
+            categoryImage: event.image,
             category: event.category
         )
     );
@@ -66,7 +70,7 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       ) {
     emit(
         state.copyWith(
-            currency: event.currency
+            currencyCode: event.currency
         )
     );
   }
@@ -82,17 +86,31 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
     );
   }
 
+  void _onRemarkChanged(
+      RemarkChanged event,
+      Emitter<CreateExpenseState> emit,
+      ) {
+    emit(
+        state.copyWith(
+            remark: event.remark
+        )
+    );
+  }
+
   Future<void> _onSaved(
       SaveEvent event,
       Emitter<CreateExpenseState> emit,
       ) async {
 
       var expenses = Expenses(
-          expenseType: state.expenseType,
-          issueDate: state.issueDate,
+          statusType: state.statusType,
+          issueDate: DateFormat(DateUtil.YEAR_MONTH_DAY_TIME).format(state.issueDate ?? DateTime.now()),
+          createDate: DateFormat(DateUtil.YEAR_MONTH_DAY_TIME).format(DateTime.now()),
+          categoryImage: state.categoryImage,
           category: state.category,
-          currency: state.currency,
-          amount: state.amount.toString()
+          currencyCode: state.currencyCode,
+          amount: state.amount.toString(),
+          remark: state.remark
       );
       await _useCase.call(expenses);
   }

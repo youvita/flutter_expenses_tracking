@@ -4,32 +4,50 @@ import 'package:expenses_tracking/db/expenses_database.dart';
 
 class Expenses {
 
-  final String? expenseType;
+  final String? statusType;
   final String? issueDate;
+  final String? createDate;
+  final String? categoryImage;
   final String? category;
-  final String? currency;
+  final String? currencyCode;
   final String? amount;
+  final String? remark;
 
   const Expenses({
-    this.expenseType,
+    this.statusType,
     this.issueDate,
+    this.createDate,
+    this.categoryImage,
     this.category,
-    this.currency,
+    this.currencyCode,
     this.amount,
+    this.remark
   });
 
   Map<String, dynamic> toMap() {
     return {
-      ExpensesDatabase.columnExpenseType: expenseType,
+      ExpensesDatabase.columnStatusType: statusType,
       ExpensesDatabase.columnIssueDate: issueDate,
+      ExpensesDatabase.columnCreateDate: createDate,
+      ExpensesDatabase.columnCategoryImage: categoryImage,
       ExpensesDatabase.columnCategory: category,
-      ExpensesDatabase.columnCurrency: currency,
+      ExpensesDatabase.columnCurrency: currencyCode,
       ExpensesDatabase.columnAmount: amount,
+      ExpensesDatabase.columnRemark: remark
     };
   }
 
   @override
   String toString() {
-    return 'Expenses{expenseType: $expenseType, issueDate: $issueDate, category: $category, currency: $currency, amount: $amount}';
+    return 'Expenses { '
+        'statusType: $statusType, '
+        'issueDate: $issueDate, '
+        'createDate: $createDate, '
+        'categoryImage: $categoryImage, '
+        'category: $category, '
+        'currencyCode: $currencyCode, '
+        'amount: $amount, '
+        'remark: $remark'
+        '}';
   }
 }

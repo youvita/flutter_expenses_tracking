@@ -9,11 +9,14 @@ class ExpensesDatabase {
   static const _databaseVersion = 1;
   static const table = 'tbExpenses';
   static const columnID = '_id';
-  static const columnExpenseType = 'expense_type';
-  static const columnIssueDate = 'issue_date';
+  static const columnStatusType = 'status_type';
+  static const columnIssueDate = 'issue_datetime';
+  static const columnCreateDate = 'create_datetime';
+  static const columnCategoryImage = 'category_image';
   static const columnCategory = 'category';
-  static const columnCurrency = 'currency';
+  static const columnCurrency = 'currency_code';
   static const columnAmount = 'amount';
+  static const columnRemark = 'remark';
 
   late Database _db;
 
@@ -23,7 +26,7 @@ class ExpensesDatabase {
     _db = await openDatabase(
       path,
       version: _databaseVersion,
-      onCreate: _onCreate,
+      onCreate: _onCreate
     );
   }
 
@@ -31,11 +34,14 @@ class ExpensesDatabase {
     await db.execute(''' 
       CREATE TABLE $table (
         $columnID INTEGER PRIMARY KEY autoincrement,
-        $columnExpenseType TEXT,
+        $columnStatusType TEXT,
         $columnIssueDate TEXT,
+        $columnCreateDate TEXT,
+        $columnCategoryImage TEXT,
         $columnCategory TEXT,
         $columnCurrency TEXT,
-        $columnAmount TEXT
+        $columnAmount TEXT,
+        $columnRemark TEXT
       )
     ''');
   }

@@ -2,37 +2,45 @@ part of 'create_expense_bloc.dart';
 
 class CreateExpenseState extends Equatable {
   const CreateExpenseState({
-    this.expenseType,
+    this.statusType,
     this.issueDate,
+    this.categoryImage,
     this.category,
-    this.currency,
+    this.currencyCode,
     this.amount,
+    this.remark
   });
 
   CreateExpenseState copyWith({
-    String? expenseType,
-    String? issueDate,
+    String? statusType,
+    DateTime? issueDate,
+    String? categoryImage,
     String? category,
-    String? currency,
-    String? amount
+    String? currencyCode,
+    double? amount,
+    String? remark
   }) {
     return CreateExpenseState(
-      expenseType: expenseType ?? this.expenseType,
+      statusType: statusType ?? this.statusType,
       issueDate: issueDate ?? this.issueDate,
+      categoryImage: categoryImage ?? this.categoryImage,
       category: category ?? this.category,
-      currency: currency ?? this.currency,
-      amount: amount ?? this.amount
+      currencyCode: currencyCode ?? this.currencyCode,
+      amount: amount ?? this.amount,
+      remark: remark ?? this.remark
     );
   }
 
-  final String? expenseType;
-  final String? issueDate;
+  final String? statusType;
+  final DateTime? issueDate;
+  final String? categoryImage;
   final String? category;
-  final String? currency;
-  final String? amount;
+  final String? currencyCode;
+  final double? amount;
+  final String? remark;
 
   @override
-  List<Object?> get props => [expenseType, issueDate, category, currency, amount];
+  List<Object?> get props => [statusType, issueDate, categoryImage, category, currencyCode, amount, remark];
 }
 
 class CreateExpenseInitial extends CreateExpenseState {}
