@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,19 +10,20 @@ class CreateForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateExpenseBloc, CreateExpenseState>(
-      listener: (context, state) {
-
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          _ExpenseTypeSelected(),
-          _IssueDateSelected(),
-          _CategoryInput(),
-          _SaveButton()
-        ],
-      ),
+    return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
+        builder: (context, state) {
+          return Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              _ExpenseTypeSelected(),
+              _IssueDateSelected(),
+              _CategoryInput(),
+              _CurrencySelected(),
+              _AmountInput(),
+              _SaveButton()
+            ],
+          );
+        }
     );
   }
 
@@ -42,23 +45,14 @@ class _ExpenseTypeSelected extends StatelessWidget {
 }
 
 class _IssueDateSelected extends StatelessWidget {
-  DateTime dateTime = DateTime(2023, 08, 29);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
         builder: (context, state) {
-          return ElevatedButton(onPressed: () async {
-            DateTime? newDateTime = await showDatePicker(
-                context: context,
-                initialDate: dateTime,
-                firstDate: DateTime(2023),
-                lastDate: DateTime(2100));
-
-            if (newDateTime == null) return;
-
-            // context.read<CreateExpenseBloc>().add(IssueDateChanged(newDateTime))
-          }, child: const Text('Select Date'));
+          return ElevatedButton(onPressed: () {
+            context.read<CreateExpenseBloc>().add(IssueDateChanged(DateTime.now().toIso8601String()));
+          }, child: const Text('DateTime'));
         }
     );
   }
@@ -77,6 +71,41 @@ class _CategoryInput extends StatelessWidget {
                 context.read<CreateExpenseBloc>().add(CategoryChanged(category)),
             decoration: const InputDecoration(
               labelText: 'category'
+            ),
+          );
+        }
+    );
+  }
+
+}
+
+class _CurrencySelected extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
+        builder: (context, state) {
+          return ElevatedButton(onPressed: () {
+            context.read<CreateExpenseBloc>().add(const CurrencyChanged('USD'));
+          }, child: const Text('USD'));
+        }
+    );
+  }
+
+}
+
+class _AmountInput extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreateExpenseBloc, CreateExpenseState>(
+        builder: (context, state) {
+          return TextField(
+            key: const Key('createForm_amountInput_textField'),
+            onChanged: (amount) =>
+                context.read<CreateExpenseBloc>().add(AmountChanged(amount)),
+            decoration: const InputDecoration(
+                labelText: 'amount'
             ),
           );
         }

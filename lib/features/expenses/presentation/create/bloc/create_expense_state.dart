@@ -11,10 +11,10 @@ class CreateExpenseState extends Equatable {
 
   CreateExpenseState copyWith({
     String? expenseType,
-    DateTime? issueDate,
+    String? issueDate,
     String? category,
     String? currency,
-    Double? amount
+    String? amount
   }) {
     return CreateExpenseState(
       expenseType: expenseType ?? this.expenseType,
@@ -26,10 +26,10 @@ class CreateExpenseState extends Equatable {
   }
 
   final String? expenseType;
-  final DateTime? issueDate;
+  final String? issueDate;
   final String? category;
   final String? currency;
-  final Double? amount;
+  final String? amount;
 
   @override
   List<Object?> get props => [expenseType, issueDate, category, currency, amount];

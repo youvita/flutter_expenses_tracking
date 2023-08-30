@@ -2,19 +2,21 @@ import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecase.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../../../db/expenses_database.dart';
+import '../../../data/model/expenses.dart';
 
 part 'create_expense_event.dart';
 part 'create_expense_state.dart';
 
 class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
 
-  final _db = ExpensesDatabase();
 
-  CreateExpenseBloc() : super(CreateExpenseInitial()) {
-    _db.init();
+  final CreateUseCase _useCase;
+
+  CreateExpenseBloc({required CreateUseCase useCase}) : _useCase = useCase, super(CreateExpenseInitial()) {
     on<CreateExpenseEvent>((event, emit) {
       on<ExpensesTypeChanged>(_onExpenseTypeChanged);
       on<IssueDateChanged>(_onIssueDateChanged);
@@ -85,14 +87,13 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       Emitter<CreateExpenseState> emit,
       ) async {
 
-    // row to insert
-    Map<String, dynamic> row = {
-      ExpensesDatabase.columnExpenseType: state.expenseType,
-      ExpensesDatabase.columnIssueDate: state.issueDate?.toIso8601String(),
-      ExpensesDatabase.columnCategory: state.category,
-      ExpensesDatabase.columnCurrency: state.currency,
-      ExpensesDatabase.columnAmount: state.amount,
-    };
-    _db.insert(row);
+      var expenses = Expenses(
+          expenseType: state.expenseType,
+          issueDate: state.issueDate,
+          category: state.category,
+          currency: state.currency,
+          amount: state.amount.toString()
+      );
+      await _useCase.call(expenses);
   }
 }

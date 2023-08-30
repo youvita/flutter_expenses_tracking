@@ -1,6 +1,7 @@
 
+import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class ExpensesDatabase {
@@ -17,8 +18,8 @@ class ExpensesDatabase {
   late Database _db;
 
   Future<void> init() async {
-    final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, _databaseName);
+    WidgetsFlutterBinding.ensureInitialized();
+    final path = join(await getDatabasesPath(), _databaseName);
     _db = await openDatabase(
       path,
       version: _databaseVersion,
@@ -30,17 +31,18 @@ class ExpensesDatabase {
     await db.execute(''' 
       CREATE TABLE $table (
         $columnID INTEGER PRIMARY KEY autoincrement,
-        $columnExpenseType TEXT NOT NULL,
-        $columnIssueDate TEXT NOT NULL,
-        $columnCategory TEXT NOT NULL,
-        $columnCurrency TEXT NOT NULL,
-        $columnAmount TEXT NOT NULL
+        $columnExpenseType TEXT,
+        $columnIssueDate TEXT,
+        $columnCategory TEXT,
+        $columnCurrency TEXT,
+        $columnAmount TEXT
       )
     ''');
   }
 
   // inserted row.
-  Future<int> insert(Map<String, dynamic> row) async {
-    return await _db.insert(table, row);
+  Future<int> insert(Expenses expenses) async {
+    return await _db.insert(table, expenses.toMap());
   }
+
 }

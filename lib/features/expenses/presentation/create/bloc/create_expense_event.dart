@@ -19,7 +19,7 @@ class ExpensesTypeChanged extends CreateExpenseEvent {
 class IssueDateChanged extends CreateExpenseEvent {
   const IssueDateChanged(this.issueDate);
 
-  final DateTime issueDate;
+  final String issueDate;
 
   @override
   List<Object> get props => [issueDate];
@@ -46,7 +46,7 @@ class CurrencyChanged extends CreateExpenseEvent {
 class AmountChanged extends CreateExpenseEvent {
   const AmountChanged(this.amount);
 
-  final Double amount;
+  final String amount;
 
   @override
   List<Object> get props => [amount];

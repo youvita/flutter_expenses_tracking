@@ -2,6 +2,7 @@ import 'package:expenses_tracking/features/expenses/presentation/create/bloc/cre
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/create_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expenses_tracking/di/injection_container.dart';
 
 class CreatePage extends StatelessWidget {
   const CreatePage({super.key});
@@ -17,9 +18,7 @@ class CreatePage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(12),
         child: BlocProvider(
-          create: (context) {
-            return CreateExpenseBloc();
-          },
+          create: (_) => sl<CreateExpenseBloc>(),
           child: const CreateForm(),
         ),
       ),
