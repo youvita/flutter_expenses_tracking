@@ -1,7 +1,7 @@
 
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 
-import '../../../../db/expenses_database.dart';
+import '../../../../core/db/expenses_database.dart';
 
 abstract class LocalDataSource {
   Future<void> save(Expenses expenses);

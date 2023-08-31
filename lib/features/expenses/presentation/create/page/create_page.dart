@@ -15,12 +15,9 @@ class CreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Expense Create')),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
-        child: BlocProvider(
-          create: (_) => sl<CreateExpenseBloc>(),
-          child: const CreateForm(),
-        ),
+      body: BlocProvider(
+        create: (_) => sl<CreateExpenseBloc>(),
+        child: const CreateForm(),
       ),
     );
   }
