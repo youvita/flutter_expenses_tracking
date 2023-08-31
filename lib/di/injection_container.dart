@@ -1,10 +1,11 @@
-import 'package:expenses_tracking/db/expenses_database.dart';
 import 'package:expenses_tracking/features/expenses/data/local/local_data_source.dart';
 import 'package:expenses_tracking/features/expenses/data/repository/create_repository_impl.dart';
 import 'package:expenses_tracking/features/expenses/domain/repository/create_repository.dart';
 import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecase.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:get_it/get_it.dart';
+
+import '../core/db/expenses_database.dart';
 
 final sl = GetIt.instance;
 

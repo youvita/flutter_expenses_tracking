@@ -1,7 +1,11 @@
+import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
+import 'package:expenses_tracking/widgets/TextSelectWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 class CreateForm extends StatelessWidget {
   const CreateForm({super.key});
@@ -11,8 +15,8 @@ class CreateForm extends StatelessWidget {
     return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          _StatusType(),
-          _IssueDateSelected(),
+          _StatusTypeWidget(),
+          _IssueDateWidget(),
           _CategoryInput(),
           _CurrencySelected(),
           _AmountInput(),
@@ -23,7 +27,7 @@ class CreateForm extends StatelessWidget {
 
 }
 
-class _StatusType extends StatefulWidget {
+class _StatusTypeWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _ExpenseTypeSelected();
 }
@@ -48,25 +52,36 @@ class _ExpenseTypeSelected extends State {
 
 }
 
-class _IssueDateSelected extends StatelessWidget {
+class _IssueDateWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _IssueDateSelected();
+}
+
+class _IssueDateSelected extends State {
+  DateTime newDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     final issueDate = context.read<CreateExpenseBloc>();
-    return ElevatedButton(onPressed: () async {
-      DateTime? selectedDateTime = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2023),
-          lastDate: DateTime(2100)
-      );
+    return TextSelectWidget(
+        value: DateFormat(DateUtil.DAY_MONTH_YEAR).format(newDateTime),
+        icon: SvgPicture.asset('assets/images/ic_calendar.svg'),
+        onTap: (_) async {
+            DateTime? selectedDateTime = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2023),
+                lastDate: DateTime(2100));
 
-      if (selectedDateTime != null) {
-        DateTime currentTime = DateTime.now();
-        DateTime newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
-        issueDate.add(IssueDateChanged(newDateTime));
-      }
-    }, child: const Text('Select Date'));
+                if (selectedDateTime != null) {
+                  DateTime currentTime = DateTime.now();
+                  setState(() {
+                    newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
+                  });
+                  issueDate.add(IssueDateChanged(newDateTime));
+                }
+        }
+    );
   }
 
 }

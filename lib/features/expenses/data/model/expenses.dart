@@ -1,6 +1,4 @@
-import 'dart:ffi';
-
-import 'package:expenses_tracking/db/expenses_database.dart';
+import '../../../../core/db/expenses_database.dart';
 
 class Expenses {
 
