@@ -1,33 +1,25 @@
-import 'dart:ffi';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecase.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../db/expenses_database.dart';
 import '../../../data/model/expenses.dart';
 
 part 'create_expense_event.dart';
 part 'create_expense_state.dart';
 
 class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
-
-
   final CreateUseCase _useCase;
 
   CreateExpenseBloc({required CreateUseCase useCase}) : _useCase = useCase, super(CreateExpenseInitial()) {
-    on<CreateExpenseEvent>((event, emit) {
-      on<ExpensesTypeChanged>(_onExpenseTypeChanged);
-      on<IssueDateChanged>(_onIssueDateChanged);
-      on<CategoryChanged>(_onCategoryChanged);
-      on<CurrencyChanged>(_onCurrencyChanged);
-      on<AmountChanged>(_onAmountChanged);
-      on<RemarkChanged>(_onRemarkChanged);
-      on<SaveEvent>(_onSaved);
-    });
+    on<ExpensesTypeChanged>(_onExpenseTypeChanged);
+    on<IssueDateChanged>(_onIssueDateChanged);
+    on<CategoryChanged>(_onCategoryChanged);
+    on<CurrencyChanged>(_onCurrencyChanged);
+    on<AmountChanged>(_onAmountChanged);
+    on<RemarkChanged>(_onRemarkChanged);
+    on<SaveEvent>(_onSaved);
   }
 
   void _onExpenseTypeChanged(
@@ -109,7 +101,7 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
           categoryImage: state.categoryImage,
           category: state.category,
           currencyCode: state.currencyCode,
-          amount: state.amount.toString(),
+          amount: state.amount == null ? '0.0' : state.amount.toString(),
           remark: state.remark
       );
       await _useCase.call(expenses);
