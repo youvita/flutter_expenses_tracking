@@ -2,11 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TextSelectWidget extends StatefulWidget {
+  final String label;
   final String value;
+  final String imagePath;
+  final EdgeInsets? padding;
+  final double horSpace;
   final ValueChanged<String> onTap;
-  final SvgPicture icon;
 
-  const TextSelectWidget({Key? key, required this.value, required this.icon, required this.onTap}): super(key: key);
+  const TextSelectWidget({
+    Key? key,
+    required this.label,
+    required this.value,
+    required this.imagePath,
+    this.padding = const EdgeInsets.only(left: 20, top: 20, right: 14, bottom: 17),
+    this.horSpace = 8,
+    required this.onTap
+  }): super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomTextSelect();
@@ -17,21 +28,21 @@ class _CustomTextSelect extends State<TextSelectWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       onTap: () { widget.onTap(widget.value); },
       child: Container(
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 17),
+        padding: widget.padding,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Date'),
+            Text(widget.label),
             Row(
               children: [
                 Text(widget.value),
-                const SizedBox(width: 15),
-                widget.icon
-                // SvgPicture.asset('assets/images/ic_calendar.svg')
+                SizedBox(width: widget.horSpace),
+                SvgPicture.asset(widget.imagePath)
               ],
             )
           ],

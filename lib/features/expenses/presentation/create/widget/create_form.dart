@@ -1,10 +1,10 @@
 import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
+import 'package:expenses_tracking/widgets/TextAmountInputWidget.dart';
 import 'package:expenses_tracking/widgets/TextSelectWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 
 class CreateForm extends StatelessWidget {
@@ -17,9 +17,9 @@ class CreateForm extends StatelessWidget {
         children: [
           _StatusTypeWidget(),
           _IssueDateWidget(),
-          _CategoryInput(),
+          _CategoryWidget(),
           _CurrencySelected(),
-          _AmountInput(),
+          _AmountInputWidget(),
           _SaveButton()
         ]
     );
@@ -64,8 +64,11 @@ class _IssueDateSelected extends State {
   Widget build(BuildContext context) {
     final issueDate = context.read<CreateExpenseBloc>();
     return TextSelectWidget(
+        label: "Date",
+        padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 17),
+        horSpace: 15,
         value: DateFormat(DateUtil.DAY_MONTH_YEAR).format(newDateTime),
-        icon: SvgPicture.asset('assets/images/ic_calendar.svg'),
+        imagePath: "assets/images/ic_calendar.svg",
         onTap: (_) async {
             DateTime? selectedDateTime = await showDatePicker(
                 context: context,
@@ -86,18 +89,34 @@ class _IssueDateSelected extends State {
 
 }
 
-class _CategoryInput extends StatelessWidget {
+class _CategoryWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _CategoryInput();
+}
+
+class _CategoryInput extends State {
+  String category = "Select";
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      key: const Key('createForm_categoryInput_textField'),
-      onChanged: (category) =>
-          context.read<CreateExpenseBloc>().add(CategoryChanged('🤣',category)),
-      decoration: const InputDecoration(
-          labelText: 'category'
-      ),
-    );
+    return TextSelectWidget(
+        label: "Category",
+        value: category,
+        imagePath: "assets/images/ic_arrow_drop_down.svg",
+        onTap: (String value) {
+          setState(() {
+            category = "🤣$value";
+          });
+          context.read<CreateExpenseBloc>().add(CategoryChanged('🤣', category));
+        });
+    // return TextField(
+    //   key: const Key('createForm_categoryInput_textField'),
+    //   onChanged: (category) =>
+    //       context.read<CreateExpenseBloc>().add(CategoryChanged('🤣',category)),
+    //   decoration: const InputDecoration(
+    //       labelText: 'category'
+    //   ),
+    // );
   }
 
 }
@@ -120,18 +139,32 @@ class _CurrencySelected extends StatelessWidget {
 
 }
 
-class _AmountInput extends StatelessWidget {
+class _AmountInputWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _AmountInput();
+}
 
+class _AmountInput extends State {
+  String amount = "";
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      key: const Key('createForm_amountInput_textField'),
-      onChanged: (amount) =>
-          context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount))),
-      decoration: const InputDecoration(
-          labelText: 'amount'
-      ),
-    );
+    return TextAmountInputWidget(
+        placeholder: "Input",
+        value: amount,
+        onValueChanged: (String value) {
+          setState(() {
+            amount = value;
+          });
+          context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount)));
+        });
+    // return TextField(
+    //   key: const Key('createForm_amountInput_textField'),
+    //   onChanged: (amount) =>
+    //       context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount))),
+    //   decoration: const InputDecoration(
+    //       labelText: 'amount'
+    //   ),
+    // );
   }
 
 }
