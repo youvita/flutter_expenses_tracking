@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_item.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ class TextAmountInputWidget extends StatefulWidget {
   final String value;
   final EdgeInsets? padding;
   final double horSpace;
-  final ValueChanged<String> onValueChanged;
+  final ValueChanged<Expenses> onValueChanged;
 
   const TextAmountInputWidget({
     Key? key,
@@ -52,7 +53,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
             child: TextField(
               key: const Key('createForm_amountInput_textField'),
               onChanged: (amount) => {
-                widget.onValueChanged(amount)
+                widget.onValueChanged(Expenses(currencyCode: _selectedValue == "1" ? "USD" : "KHR", amount: amount))
               },
               textAlign: TextAlign.right,
               decoration: const InputDecoration(

@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/config/date_util.dart';
+import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/text_remark_input.dart';
@@ -135,12 +136,12 @@ class _AmountInput extends State {
     return TextAmountInputWidget(
         placeholder: "Input",
         value: amount,
-        onValueChanged: (String value) {
+        onValueChanged: (Expenses value) {
           setState(() {
-            amount = value;
+            amount = value.amount!;
           });
-          context.read<CreateExpenseBloc>().add(
-              AmountChanged(double.parse(amount.isEmpty ? "0.0" : amount)));
+          context.read<CreateExpenseBloc>().add(CurrencyChanged(value.currencyCode ?? "USD"));
+          context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount.isEmpty ? "0.0" : amount)));
         });
   }
 
