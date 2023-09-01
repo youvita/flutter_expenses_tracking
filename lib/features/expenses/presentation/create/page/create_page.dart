@@ -14,6 +14,7 @@ class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: const Text('Expense Create')),
       body: BlocProvider(
         create: (_) => sl<CreateExpenseBloc>(),

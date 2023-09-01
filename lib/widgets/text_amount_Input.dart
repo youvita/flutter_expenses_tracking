@@ -1,5 +1,6 @@
+import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
+import 'package:expenses_tracking/widgets/dropdown/list_item.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class TextAmountInputWidget extends StatefulWidget {
   final String placeholder;
@@ -12,7 +13,7 @@ class TextAmountInputWidget extends StatefulWidget {
     Key? key,
     required this.placeholder,
     required this.value,
-    this.padding = const EdgeInsets.only(left: 20, top: 20, right: 14, bottom: 17),
+    this.padding = const EdgeInsets.only(left: 10, top: 15, right: 20, bottom: 15),
     this.horSpace = 8,
     required this.onValueChanged
   }): super(key: key);
@@ -23,7 +24,7 @@ class TextAmountInputWidget extends StatefulWidget {
 }
 
 class _CustomTextSelect extends State<TextAmountInputWidget> {
-
+  String _selectedValue = "1";
   @override
   Widget build(BuildContext context) {
 
@@ -33,25 +34,33 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          InkWell(
-            onTap: () { widget.onValueChanged(widget.value); },
-            child: Row(
-              children: [
-                const Text("USD"),
-                SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
+          Flexible(
+              child:
+            DropDownList<String>(
+              listItems: const [
+                ListItem<String>('USD', value: '1'),
+                ListItem<String>('KHR', value: '2'),
               ],
-            ),
+              value: _selectedValue,
+              onChange: (value) => setState(() {
+              _selectedValue = value!;
+              })
+            )
           ),
-          SizedBox(
-            width: 200,
+          Flexible(
+            flex: 2,
             child: TextField(
               key: const Key('createForm_amountInput_textField'),
               onChanged: (amount) => {
                 widget.onValueChanged(amount)
               },
+              textAlign: TextAlign.right,
               decoration: const InputDecoration(
-                  labelText: 'amount'
+                  hintText: "0.00",
+                  border: InputBorder.none,
+                  isCollapsed: true
               ),
+              keyboardType: TextInputType.number,
             )
           )
         ],

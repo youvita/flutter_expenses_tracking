@@ -1,8 +1,10 @@
 import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
-import 'package:expenses_tracking/widgets/TextAmountInputWidget.dart';
-import 'package:expenses_tracking/widgets/TextSelectWidget.dart';
+import 'package:expenses_tracking/features/expenses/presentation/create/widget/text_remark_input.dart';
+import 'package:expenses_tracking/widgets/divider_widget.dart';
+import 'package:expenses_tracking/widgets/text_amount_Input.dart';
+import 'package:expenses_tracking/widgets/text_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -14,12 +16,20 @@ class CreateForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
         mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _StatusTypeWidget(),
-          _IssueDateWidget(),
-          _CategoryWidget(),
-          _CurrencySelected(),
-          _AmountInputWidget(),
+          Column(
+            children: [
+              _StatusTypeWidget(),
+              _IssueDateWidget(),
+              const DividerWidget(),
+              _CategoryWidget(),
+              const DividerWidget(),
+              _AmountInputWidget(),
+              const DividerWidget(),
+              _RemarkInputWidget(),
+            ],
+          ),
           _SaveButton()
         ]
     );
@@ -65,7 +75,7 @@ class _IssueDateSelected extends State {
     final issueDate = context.read<CreateExpenseBloc>();
     return TextSelectWidget(
         label: "Date",
-        padding: const EdgeInsets.only(left: 20, top: 20, right: 20, bottom: 17),
+        padding: const EdgeInsets.only(left: 20, top: 22, right: 20, bottom: 22),
         horSpace: 15,
         value: DateFormat(DateUtil.DAY_MONTH_YEAR).format(newDateTime),
         imagePath: "assets/images/ic_calendar.svg",
@@ -101,40 +111,14 @@ class _CategoryInput extends State {
   Widget build(BuildContext context) {
     return TextSelectWidget(
         label: "Category",
-        value: category,
+        value: "🤣$category",
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (String value) {
           setState(() {
-            category = "🤣$value";
+            category = value;
           });
           context.read<CreateExpenseBloc>().add(CategoryChanged('🤣', category));
         });
-    // return TextField(
-    //   key: const Key('createForm_categoryInput_textField'),
-    //   onChanged: (category) =>
-    //       context.read<CreateExpenseBloc>().add(CategoryChanged('🤣',category)),
-    //   decoration: const InputDecoration(
-    //       labelText: 'category'
-    //   ),
-    // );
-  }
-
-}
-
-class _CurrencySelected extends StatelessWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        ElevatedButton(onPressed: () {
-          context.read<CreateExpenseBloc>().add(const CurrencyChanged('USD'));
-        }, child: const Text('USD')),
-        ElevatedButton(onPressed: () {
-          context.read<CreateExpenseBloc>().add(const CurrencyChanged('KHR'));
-        }, child: const Text('KHR'))
-      ],
-    );
   }
 
 }
@@ -155,16 +139,36 @@ class _AmountInput extends State {
           setState(() {
             amount = value;
           });
-          context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount)));
+          context.read<CreateExpenseBloc>().add(
+              AmountChanged(double.parse(amount.isEmpty ? "0.0" : amount)));
         });
-    // return TextField(
-    //   key: const Key('createForm_amountInput_textField'),
-    //   onChanged: (amount) =>
-    //       context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amount))),
-    //   decoration: const InputDecoration(
-    //       labelText: 'amount'
-    //   ),
-    // );
+  }
+
+}
+
+class _RemarkInputWidget extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _RemarkInputState();
+}
+
+class _RemarkInputState extends State {
+  String remark = "";
+  @override
+  Widget build(BuildContext context) {
+    final isVisible = context.select((CreateExpenseBloc bloc) => bloc.state.amount);
+
+    return TextRemarkInputWidget(
+        isVisible: isVisible != 0.0,
+        label: "Remark",
+        placeholder: "Please Input",
+        value: remark,
+        onValueChanged: (String value) {
+          setState(() {
+            remark = value;
+          });
+          context.read<CreateExpenseBloc>().add(RemarkChanged(remark));
+        }
+      );
   }
 
 }
@@ -173,12 +177,18 @@ class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      key: const Key('createForm_saveButton'),
-      onPressed: () {
-        context.read<CreateExpenseBloc>().add(const SaveEvent());
-      },
-      child: const Text('Save'),
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: ElevatedButton(
+        key: const Key('createForm_saveButton'),
+        style: ElevatedButton.styleFrom(
+            minimumSize: const Size.fromHeight(50)
+        ),
+        onPressed: () {
+          context.read<CreateExpenseBloc>().add(const SaveEvent());
+        },
+        child: const Text('Save'),
+      )
     );
   }
 }

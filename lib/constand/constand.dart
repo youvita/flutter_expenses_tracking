@@ -15,4 +15,5 @@ class MyTextStyles {
 class MyColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color blue = Color(0xFF3743EC);
+  static const Color black = Color(0xFF000000);
 }
