@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_item.dart';
@@ -62,6 +63,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
                   isCollapsed: true
               ),
               keyboardType: TextInputType.number,
+              style: MyTextStyles.textStyleBold17,
             )
           )
         ],

@@ -18,7 +18,7 @@ class CreatePage extends StatelessWidget {
       appBar: AppBar(title: const Text('Expense Create')),
       body: BlocProvider(
         create: (_) => sl<CreateExpenseBloc>(),
-        child: const CreateForm(),
+        child: CreateFormWidget(),
       ),
     );
   }

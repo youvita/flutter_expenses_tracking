@@ -1,6 +1,8 @@
 import 'package:expenses_tracking/config/date_util.dart';
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
+import 'package:expenses_tracking/features/expenses/presentation/create/widget/category_item.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/text_remark_input.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
@@ -10,8 +12,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-class CreateForm extends StatelessWidget {
-  const CreateForm({super.key});
+class CreateFormWidget extends StatefulWidget {
+  const CreateFormWidget({super.key});
+
+  @override
+  State<StatefulWidget> createState() => CreateForm();
+
+}
+
+class CreateForm extends State<CreateFormWidget> {
+  bool isVisibleCategories = false;
+  callBack(isSelected) {
+    setState(() {
+      isVisibleCategories = isSelected;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +36,17 @@ class CreateForm extends StatelessWidget {
         children: [
           Column(
             children: [
+              const SizedBox(height: 20),
               _StatusTypeWidget(),
+              const SizedBox(height: 30),
               _IssueDateWidget(),
               const DividerWidget(),
-              _CategoryWidget(),
+              _CategoryWidget(onSelected: callBack),
               const DividerWidget(),
               _AmountInputWidget(),
               const DividerWidget(),
               _RemarkInputWidget(),
+              _CategoriesWidget(isVisibleCategories: isVisibleCategories)
             ],
           ),
           _SaveButton()
@@ -101,24 +119,27 @@ class _IssueDateSelected extends State {
 }
 
 class _CategoryWidget extends StatefulWidget {
+  final Function onSelected;
+
+  const _CategoryWidget({Key? key, required this.onSelected}): super(key: key);
+
   @override
   State<StatefulWidget> createState() => _CategoryInput();
 }
 
-class _CategoryInput extends State {
-  String category = "Select";
+class _CategoryInput extends State<_CategoryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    String? category = context.select((CreateExpenseBloc bloc) => bloc.state.category);
+    String? categoryImage = context.select((CreateExpenseBloc bloc) => bloc.state.categoryImage);
+
     return TextSelectWidget(
         label: "Category",
-        value: "🤣$category",
+        value: category == null ? "Select" : "$categoryImage $category",
         imagePath: "assets/images/ic_arrow_drop_down.svg",
-        onTap: (String value) {
-          setState(() {
-            category = value;
-          });
-          context.read<CreateExpenseBloc>().add(CategoryChanged('🤣', category));
+        onTap: (bool value) {
+          widget.onSelected(value);
         });
   }
 
@@ -159,7 +180,7 @@ class _RemarkInputState extends State {
     final isVisible = context.select((CreateExpenseBloc bloc) => bloc.state.amount);
 
     return TextRemarkInputWidget(
-        isVisible: isVisible != 0.0,
+        isVisible: isVisible != null && isVisible != 0.0,
         label: "Remark",
         placeholder: "Please Input",
         value: remark,
@@ -174,6 +195,115 @@ class _RemarkInputState extends State {
 
 }
 
+class _CategoriesWidget extends StatefulWidget {
+  final bool isVisibleCategories;
+  const _CategoriesWidget({Key? key, required this.isVisibleCategories}): super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _CategoryState();
+}
+
+class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderStateMixin {
+  late AnimationController expandController;
+  late Animation<double> animation;
+
+  @override
+  void initState() {
+    super.initState();
+    prepareAnimations();
+  }
+
+  void prepareAnimations() {
+    expandController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    animation = CurvedAnimation(parent: expandController, curve: Curves.fastOutSlowIn);
+  }
+
+  void _runExpandCheck() {
+    if(widget.isVisibleCategories) {
+      expandController.forward();
+    }
+    else {
+      expandController.reverse();
+    }
+  }
+
+  @override
+  void didUpdateWidget(_CategoriesWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _runExpandCheck();
+  }
+
+  @override
+  void dispose() {
+    expandController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    return SizeTransition(
+        axisAlignment: 1.0,
+        sizeFactor: animation,
+        child: Column(
+          children: [
+            Container(
+                padding: const EdgeInsets.only(left: 20, top: 40, bottom: 17, right: 20),
+                child: const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Categories", style: MyTextStyles.textStyleBold20),
+                )
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  CategoryItemWidget(
+                      image: "\u{1F4B2}",
+                      label: "Salary",
+                      onValueChanged: (Expenses category) {
+                        setState(() {
+                          context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                        });
+                      }
+                  ),
+                  CategoryItemWidget(
+                    image: "\u{1F4B0}",
+                    label: "Bonus",
+                    onValueChanged: (Expenses category) {
+                      setState(() {
+                        context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                      });
+                    },
+                  ),
+                  CategoryItemWidget(
+                    image: "\u{1F48A}",
+                    label: "Health",
+                    onValueChanged: (Expenses category) {
+                      setState(() {
+                        context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                      });
+                    },
+                  ),
+                  CategoryItemWidget(
+                    image: "",
+                    label: "Other",
+                    onValueChanged: (Expenses category) {
+
+                    },
+                  )
+                ],
+              ),
+            )
+          ],
+        )
+    );
+  }
+
+}
+
 class _SaveButton extends StatelessWidget {
 
   @override
@@ -183,7 +313,10 @@ class _SaveButton extends StatelessWidget {
       child: ElevatedButton(
         key: const Key('createForm_saveButton'),
         style: ElevatedButton.styleFrom(
-            minimumSize: const Size.fromHeight(50)
+            minimumSize: const Size.fromHeight(50),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6)
+            )
         ),
         onPressed: () {
           context.read<CreateExpenseBloc>().add(const SaveEvent());

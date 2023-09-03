@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -7,7 +8,7 @@ class TextSelectWidget extends StatefulWidget {
   final String imagePath;
   final EdgeInsets? padding;
   final double horSpace;
-  final ValueChanged<String> onTap;
+  final ValueChanged<bool> onTap;
 
   const TextSelectWidget({
     Key? key,
@@ -25,22 +26,26 @@ class TextSelectWidget extends StatefulWidget {
 }
 
 class _CustomTextSelect extends State<TextSelectWidget> {
+  bool isExpand = false;
 
   @override
   Widget build(BuildContext context) {
 
     return InkWell(
-      onTap: () { widget.onTap(widget.value); },
+      onTap: () {
+        isExpand = !isExpand;
+        widget.onTap(isExpand);
+      },
       child: Container(
         padding: widget.padding,
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(widget.label),
+            Text(widget.label, style: MyTextStyles.textStyleMedium17),
             Row(
               children: [
-                Text(widget.value),
+                Text(widget.value, style: MyTextStyles.textStyleBold17),
                 SizedBox(width: widget.horSpace),
                 SvgPicture.asset(widget.imagePath)
               ],
