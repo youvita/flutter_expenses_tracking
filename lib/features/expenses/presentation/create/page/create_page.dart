@@ -1,5 +1,7 @@
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/create_form.dart';
+import 'package:expenses_tracking/widgets/app_topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expenses_tracking/di/injection_container.dart';
@@ -15,10 +17,11 @@ class CreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: const Text('Expense Create')),
+      appBar: AppTopBarWidget(title: "Create", onActionRight: (_) {}),
+      backgroundColor: MyColors.white,
       body: BlocProvider(
         create: (_) => sl<CreateExpenseBloc>(),
-        child: CreateFormWidget(),
+        child: const CreateFormWidget(),
       ),
     );
   }
