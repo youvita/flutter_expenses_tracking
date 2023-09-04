@@ -4,28 +4,25 @@ import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecas
 import 'package:flutter/material.dart';
 
 part 'report_list_event.dart';
+
 part 'report_list_state.dart';
 
 class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
-
-
   final CreateUseCase _useCase;
 
-  ReportListBloc({required CreateUseCase useCase}) : _useCase = useCase, super(CreateExpenseInitial()) {
+  ReportListBloc({required CreateUseCase useCase})
+      : _useCase = useCase,
+        super(CreateExpenseInitial()) {
     on<ReportListEvent>((event, emit) {
       on<OnDatePickerChanged>(_onDatePickerChanged);
     });
   }
 
-
   void _onDatePickerChanged(
-      OnDatePickerChanged event,
-      Emitter<ReportListState> emit,
-      ) {
-    emit(
-        state.copyWith(
-            datePicker: event.datePicker
-        )
-    );
+    OnDatePickerChanged event,
+    Emitter<ReportListState> emit,
+  ) {
+
+    emit(state.copyWith(datePicker: event.datePicker));
   }
 }

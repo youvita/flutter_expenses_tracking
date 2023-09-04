@@ -50,6 +50,8 @@ dependencies:
   path_provider: ^2.1.0
   path: ^1.8.3
 
+  toggle_switch: ^2.1.0
+  easy_localization: ^3.0.3
   # Simple direct Service Locator that allows to decouple the interface from a concrete
   # implementation and to access the concrete implementation from everywhere in your App
   get_it: ^7.6.0
@@ -86,6 +88,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/i18n/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

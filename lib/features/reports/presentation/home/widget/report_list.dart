@@ -1,7 +1,9 @@
 import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/bloc/report_list_bloc.dart';
+import 'package:expenses_tracking/widgets/toggle_swich.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 
 class ReportList extends StatelessWidget {
   const ReportList({super.key});
@@ -13,6 +15,8 @@ class ReportList extends StatelessWidget {
       return Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          const SizedBox(height: 20,),
+          Center(child: ExpenseToggle(onToggle: (){},),)
         //  _HeaderCalendar(),
         ],
       );
