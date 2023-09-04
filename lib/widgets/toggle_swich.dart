@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constand/constand.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 class ExpenseToggle extends StatefulWidget {
   final Function onToggle;
