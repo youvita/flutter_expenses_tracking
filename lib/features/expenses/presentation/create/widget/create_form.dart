@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/config/date_util.dart';
+import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
@@ -261,7 +262,7 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   CategoryItemWidget(
-                      image: "\u{1F4B2}",
+                      image: Utils().getUnicodeCharacter("1F4B2"),
                       label: "Salary",
                       onValueChanged: (Expenses category) {
                         setState(() {
@@ -270,7 +271,7 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
                       }
                   ),
                   CategoryItemWidget(
-                    image: "\u{1F4B0}",
+                    image: Utils().getUnicodeCharacter("1F4B0"),
                     label: "Bonus",
                     onValueChanged: (Expenses category) {
                       setState(() {
@@ -279,7 +280,7 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
                     },
                   ),
                   CategoryItemWidget(
-                    image: "\u{1F48A}",
+                    image: Utils().getUnicodeCharacter("1F48A"),
                     label: "Health",
                     onValueChanged: (Expenses category) {
                       setState(() {
