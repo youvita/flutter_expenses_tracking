@@ -58,7 +58,7 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_selected == null ? '' : _selected!.title),
+                Text(_selected == null ? '' : _selected!.title, style: MyTextStyles.textStyleMedium17),
                 SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
               ],
             ),

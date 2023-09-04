@@ -1,5 +1,5 @@
 
-import 'package:flutter/cupertino.dart';
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:flutter/material.dart';
 
 class StatusSwitch extends StatefulWidget {
@@ -37,28 +37,51 @@ class _CustomSwitchState extends State<StatusSwitch> with SingleTickerProviderSt
           }
           widget.value == false ? widget.onChanged(true) : widget.onChanged(false);
         },
-        child: Container(
-          width: 45.0,
-          height: 28.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.0),
-            color: _circleAnimation!.value == Alignment.centerLeft ? Colors.grey : Colors.blue
-          ),
-          child: Padding(
-            padding: const EdgeInsets.only(
-                top: 2.0, bottom: 2.0, right: 2.0, left: 2.0
-            ),
-            child: Container(
-              alignment: widget.value ? ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerRight : Alignment.centerLeft ) : ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerLeft : Alignment.centerRight),
-              child: Container(
-                width: 20.0,
-                height: 20.0,
-                decoration: const BoxDecoration(
-                shape: BoxShape.circle, color: Colors.white),
+        child: Stack(
+            children: [
+              Positioned(child: Container(
+                width: 288.0,
+                height: 36.0,
+                decoration: BoxDecoration(
+                    border: Border.all(color: MyColors.black10, width: 1),
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.white
+                ),
+                child: Container(
+                    alignment: widget.value ? ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerRight : Alignment.centerLeft ) : ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerLeft : Alignment.centerRight),
+                    child: Container(
+                        width: 143.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            shape: BoxShape.rectangle, color: widget.value ? MyColors.red : MyColors.green),
+                    )
+                ),
               )
-            ),
-          ),
-        ),
+              ),
+              Positioned(
+                  child: SizedBox(
+                    width: 288.0,
+                    height: 36.0,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text("Expense",textAlign: TextAlign.center, style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: widget.value ? MyColors.white : MyColors.black
+                        )),
+                        Text("Income",textAlign: TextAlign.center, style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          color: widget.value ? MyColors.black : MyColors.white
+                        ))
+                      ],
+                    ),
+                  )
+              )
+            ]
+        )
       );
     });
   }

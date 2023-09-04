@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -75,9 +76,9 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(widget.label),
+                    child: Text(widget.label, style: MyTextStyles.textStyleMedium17),
                   ),
-                  const SizedBox(height: 50),
+                  const SizedBox(height: 30),
                   TextField(
                     key: const Key('createForm_remarkInput_textField'),
                     onChanged: (amount) => {
@@ -90,6 +91,7 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
                         isCollapsed: true
                     ),
                     keyboardType: TextInputType.text,
+                    style: MyTextStyles.textStyleBold17,
                   ),
                 ]
             ),

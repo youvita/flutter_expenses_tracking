@@ -21,7 +21,7 @@ class _MyToggleSwitchState extends State<ExpenseToggle> {
       cornerRadius: 7,
       initialLabelIndex: 0,
       borderWidth: 1,
-      borderColor: const [MyColors.grey],
+      borderColor: const [MyColors.black10],
       activeBgColors:const [[MyColors.blue], [MyColors.red], [MyColors.green]],
       inactiveBgColor: MyColors.white,
       radiusStyle: true,
