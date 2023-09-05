@@ -1,7 +1,7 @@
 part of 'report_list_bloc.dart';
 
 class ReportListState extends Equatable {
-  const ReportListState({
+  ReportListState({
     this.datePicker,
   });
 
@@ -13,35 +13,13 @@ class ReportListState extends Equatable {
     );
   }
 
-
   final DateTime? datePicker;
-
-  getMonthTap(){
-    List<Widget> list = [];
-    var listOfMonth = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December'
-    ];
-
-    for (var element in listOfMonth) {
-      list.add(Tab(text: element));
-    }
-
-    return list;
-  }
+  final double totalExpense = 0;
+  late double totalIncome = 0;
+  final double currentBalance = 0;
 
   @override
-  List<Object?> get props => [datePicker];
+  List<Object?> get props => [datePicker, totalExpense, totalIncome, currentBalance];
 }
 
 class CreateExpenseInitial extends ReportListState {}

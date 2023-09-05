@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expenses_tracking/constand/constand.dart';
 import 'package:expenses_tracking/di/injection_container.dart' as di;
 import 'package:expenses_tracking/features/expenses/presentation/category/page/category_page.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: MyMaterialColors.blue
       ),
       home: const CreatePage(),
       supportedLocales: context.supportedLocales,

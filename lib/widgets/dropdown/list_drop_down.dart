@@ -9,12 +9,14 @@ class DropDownList<T> extends StatefulWidget {
   final List<ListItem<T>> listItems;
   final T? value;
   final ValueChanged<T?>? onChange;
+  final TextStyle? textStyle;
 
   const DropDownList({
     Key? key,
     required this.listItems,
     this.value,
     this.onChange,
+    this.textStyle=MyTextStyles.textStyleMedium17,
   }) : super(key: key);
 
   @override
@@ -58,7 +60,7 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(_selected == null ? '' : _selected!.title, style: MyTextStyles.textStyleMedium17),
+                Text(_selected == null ? '' : _selected!.title, style: widget.textStyle),
                 SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
               ],
             ),

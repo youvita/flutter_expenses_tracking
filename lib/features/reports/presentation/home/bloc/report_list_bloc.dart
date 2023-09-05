@@ -14,15 +14,16 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
       : _useCase = useCase,
         super(CreateExpenseInitial()) {
     on<ReportListEvent>((event, emit) {
-      on<OnDatePickerChanged>(_onDatePickerChanged);
+      on<OnYearDropChange>(_yearDropChange);
     });
   }
 
-  void _onDatePickerChanged(
-    OnDatePickerChanged event,
+  void _yearDropChange(
+      OnYearDropChange event,
     Emitter<ReportListState> emit,
   ) {
-
+    state.totalIncome += 10.0;
     emit(state.copyWith(datePicker: event.datePicker));
   }
+
 }

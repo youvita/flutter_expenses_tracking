@@ -8,6 +8,12 @@ class MyTextStyles {
     color: MyColors.white,
   );
 
+  static const TextStyle appBarTitle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: MyColors.white,
+  );
+
   static const TextStyle textStyleBold20 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -55,4 +61,28 @@ class MyColors {
   static const Color black = Color(0xFF000000);
   static const Color black10 = Color(0x1A0A0A0A);
   static const Color grey = Color(0xFFD9D9D9);
+}
+
+class MyMaterialColors {
+  static const MaterialColor blue = MaterialColor(_bluePrimaryValue, <int, Color>{
+    50: Color(0xFFE7E8FD),
+    100: Color(0xFFC3C7F9),
+    200: Color(0xFF9BA1F6),
+    300: Color(0xFF737BF2),
+    400: Color(0xFF555FEF),
+    500: Color(_bluePrimaryValue),
+    600: Color(0xFF313DEA),
+    700: Color(0xFF2A34E7),
+    800: Color(0xFF232CE4),
+    900: Color(0xFF161EDF),
+  });
+  static const int _bluePrimaryValue = 0xFF3743EC;
+
+  static const MaterialColor blueAccent = MaterialColor(_blueAccentValue, <int, Color>{
+    100: Color(0xFFFFFFFF),
+    200: Color(_blueAccentValue),
+    400: Color(0xFFA9ACFF),
+    700: Color(0xFF9093FF),
+  });
+  static const int _blueAccentValue = 0xFFDCDDFF;
 }
