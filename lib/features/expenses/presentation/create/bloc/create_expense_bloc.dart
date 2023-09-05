@@ -95,13 +95,13 @@ class CreateExpenseBloc extends Bloc<CreateExpenseEvent, CreateExpenseState> {
       ) async {
 
       var expenses = Expenses(
-          statusType: state.statusType,
+          statusType: state.statusType ?? "1",
           issueDate: DateFormat(DateUtil.YEAR_MONTH_DAY_TIME).format(state.issueDate ?? DateTime.now()),
           createDate: DateFormat(DateUtil.YEAR_MONTH_DAY_TIME).format(DateTime.now()),
           categoryImage: state.categoryImage,
           category: state.category,
-          currencyCode: state.currencyCode,
-          amount: state.amount == null ? '0.0' : state.amount.toString(),
+          currencyCode: state.currencyCode ?? "USD",
+          amount: state.amount == null ? "0.0" : state.amount.toString(),
           remark: state.remark
       );
       await _useCase.call(expenses);
