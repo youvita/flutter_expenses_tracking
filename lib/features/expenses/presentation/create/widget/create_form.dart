@@ -52,7 +52,7 @@ class CreateForm extends State<CreateFormWidget> {
                     _AmountInputWidget(),
                     const DividerWidget(),
                     _RemarkInputWidget(),
-                    _CategoriesWidget(isVisibleCategories: isVisibleCategories)
+                    const _CategoriesWidget(isVisibleCategories: true)
                   ],
                 ),
               )
@@ -147,7 +147,8 @@ class _CategoryInput extends State<_CategoryWidget> {
         value: category == null ? "Select" : "$categoryImage $category",
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (bool value) {
-          widget.onSelected(value);
+          // widget.onSelected(value);
+          _navigationRoute(context);
         });
   }
 
@@ -211,102 +212,101 @@ class _CategoriesWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _CategoryState();
 }
 
-class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderStateMixin {
-  late AnimationController expandController;
-  late Animation<double> animation;
-
-  @override
-  void initState() {
-    super.initState();
-    prepareAnimations();
-  }
-
-  void prepareAnimations() {
-    expandController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
-    animation = CurvedAnimation(parent: expandController, curve: Curves.fastOutSlowIn);
-  }
-
-  void _runExpandCheck() {
-    if(widget.isVisibleCategories) {
-      expandController.forward();
-    }
-    else {
-      expandController.reverse();
-    }
-  }
-
-  @override
-  void didUpdateWidget(_CategoriesWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _runExpandCheck();
-  }
-
-  @override
-  void dispose() {
-    expandController.dispose();
-    super.dispose();
-  }
+class _CategoryState extends State<_CategoriesWidget> {
+  // late AnimationController expandController;
+  // late Animation<double> animation;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   prepareAnimations();
+  // }
+  //
+  // void prepareAnimations() {
+  //   expandController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+  //   animation = CurvedAnimation(parent: expandController, curve: Curves.fastOutSlowIn);
+  // }
+  //
+  // void _runExpandCheck() {
+  //   if(widget.isVisibleCategories) {
+  //     expandController.forward();
+  //   }
+  //   else {
+  //     expandController.reverse();
+  //   }
+  // }
+  //
+  // @override
+  // void didUpdateWidget(_CategoriesWidget oldWidget) {
+  //   super.didUpdateWidget(oldWidget);
+  //   _runExpandCheck();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   expandController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
 
-    return SizeTransition(
-        axisAlignment: 1.0,
-        sizeFactor: animation,
-        child: Column(
-          children: [
-            Container(
-                padding: const EdgeInsets.only(left: 20, top: 40, bottom: 17, right: 20),
-                child: const Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text("Categories", style: MyTextStyles.textStyleBold20),
-                )
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CategoryItemWidget(
-                      image: Utils().getUnicodeCharacter("1F4B2"),
-                      label: "Salary",
-                      onValueChanged: (Expenses category) {
-                        setState(() {
-                          context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
-                        });
-                      }
-                  ),
-                  CategoryItemWidget(
-                    image: Utils().getUnicodeCharacter("1F4B0"),
-                    label: "Bonus",
-                    onValueChanged: (Expenses category) {
-                      setState(() {
-                        context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
-                      });
-                    },
-                  ),
-                  CategoryItemWidget(
-                    image: Utils().getUnicodeCharacter("1F48A"),
-                    label: "Health",
-                    onValueChanged: (Expenses category) {
-                      setState(() {
-                        context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
-                      });
-                    },
-                  ),
-                  CategoryItemWidget(
-                    image: "",
-                    label: "Other",
-                    onValueChanged: (Expenses category) {
-                      _navigationRoute(context);
-                    },
-                  )
-                ],
-              ),
+    return Column(
+      children: [
+        Container(
+            padding: const EdgeInsets.only(left: 20, top: 30, bottom: 17, right: 20),
+            child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text("Popular Categories", style: MyTextStyles.textStyleBold20),
             )
-          ],
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CategoryItemWidget(
+                  image: Utils().getUnicodeCharacter("1F4B2"),
+                  label: "Salary",
+                  onValueChanged: (Expenses category) {
+                    setState(() {
+                      context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                    });
+                  }
+              ),
+              CategoryItemWidget(
+                image: Utils().getUnicodeCharacter("1F4B0"),
+                label: "Bonus",
+                onValueChanged: (Expenses category) {
+                  setState(() {
+                    context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                  });
+                },
+              ),
+              CategoryItemWidget(
+                image: Utils().getUnicodeCharacter("1F48A"),
+                label: "Health",
+                onValueChanged: (Expenses category) {
+                  setState(() {
+                    context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                  });
+                },
+              ),
+              CategoryItemWidget(
+                image: Utils().getUnicodeCharacter("1F68C"),
+                label: "Transport",
+                onValueChanged: (Expenses category) {
+                  setState(() {
+                    context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
+                  });
+                  // _navigationRoute(context);
+                },
+              )
+            ],
+          ),
         )
+      ],
     );
   }
 
