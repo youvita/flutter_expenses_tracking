@@ -122,6 +122,22 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
+                                        title: const Text("Animals", style: MyTextStyles.textStyleMedium17),
+                                        shape: const Border(),
+                                        children: <Widget>[
+                                          CategoryGridviewWidget(
+                                            categories: categories?.animals,
+                                            onValueChanged: (String value) {
+                                              setState(() {
+                                                mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
+                                              });
+                                              Navigator.pop(context);
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                      ExpansionTile(
+                                        trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
                                         title: const Text("Other", style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[

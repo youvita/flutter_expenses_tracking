@@ -14,6 +14,7 @@ import 'package:expenses_tracking/widgets/text_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 
 class CreateFormWidget extends StatefulWidget {
   const CreateFormWidget({super.key});
@@ -37,20 +38,24 @@ class CreateForm extends State<CreateFormWidget> {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            children: [
-              const SizedBox(height: 20),
-              _StatusTypeWidget(),
-              const SizedBox(height: 30),
-              _IssueDateWidget(),
-              const DividerWidget(),
-              _CategoryWidget(onSelected: callBack),
-              const DividerWidget(),
-              _AmountInputWidget(),
-              const DividerWidget(),
-              _RemarkInputWidget(),
-              _CategoriesWidget(isVisibleCategories: isVisibleCategories)
-            ],
+          Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    _StatusTypeWidget(),
+                    const SizedBox(height: 30),
+                    _IssueDateWidget(),
+                    const DividerWidget(),
+                    _CategoryWidget(onSelected: callBack),
+                    const DividerWidget(),
+                    _AmountInputWidget(),
+                    const DividerWidget(),
+                    _RemarkInputWidget(),
+                    _CategoriesWidget(isVisibleCategories: isVisibleCategories)
+                  ],
+                ),
+              )
           ),
           _SaveButton()
         ]
@@ -307,17 +312,12 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
 
 }
 
-Future<void> _navigationRoute(BuildContext context) async {
-  final Category result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryPage()));
-  context.read<CreateExpenseBloc>().add(CategoryChanged(result.image, result.name));
-}
-
 class _SaveButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
       child: ElevatedButton(
         key: const Key('createForm_saveButton'),
         style: ElevatedButton.styleFrom(
@@ -333,5 +333,30 @@ class _SaveButton extends StatelessWidget {
       )
     );
   }
+}
+
+/// call back route page
+Future<void> _navigationRoute(BuildContext context) async {
+  final Category result = await Navigator.of(context).push(_createRoute());
+  context.read<CreateExpenseBloc>().add(CategoryChanged(result.image, result.name));
+}
+
+/// animation route page
+Route _createRoute() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const CategoryPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      }
+  );
 }
 

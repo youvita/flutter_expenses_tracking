@@ -4,6 +4,7 @@ class Categories {
   final List<String>? dingbats;
   final List<String>? transports;
   final List<String>? foods;
+  final List<String>? animals;
   final List<String>? other;
 
   const Categories({
@@ -11,6 +12,7 @@ class Categories {
     this.dingbats,
     this.transports,
     this.foods,
+    this.animals,
     this.other
   });
 

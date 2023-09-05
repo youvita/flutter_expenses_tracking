@@ -26,6 +26,7 @@ class LocalDataSourceImpl extends LocalDataSource {
     List<dynamic> cateDingbats = [];
     List<dynamic> cateTransports = [];
     List<dynamic> cateFoods = [];
+    List<dynamic> cateAnimals = [];
     List<dynamic> cateOther = [];
 
     final String response = await rootBundle.loadString('assets/files/categories.json');
@@ -34,15 +35,17 @@ class LocalDataSourceImpl extends LocalDataSource {
     cateDingbats = data["categories"][1]["dingbats"];
     cateTransports = data["categories"][2]["transports"];
     cateFoods = data["categories"][3]["foods"];
-    cateOther = data["categories"][4]["other"];
+    cateAnimals = data["categories"][4]["animals"];
+    cateOther = data["categories"][5]["other"];
 
     List<String> emoticons = cateEmoticons.map((e) => e.toString()).toList();
     List<String> dingbats = cateDingbats.map((e) => e.toString()).toList();
     List<String> transports = cateTransports.map((e) => e.toString()).toList();
     List<String> foods = cateFoods.map((e) => e.toString()).toList();
+    List<String> animals = cateAnimals.map((e) => e.toString()).toList();
     List<String> other = cateOther.map((e) => e.toString()).toList();
 
-    var category = Categories(emoticons: emoticons, dingbats: dingbats, transports: transports, foods: foods, other: other);
+    var category = Categories(emoticons: emoticons, dingbats: dingbats, transports: transports, foods: foods, animals: animals, other: other);
     return category;
   }
 
