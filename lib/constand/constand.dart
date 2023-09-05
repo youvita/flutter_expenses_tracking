@@ -20,6 +20,12 @@ class MyTextStyles {
     color: MyColors.black,
   );
 
+  static const TextStyle textStyleMediumWhite15 = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w700,
+    color: MyColors.white,
+  );
+
   static const TextStyle textStyleMedium17 = TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.w500,
@@ -48,4 +54,5 @@ class MyColors {
   static const Color red = Color(0xFFFF0000);
   static const Color black = Color(0xFF000000);
   static const Color black10 = Color(0x1A0A0A0A);
+  static const Color grey = Color(0xFFD9D9D9);
 }

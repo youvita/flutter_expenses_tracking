@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/di/injection_container.dart' as di;
+import 'package:expenses_tracking/features/expenses/presentation/category/page/category_page.dart';
+import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +31,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const ReportHomePage(),
+      home: const CreatePage(),
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,

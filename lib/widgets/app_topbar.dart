@@ -7,10 +7,10 @@ class AppTopBarWidget extends StatefulWidget implements PreferredSizeWidget {
   final String title;
   final Color backgroundColor;
   final double elevation;
-  final Function onActionRight;
+  final Function? onActionRight;
 
   const AppTopBarWidget(
-      {Key? key, this.title = "", this.backgroundColor = MyColors.white, this.elevation = 0.0, required this.onActionRight}
+      {Key? key, this.title = "", this.backgroundColor = MyColors.white, this.elevation = 0.0, this.onActionRight}
       ) : preferredSize = const Size.fromHeight(kToolbarHeight), super(key: key);
 
   @override
@@ -33,7 +33,7 @@ class _AppTopBarState extends State<AppTopBarWidget> {
         InkWell(
           borderRadius: BorderRadius.circular(100),
           onTap: () {
-            widget.onActionRight();
+            widget.onActionRight!();
           },
           child: Container(
             padding: const EdgeInsets.all(10),

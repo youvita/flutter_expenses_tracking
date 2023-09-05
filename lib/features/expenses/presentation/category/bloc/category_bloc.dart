@@ -12,14 +12,37 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
 
   CategoryBloc({required CategoryUseCase useCase}) : _useCase = useCase, super(CategoryInitial()) {
     on<CategoryEvent>(_fetchCategories);
+    on<CategoryImageChanged>(_onCategoryImageChanged);
+    on<CategoryNameChanged>(_onCategoryNameChanged);
   }
 
   Future<void> _fetchCategories(CategoryEvent event, Emitter<CategoryState> emit) async {
     final categories = await _useCase.getCategories();
-    print("bloc:: $categories");
     emit(
         state.copyWith(
             categories: categories
+        )
+    );
+  }
+
+  void _onCategoryImageChanged(
+      CategoryImageChanged event,
+      Emitter<CategoryState> emit,
+      ) {
+    emit(
+        state.copyWith(
+            image: event.categoryImage
+        )
+    );
+  }
+
+  void _onCategoryNameChanged(
+      CategoryNameChanged event,
+      Emitter<CategoryState> emit,
+      ) {
+    emit(
+        state.copyWith(
+            name: event.categoryName
         )
     );
   }

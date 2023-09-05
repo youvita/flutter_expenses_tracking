@@ -24,19 +24,25 @@ class LocalDataSourceImpl extends LocalDataSource {
   Future<Categories> readJson() async {
     List<dynamic> cateEmoticons = [];
     List<dynamic> cateDingbats = [];
-    List<dynamic> cateTransport = [];
+    List<dynamic> cateTransports = [];
+    List<dynamic> cateFoods = [];
+    List<dynamic> cateOther = [];
 
     final String response = await rootBundle.loadString('assets/files/categories.json');
     final data = await json.decode(response);
     cateEmoticons = data["categories"][0]["emoticons"];
     cateDingbats = data["categories"][1]["dingbats"];
-    cateTransport = data["categories"][2]["transport"];
+    cateTransports = data["categories"][2]["transports"];
+    cateFoods = data["categories"][3]["foods"];
+    cateOther = data["categories"][4]["other"];
 
     List<String> emoticons = cateEmoticons.map((e) => e.toString()).toList();
     List<String> dingbats = cateDingbats.map((e) => e.toString()).toList();
-    List<String> transport = cateTransport.map((e) => e.toString()).toList();
+    List<String> transports = cateTransports.map((e) => e.toString()).toList();
+    List<String> foods = cateFoods.map((e) => e.toString()).toList();
+    List<String> other = cateOther.map((e) => e.toString()).toList();
 
-    var category = Categories(emoticons: emoticons, dingbats: dingbats, transport: transport);
+    var category = Categories(emoticons: emoticons, dingbats: dingbats, transports: transports, foods: foods, other: other);
     return category;
   }
 

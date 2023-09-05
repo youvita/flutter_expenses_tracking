@@ -1,7 +1,9 @@
 import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constand/constand.dart';
+import 'package:expenses_tracking/features/expenses/data/model/category.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
+import 'package:expenses_tracking/features/expenses/presentation/category/page/category_page.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/category_item.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/status_switch.dart';
@@ -63,7 +65,7 @@ class _StatusTypeWidget extends StatefulWidget {
 }
 
 class _ExpenseTypeSelected extends State {
-  bool _enable = false;
+  bool _enable = true;
   @override
   Widget build(BuildContext context) {
 
@@ -292,7 +294,7 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
                     image: "",
                     label: "Other",
                     onValueChanged: (Expenses category) {
-
+                      _navigationRoute(context);
                     },
                   )
                 ],
@@ -303,6 +305,11 @@ class _CategoryState extends State<_CategoriesWidget> with SingleTickerProviderS
     );
   }
 
+}
+
+Future<void> _navigationRoute(BuildContext context) async {
+  final Category result = await Navigator.push(context, MaterialPageRoute(builder: (context) => const CategoryPage()));
+  context.read<CreateExpenseBloc>().add(CategoryChanged(result.image, result.name));
 }
 
 class _SaveButton extends StatelessWidget {
@@ -322,7 +329,7 @@ class _SaveButton extends StatelessWidget {
         onPressed: () {
           context.read<CreateExpenseBloc>().add(const SaveEvent());
         },
-        child: const Text('Save'),
+        child: const Text('Save', style: MyTextStyles.textStyleMediumWhite15),
       )
     );
   }
