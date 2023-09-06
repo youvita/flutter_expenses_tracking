@@ -51,4 +51,20 @@ class ExpensesDatabase {
     return await _db.insert(table, expenses.toMap());
   }
 
+  Future<List<Expenses>> query() async {
+    final List<Map<String, dynamic>> maps = await _db.query(table);
+    return List.generate(maps.length, (index) {
+      return Expenses(
+        statusType: maps[index][columnStatusType],
+        issueDate: maps[index][columnIssueDate],
+        createDate: maps[index][columnCreateDate],
+        categoryImage: maps[index][columnCategoryImage],
+        category: maps[index][columnCategory],
+        currencyCode: maps[index][columnCurrency],
+        amount: maps[index][columnAmount],
+        remark: maps[index][columnRemark]
+      );
+    });
+  }
+
 }
