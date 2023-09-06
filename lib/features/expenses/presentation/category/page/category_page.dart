@@ -5,7 +5,7 @@ import 'package:expenses_tracking/widgets/app_topbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../../constand/constand.dart';
+import '../../../../../constant/constant.dart';
 import '../../../../../di/injection_container.dart';
 
 class CategoryPage extends StatelessWidget {

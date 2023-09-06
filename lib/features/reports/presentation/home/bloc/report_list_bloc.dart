@@ -15,6 +15,7 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
         super(CreateExpenseInitial()) {
     on<ReportListEvent>((event, emit) {
       on<OnYearDropChange>(_yearDropChange);
+      on<IncreaseIncome>(_increaseIncome);
     });
   }
 
@@ -22,8 +23,13 @@ class ReportListBloc extends Bloc<ReportListEvent, ReportListState> {
       OnYearDropChange event,
     Emitter<ReportListState> emit,
   ) {
-    state.totalIncome += 10.0;
     emit(state.copyWith(datePicker: event.datePicker));
   }
 
+  void _increaseIncome(
+      IncreaseIncome event,
+    Emitter<ReportListState> emit,
+  ) {
+    emit(state.copyWith(totalIncome: event.totalIncome));
+  }
 }

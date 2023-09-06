@@ -1,6 +1,6 @@
 import 'package:expenses_tracking/config/date_util.dart';
 import 'package:expenses_tracking/config/utils.dart';
-import 'package:expenses_tracking/constand/constand.dart';
+import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/features/expenses/data/model/category.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/category/page/category_page.dart';

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../../../constand/constand.dart';
+import '../../../../../constant/constant.dart';
 import '../../../../../widgets/divider_widget.dart';
 import '../../../../../widgets/text_select.dart';
 import '../../../data/model/category.dart';

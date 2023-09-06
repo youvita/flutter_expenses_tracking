@@ -1,5 +1,5 @@
 
-import 'package:expenses_tracking/constand/constand.dart';
+import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

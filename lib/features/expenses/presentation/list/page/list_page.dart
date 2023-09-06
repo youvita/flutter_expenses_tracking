@@ -1,4 +1,4 @@
-import 'package:expenses_tracking/constand/constand.dart';
+import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/widget/list_form.dart';
 import 'package:flutter/material.dart';

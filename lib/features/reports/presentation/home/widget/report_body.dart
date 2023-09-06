@@ -15,13 +15,15 @@ class _ReportBodyState extends State<ReportBody> {
     return SafeArea(child: SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(20),
-        child: const Column(
+        child: Column(
           children: [
-            SummaryReport(),
-            ChartReport(),
+            SummaryReport(callback: (){setState(() {});},),
+            const ChartReport(),
           ],
         ),
       ),
     ));
   }
 }
+
+

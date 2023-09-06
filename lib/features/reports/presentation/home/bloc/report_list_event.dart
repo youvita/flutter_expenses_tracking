@@ -19,3 +19,11 @@ class OnYearDropChange extends ReportListEvent {
   @override
   List<Object> get props => [datePicker];
 }
+
+class IncreaseIncome extends ReportListEvent {
+  const IncreaseIncome(this.totalIncome);
+  final double totalIncome;
+
+  @override
+  List<Object> get props => [totalIncome];
+}

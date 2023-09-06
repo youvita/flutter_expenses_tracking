@@ -20,6 +20,29 @@ class MyTextStyles {
     color: MyColors.black,
   );
 
+  static const TextStyle textStyleBold20Red = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: MyColors.red,
+  );
+
+  static const TextStyle textStyleBold20Green = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    color: MyColors.green,
+  );
+
+  static const TextStyle textStyle26 = TextStyle(
+    fontSize: 26,
+    color: MyColors.black,
+  );
+
+  static const TextStyle textStyleBold26Blue = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: MyColors.blue,
+  );
+
   static const TextStyle textStyleNormal15 = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.normal,
@@ -36,6 +59,18 @@ class MyTextStyles {
     fontSize: 17,
     fontWeight: FontWeight.w500,
     color: MyColors.black,
+  );
+
+  static const TextStyle textStyleMedium17Red = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: MyColors.red,
+  );
+
+  static const TextStyle textStyleMedium17Green = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: MyColors.green,
   );
 
   static const TextStyle textStyleBold17 = TextStyle(

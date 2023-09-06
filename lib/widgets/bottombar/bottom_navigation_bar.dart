@@ -1,4 +1,4 @@
-import 'package:expenses_tracking/constand/constand.dart';
+import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/page/list_page.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
