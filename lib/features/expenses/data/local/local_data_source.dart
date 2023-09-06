@@ -7,7 +7,8 @@ import '../../../../core/db/expenses_database.dart';
 
 abstract class LocalDataSource {
   Future<void> save(Expenses expenses);
-  Future<Categories> readJson();
+  Future<Categories> readCategories();
+  Future<List<Expenses>> getExpenses();
 }
 
 class LocalDataSourceImpl extends LocalDataSource {
@@ -21,7 +22,7 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<Categories> readJson() async {
+  Future<Categories> readCategories() async {
     List<dynamic> cateEmoticons = [];
     List<dynamic> cateDingbats = [];
     List<dynamic> cateTransports = [];
@@ -47,6 +48,11 @@ class LocalDataSourceImpl extends LocalDataSource {
 
     var category = Categories(emoticons: emoticons, dingbats: dingbats, transports: transports, foods: foods, animals: animals, other: other);
     return category;
+  }
+
+  @override
+  Future<List<Expenses>> getExpenses() async {
+    return db.query();
   }
 
 }

@@ -16,7 +16,7 @@ class CreateRepositoryImpl implements CreateRepository {
 
   @override
   Future<Categories> getCategories() async {
-    return await localDataSource.readJson();
+    return await localDataSource.readCategories();
   }
 
 }
