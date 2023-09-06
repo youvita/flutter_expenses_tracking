@@ -55,12 +55,13 @@ class MyTextStyles {
 //Colors
 class MyColors {
   static const Color white = Color(0xFFFFFFFF);
-  static const Color blue = Color(0xFF3743EC);
+  static const Color blue = Color(0xFF0084FF);
   static const Color green = Color(0xFF38AD52);
   static const Color red = Color(0xFFFF0000);
   static const Color black = Color(0xFF000000);
   static const Color black10 = Color(0x1A0A0A0A);
   static const Color grey = Color(0xFFD9D9D9);
+  static const Color greyBackground = Color(0xFFEEEFF0);
 }
 
 class MyMaterialColors {

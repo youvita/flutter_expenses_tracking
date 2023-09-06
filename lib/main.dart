@@ -4,6 +4,7 @@ import 'package:expenses_tracking/di/injection_container.dart' as di;
 import 'package:expenses_tracking/features/expenses/presentation/category/page/category_page.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
+import 'package:expenses_tracking/widgets/bottombar/bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: MyMaterialColors.blue
       ),
-      home: const CreatePage(),
+      home: const BottomNavigationBarWidget(),
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       locale: context.locale,

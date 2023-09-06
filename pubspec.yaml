@@ -63,6 +63,9 @@ dependencies:
   # Support svg file
   flutter_svg: ^2.0.7
 
+  # Bottom app bar can only display a notch FAB with an app bar.
+  convex_bottom_bar: ^3.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
