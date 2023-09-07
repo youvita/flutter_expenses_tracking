@@ -1,9 +1,13 @@
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
+import 'package:expenses_tracking/features/expenses/presentation/list/bloc/list_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/page/list_page.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../di/injection_container.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});
@@ -19,6 +23,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   void _onItemTapped(int index) {
     setState(() {
+      print("selected index:: $index");
       _selectedIndex = index;
     });
   }
@@ -26,86 +31,89 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedFontSize: 5,
-        showSelectedLabels: false,
-        backgroundColor: MyColors.white,
-        elevation: 0.0,
-        items: <BottomNavigationBarItem>[
-
-          BottomNavigationBarItem(
-            icon: Column(children: [
-              const SizedBox(height: 15),
-              Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: SvgPicture.asset('assets/images/ic_list.svg', height: 19, width: 19)
-                  )
-              ),
-              Text("Expense", style: TextStyle(fontSize: 11, color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey))
-            ]),
-            label: '',
+        body: Center(
+          child: BlocProvider(
+            create: (_) => sl<ListExpenseBloc>()..add(const ListExpenseLoad()),
+            child: _widgetOptions.elementAt(_selectedIndex),
           ),
-          BottomNavigationBarItem(
-            icon: InkWell(
-                borderRadius: BorderRadius.circular(100),
-                onTap: () {
-                  _navigationRoute(context);
-                },
-                child: Container(
-                    height: 46,
-                    width: 46,
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.topCenter,
-                          stops: [0.6, 1.0],
-                          tileMode: TileMode.mirror,
-                          colors: [MyColors.blue, MyColors.white]
-                      ),
-                      color: MyColors.blue,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          selectedFontSize: 5,
+          showSelectedLabels: false,
+          backgroundColor: MyColors.white,
+          elevation: 0.0,
+          items: <BottomNavigationBarItem>[
+
+            BottomNavigationBarItem(
+              icon: Column(children: [
+                const SizedBox(height: 15),
+                Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: SvgPicture.asset('assets/images/ic_plus.svg', height: 17, width: 17)
+                        padding: const EdgeInsets.all(5),
+                        child: SvgPicture.asset('assets/images/ic_list.svg', height: 19, width: 19)
                     )
-                )
+                ),
+                Text("Expense", style: TextStyle(fontSize: 11, color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey))
+              ]),
+              label: '',
             ),
-            label: '',
-          ),
-          BottomNavigationBarItem(
-            icon: Column(children: [
-              const SizedBox(height: 15),
-              Container(
-                  height: 30,
-                  width: 30,
-                  decoration: BoxDecoration(
-                    color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                      padding: const EdgeInsets.all(5),
-                      child: SvgPicture.asset('assets/images/ic_pie-chart.svg', height: 19, width: 19)
+            BottomNavigationBarItem(
+              icon: InkWell(
+                  borderRadius: BorderRadius.circular(100),
+                  onTap: () {
+                    _navigationRoute(context);
+                  },
+                  child: Container(
+                      height: 46,
+                      width: 46,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            stops: [0.6, 1.0],
+                            tileMode: TileMode.mirror,
+                            colors: [MyColors.blue, MyColors.white]
+                        ),
+                        color: MyColors.blue,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: SvgPicture.asset('assets/images/ic_plus.svg', height: 17, width: 17)
+                      )
                   )
               ),
-              Text("Report", style: TextStyle(fontSize: 11, color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey))
-            ]),
-            label: '',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-      )
+              label: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Column(children: [
+                const SizedBox(height: 15),
+                Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: SvgPicture.asset('assets/images/ic_pie-chart.svg', height: 19, width: 19)
+                    )
+                ),
+                Text("Report", style: TextStyle(fontSize: 11, color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey))
+              ]),
+              label: '',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
+        )
     );
   }
 

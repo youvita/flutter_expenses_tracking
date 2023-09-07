@@ -52,7 +52,7 @@ class LocalDataSourceImpl extends LocalDataSource {
 
   @override
   Future<List<Expenses>> getExpenses() async {
-    return db.query();
+    return await db.query();
   }
 
 }

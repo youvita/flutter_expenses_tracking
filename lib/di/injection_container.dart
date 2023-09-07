@@ -8,6 +8,7 @@ import 'package:expenses_tracking/features/expenses/domain/usecase/create_usecas
 import 'package:expenses_tracking/features/expenses/domain/usecase/list_usecase.dart';
 import 'package:expenses_tracking/features/expenses/presentation/category/bloc/category_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
+import 'package:expenses_tracking/features/expenses/presentation/list/bloc/list_expense_bloc.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/bloc/report_list_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -21,6 +22,7 @@ Future<void> init() async {
   sl.registerFactory(() => CreateExpenseBloc(useCase: sl()));
   sl.registerFactory(() => ReportListBloc(useCase: sl()));
   sl.registerFactory(() => CategoryBloc(useCase: sl()));
+  sl.registerFactory(() => ListExpenseBloc(useCase: sl()));
 
   // Use Case
   sl.registerLazySingleton(() => CreateUseCase(repository: sl()));

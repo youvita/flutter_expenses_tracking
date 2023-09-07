@@ -18,7 +18,7 @@ class ExpensesDatabase {
   static const columnAmount = 'amount';
   static const columnRemark = 'remark';
 
-  late Database _db;
+  Database? _db;
 
   Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -48,11 +48,11 @@ class ExpensesDatabase {
 
   // inserted row.
   Future<int> insert(Expenses expenses) async {
-    return await _db.insert(table, expenses.toMap());
+    return await _db?.insert(table, expenses.toMap()) ?? -1;
   }
 
   Future<List<Expenses>> query() async {
-    final List<Map<String, dynamic>> maps = await _db.query(table);
+    final List<Map<String, dynamic>> maps = await _db?.query(table) ?? List.empty();
     return List.generate(maps.length, (index) {
       return Expenses(
         statusType: maps[index][columnStatusType],

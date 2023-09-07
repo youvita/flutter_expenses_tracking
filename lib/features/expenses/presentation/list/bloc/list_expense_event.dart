@@ -6,3 +6,7 @@ abstract class ListExpenseEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class ListExpenseLoad extends ListExpenseEvent {
+  const ListExpenseLoad();
+}
