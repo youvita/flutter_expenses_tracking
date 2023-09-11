@@ -67,6 +67,8 @@ dependencies:
   # Bottom app bar can only display a notch FAB with an app bar.
   convex_bottom_bar: ^3.2.0
 
+  sticky_headers: ^0.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

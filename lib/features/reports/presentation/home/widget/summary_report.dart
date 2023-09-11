@@ -64,7 +64,7 @@ class _YearDropDown extends State<_YearDrop> {
   @override
   Widget build(BuildContext context) {
     dropDownList=[];
-    selectedValue = Utils.dateFormatYYYY(DateTime.now());
+    selectedValue = Utils.dateFormatYear(DateTime.now());
     currentYear = DateTime.now().year;
     for (int i = currentYear - 5; i <= currentYear; i++) {
       dropDownList.add(ListItem<String>(i.toString(), value: i.toString()));

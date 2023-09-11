@@ -1,6 +1,6 @@
 
+import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../constant/constant.dart';
@@ -40,12 +40,11 @@ class _ListItemState extends State<ListItem> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(widget.item?.createDate ?? "", style: MyTextStyles.textStyleNormal15),
+                        Text(Utils.dateFormat(Utils.dateTimeFormat("${widget.item?.issueDate}")), style: MyTextStyles.textStyleNormal15),
                         Text(widget.item?.amount ?? "", style: MyTextStyles.textStyleMedium17Red)
                       ],
                     )
-                  ],
-                )
+                  ])
                 )
               ],
             )),
