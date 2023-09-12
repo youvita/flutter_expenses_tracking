@@ -17,78 +17,101 @@ class ListFormWidget extends StatefulWidget {
 
 class _ListFormState extends State<ListFormWidget> {
   var lastHeader = "";
-  var isHeader = false;
-  var lastTile = "";
-  var isTile = false;
+  var lastChildHeader = "";
 
   @override
   Widget build(BuildContext context) {
-    List<Expenses>? listItem = List.empty();
+    List<Expenses> listItem = List.empty();
+    List<String> listHeader = List.empty(growable: true);
+    List<String> listChildHeader = List.empty(growable: true);
 
     setState(() {
-      listItem = context.select((ListExpenseBloc bloc) => bloc.state.listExpenses);
+      listItem = context.select((ListExpenseBloc bloc) => bloc.state.listExpenses ?? List.empty());
+
+      for (var i = 0; i < listItem.length; i++) {
+        DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
+        String header = Utils.dateFormatYear(dateTime);
+        String childHeader = Utils.dateFormatYearMonth(dateTime);
+        if (lastHeader != header) {
+          listHeader.add(header);
+          lastHeader = header;
+        }
+      }
     });
 
     return ListView.builder(
-        itemCount: listItem?.length,
-        itemBuilder: (context, index) {
-          Expenses? item = listItem?.elementAt(index);
-          DateTime dateTime = Utils.dateTimeFormat("${item?.createDate}");
-          String header = Utils.dateFormatYear(dateTime);
-
-          print(header);
-          /// header condition check
-          if (lastHeader != header) {
-              isHeader = true;
-              lastHeader = header;
-          } else {
-              isHeader = false;
-          }
-
-          String tile = Utils.dateFormatYearMonth(dateTime);
-          print(tile);
-          if (lastTile != tile) {
-            isTile = true;
-            lastTile = tile;
-          } else {
-            isTile = false;
-          }
-
+        itemCount: listHeader.length,
+        itemBuilder: (BuildContext context, int index) {
           return StickyHeader(
-              header: isHeader ? Container(
-                  padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 7),
-                  child: Text(header, style: MyTextStyles.textStyleMedium17)
-              ) : const SizedBox(),
-              content: ExpansionTile(
-                title: Text("Header"),
-                children: [
-                  isTile ?
-                  Column(
-                    children: [
-                      ListItem(item: item),
-                      item == listItem?.last ? const SizedBox()
-                          : Container(
-                          padding: const EdgeInsets.only(left: 70),
-                          child: const Divider(
-                              height: 0,
-                              thickness: 1
-                          ))
-                    ],
-                  ):
-                  Column(
-                    children: [
-                      ListItem(item: item),
-                      item == listItem?.last ? const SizedBox()
-                          : Container(
-                          padding: const EdgeInsets.only(left: 70),
-                          child: const Divider(
-                              height: 0,
-                              thickness: 1
-                          ))
-                    ],
-                  )
-                ],
-              )
+              header: ColoredBox(
+                color: MyColors.greyBackground,
+                child: Container(
+                    padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 7),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Text(listHeader.elementAt(index), style: MyTextStyles.textStyleMedium17)
+                      ],
+                    )
+                ),
+              ),
+              content: SingleChildScrollView(
+                  physics: const ScrollPhysics(),
+                  child: Column(
+                      children: [
+                            ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: listItem.length,
+                                itemBuilder: (context, indexChild) {
+                                  Expenses? childItem = listItem.elementAt(indexChild);
+                                  return listHeader.elementAt(index) == Utils.dateFormatYear(Utils.dateTimeFormat("${childItem.createDate}")) ?
+                                  Column(
+                                    children: [
+                                      ListItem(item: childItem),
+                                      childItem == listItem.last ? const SizedBox()
+                                          : Container(
+                                          padding: const EdgeInsets.only(left: 70),
+                                          child: const Divider(
+                                              height: 0,
+                                              thickness: 1
+                                          ))
+                                    ],
+                                  ) : const SizedBox();
+                                }
+                            )
+                      ]))
+
+              // ExpansionTile(
+              //   title: Text("Header"),
+              //   children: [
+              //     isTile ?
+              //     Column(
+              //       children: [
+              //         ListItem(item: item),
+              //         item == listItem?.last ? const SizedBox()
+              //             : Container(
+              //             padding: const EdgeInsets.only(left: 70),
+              //             child: const Divider(
+              //                 height: 0,
+              //                 thickness: 1
+              //             ))
+              //       ],
+              //     ):
+              //     Column(
+              //       children: [
+              //         ListItem(item: item),
+              //         item == listItem?.last ? const SizedBox()
+              //             : Container(
+              //             padding: const EdgeInsets.only(left: 70),
+              //             child: const Divider(
+              //                 height: 0,
+              //                 thickness: 1
+              //             ))
+              //       ],
+              //     )
+              //   ],
+              // )
           );
         }
     );
