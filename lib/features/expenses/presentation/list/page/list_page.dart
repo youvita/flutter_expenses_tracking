@@ -17,6 +17,7 @@ class ListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DefaultAppBar(title: 'Expense'),

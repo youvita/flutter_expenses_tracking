@@ -20,6 +20,7 @@ class _ListFormState extends State<ListFormWidget> {
   var lastHeader = "";
   var totalAmount = 0.0;
   var status = "";
+  int toggleIndex = 0;
 
   List<Expenses> listItem = List.empty();
   List<String> listHeader = List.empty(growable: true);
@@ -27,8 +28,8 @@ class _ListFormState extends State<ListFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    listItem = context.select((ListExpenseBloc bloc) => bloc.state.listExpenses ?? List.empty());
 
+    listItem = context.select((ListExpenseBloc bloc) => bloc.state.listExpenses ?? List.empty());
     setState(() {
       print("after loaded: $listItem");
 
@@ -64,6 +65,7 @@ class _ListFormState extends State<ListFormWidget> {
             Container(
               padding: const EdgeInsets.all(10),
               child: ExpenseToggle(
+                defaultIndex: toggleIndex,
                 onToggle: (int index) {
                     print("selected index $index");
                     setState(() {
@@ -72,7 +74,7 @@ class _ListFormState extends State<ListFormWidget> {
                       listTotal.clear();
                       lastHeader = "";
                       totalAmount = 0.0;
-
+                      toggleIndex = index;
                       status = index == 0 ? '' : index.toString();
                       print("set status $status");
                       context.read<ListExpenseBloc>().add(ListExpenseLoad(status));
