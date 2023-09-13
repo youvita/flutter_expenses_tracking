@@ -9,8 +9,8 @@ class ListRepositoryImpl implements ListRepository {
   ListRepositoryImpl({required this.localDataSource});
 
   @override
-  Future<List<Expenses>> getExpenses() async {
-    return await localDataSource.getExpenses();
+  Future<List<Expenses>> getExpenses(String status) async {
+    return await localDataSource.getExpenses(status);
   }
 
 }

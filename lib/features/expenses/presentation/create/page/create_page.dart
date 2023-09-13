@@ -17,7 +17,7 @@ class CreatePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppTopBarWidget(title: "Create", onActionRight: (_) {
+      appBar: AppTopBarWidget(title: "Create", onActionRight: () {
         Navigator.pop(context);
       }),
       backgroundColor: MyColors.white,

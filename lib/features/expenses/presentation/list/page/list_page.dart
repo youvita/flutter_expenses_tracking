@@ -22,7 +22,7 @@ class ListPage extends StatelessWidget {
       appBar: const DefaultAppBar(title: 'Expense'),
       backgroundColor: MyColors.greyBackground,
       body: BlocProvider(
-        create: (_) => sl<ListExpenseBloc>()..add(const ListExpenseLoad()),
+        create: (_) => sl<ListExpenseBloc>()..add(const ListExpenseLoad('')),
         child: const ListFormWidget(),
       ),
     );

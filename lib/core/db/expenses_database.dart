@@ -51,8 +51,9 @@ class ExpensesDatabase {
     return await _db?.insert(table, expenses.toMap()) ?? -1;
   }
 
-  Future<List<Expenses>> query() async {
-    final List<Map<String, dynamic>> maps = await _db?.query(table, orderBy: "$columnCreateDate DESC") ?? List.empty();
+  Future<List<Expenses>> query(String status) async {
+    print("query status: $status");
+    final List<Map<String, dynamic>> maps = await _db?.query(table, where: "$columnStatusType = ${status.isEmpty ? "1 AND 2" : status}", orderBy: "$columnCreateDate DESC") ?? List.empty();
     return List.generate(maps.length, (index) {
       return Expenses(
         statusType: maps[index][columnStatusType],

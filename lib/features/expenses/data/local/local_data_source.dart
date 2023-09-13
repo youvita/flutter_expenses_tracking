@@ -8,7 +8,7 @@ import '../../../../core/db/expenses_database.dart';
 abstract class LocalDataSource {
   Future<void> save(Expenses expenses);
   Future<Categories> readCategories();
-  Future<List<Expenses>> getExpenses();
+  Future<List<Expenses>> getExpenses(String status);
 }
 
 class LocalDataSourceImpl extends LocalDataSource {
@@ -51,8 +51,8 @@ class LocalDataSourceImpl extends LocalDataSource {
   }
 
   @override
-  Future<List<Expenses>> getExpenses() async {
-    return await db.query();
+  Future<List<Expenses>> getExpenses(String status) async {
+    return await db.query(status);
   }
 
 }

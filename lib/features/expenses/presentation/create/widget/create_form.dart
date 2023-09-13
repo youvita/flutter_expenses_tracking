@@ -14,7 +14,8 @@ import 'package:expenses_tracking/widgets/text_select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
+
+import '../../../../../widgets/bottombar/bottom_navigation_bar.dart';
 
 class CreateFormWidget extends StatefulWidget {
   const CreateFormWidget({super.key});
@@ -148,7 +149,7 @@ class _CategoryInput extends State<_CategoryWidget> {
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (bool value) {
           // widget.onSelected(value);
-          _navigationRoute(context);
+          _navigationCategoryRoute(context);
         });
   }
 
@@ -328,6 +329,7 @@ class _SaveButton extends StatelessWidget {
         ),
         onPressed: () {
           context.read<CreateExpenseBloc>().add(const SaveEvent());
+          _navigationListRoute(context);
         },
         child: const Text('Save', style: MyTextStyles.textStyleMediumWhite15),
       )
@@ -336,15 +338,39 @@ class _SaveButton extends StatelessWidget {
 }
 
 /// call back route page
-Future<void> _navigationRoute(BuildContext context) async {
-  final Category result = await Navigator.of(context).push(_createRoute());
+Future<void> _navigationCategoryRoute(context) async {
+  final Category result = await Navigator.of(context).push(_categoryRoute());
   context.read<CreateExpenseBloc>().add(CategoryChanged(result.image, result.name));
 }
 
+/// call back route page
+Future<void> _navigationListRoute(context) async {
+  Navigator.of(context).pushAndRemoveUntil(_listRoute(), (r) { return false;} );
+}
+
 /// animation route page
-Route _createRoute() {
+Route _categoryRoute() {
   return PageRouteBuilder(
       pageBuilder: (context, animation, secondaryAnimation) => const CategoryPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      }
+  );
+}
+
+/// animation route page
+Route _listRoute() {
+  return PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => const BottomNavigationBarWidget(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
         const end = Offset.zero;

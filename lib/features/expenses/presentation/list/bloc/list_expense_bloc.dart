@@ -14,16 +14,33 @@ class ListExpenseBloc extends Bloc<ListExpenseEvent, ListExpenseState> {
 
   ListExpenseBloc({required ListUseCase useCase}) : _useCase = useCase, super(ListExpenseInitial()) {
     on<ListExpenseEvent>(_fetchExpenses);
+    // on<StatusChanged>(_onStatusChanged);
   }
 
   Future<void> _fetchExpenses(ListExpenseEvent event, Emitter<ListExpenseState> emit) async {
-    final expenses = await _useCase.getExpenses();
+    // print("Fetching.....");
+    // print(event.status);
+    final expenses = await _useCase.getExpenses(event.status ?? '');
+    // print(expenses);
     emit(
         state.copyWith(
-            listExpenses: expenses
+            listExpenses: expenses,
+            status: event.status
         )
     );
   }
+
+  // void _onStatusChanged(
+  //     StatusChanged event,
+  //     Emitter<ListExpenseState> emit,
+  //     ) {
+  //   print("status changed: ${event.status}");
+  //   emit(
+  //       state.copyWith(
+  //           status: event.status
+  //       )
+  //   );
+  // }
 }
 
 

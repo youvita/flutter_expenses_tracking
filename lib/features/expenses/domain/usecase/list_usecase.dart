@@ -9,8 +9,8 @@ class ListUseCase {
     required this.repository
   });
 
-  Future<List<Expenses>> getExpenses() async {
-    return await repository.getExpenses();
+  Future<List<Expenses>> getExpenses(String status) async {
+    return await repository.getExpenses(status);
   }
 
 }

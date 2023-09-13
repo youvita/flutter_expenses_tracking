@@ -30,12 +30,14 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
         body: Center(
-          child: BlocProvider(
-            create: (_) => sl<ListExpenseBloc>()..add(const ListExpenseLoad()),
-            child: _widgetOptions.elementAt(_selectedIndex),
-          ),
+          child: _widgetOptions.elementAt(_selectedIndex),
+          // child: BlocProvider(
+          //   create: (_) => sl<ListExpenseBloc>()..add(const ListExpenseLoad()),
+          //   child: _widgetOptions.elementAt(_selectedIndex),
+          // ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           selectedFontSize: 5,
