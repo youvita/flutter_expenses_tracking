@@ -8,6 +8,7 @@ class TextSelectWidget extends StatefulWidget {
   final String imagePath;
   final EdgeInsets? padding;
   final double horSpace;
+  final bool enable;
   final ValueChanged<bool> onTap;
 
   const TextSelectWidget({
@@ -17,6 +18,7 @@ class TextSelectWidget extends StatefulWidget {
     required this.imagePath,
     this.padding = const EdgeInsets.only(left: 20, top: 15, right: 14, bottom: 15),
     this.horSpace = 8,
+    this.enable = true,
     required this.onTap
   }): super(key: key);
 
@@ -33,8 +35,10 @@ class _CustomTextSelect extends State<TextSelectWidget> {
 
     return InkWell(
       onTap: () {
-        isExpand = !isExpand;
-        widget.onTap(isExpand);
+        if (widget.enable) {
+          isExpand = !isExpand;
+          widget.onTap(isExpand);
+        }
       },
       child: Container(
         padding: widget.padding,

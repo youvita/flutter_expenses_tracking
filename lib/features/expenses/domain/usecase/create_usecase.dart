@@ -11,8 +11,13 @@ class CreateUseCase implements UseCase<Expenses> {
   });
 
   @override
-  Future<void> call(Expenses params) async {
+  Future<void> save(Expenses params) async {
     return await repository.save(params);
+  }
+
+  @override
+  Future<void> update(Expenses params) async {
+    return await repository.update(params);
   }
 
 }

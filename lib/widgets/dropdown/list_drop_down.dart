@@ -10,9 +10,11 @@ class DropDownList<T> extends StatefulWidget {
   final T? value;
   final ValueChanged<T?>? onChange;
   final TextStyle? textStyle;
+  final bool enable;
 
   const DropDownList({
     Key? key,
+    this.enable = true,
     required this.listItems,
     this.value,
     this.onChange,
@@ -47,7 +49,11 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
       link: _layerLink,
       child: InkWell(
         borderRadius: BorderRadius.circular(100),
-        onTap: _onTap,
+        onTap: () {
+          if (widget.enable) {
+            _onTap();
+          }
+        },
         child: FocusableActionDetector(
           focusNode: _focusNode,
           mouseCursor: SystemMouseCursors.click,

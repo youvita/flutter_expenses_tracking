@@ -9,10 +9,12 @@ class TextAmountInputWidget extends StatefulWidget {
   final String value;
   final EdgeInsets? padding;
   final double horSpace;
+  final bool enable;
   final ValueChanged<Expenses> onValueChanged;
 
   const TextAmountInputWidget({
     Key? key,
+    this.enable = true,
     required this.placeholder,
     required this.value,
     this.padding = const EdgeInsets.only(left: 10, top: 15, right: 20, bottom: 15),
@@ -27,6 +29,21 @@ class TextAmountInputWidget extends StatefulWidget {
 
 class _CustomTextSelect extends State<TextAmountInputWidget> {
   String _selectedValue = "1";
+  final _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.text = widget.value;
+    _controller.addListener(_latestValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -39,6 +56,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
           Flexible(
               child:
             DropDownList<String>(
+              enable: widget.enable,
               listItems: const [
                 ListItem<String>('USD', value: '1'),
                 ListItem<String>('KHR', value: '2'),
@@ -52,6 +70,8 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
           Flexible(
             flex: 2,
             child: TextField(
+              controller: _controller,
+              enabled: widget.enable,
               key: const Key('createForm_amountInput_textField'),
               onChanged: (amount) => {
                 widget.onValueChanged(Expenses(currencyCode: _selectedValue == "1" ? "USD" : "KHR", amount: amount))
@@ -69,6 +89,9 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
         ],
       ),
     );
+  }
+
+  void _latestValue() {
   }
 
 }

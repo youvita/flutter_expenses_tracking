@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
+import '../../create/page/create_page.dart';
+
 class ListFormWidget extends StatefulWidget {
   const ListFormWidget({super.key});
 
@@ -19,7 +21,6 @@ class ListFormWidget extends StatefulWidget {
 class _ListFormState extends State<ListFormWidget> {
   var lastHeader = "";
   var totalAmount = 0.0;
-  var status = "";
   int toggleIndex = 0;
 
   List<Expenses> listItem = List.empty();
@@ -28,11 +29,9 @@ class _ListFormState extends State<ListFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     listItem = context.select((ListExpenseBloc bloc) => bloc.state.listExpenses ?? List.empty());
-    setState(() {
-      print("after loaded: $listItem");
 
+    setState(() {
       /// loop to filter header each year
       for (var i = 0; i < listItem.length; i++) {
         DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
@@ -42,8 +41,6 @@ class _ListFormState extends State<ListFormWidget> {
           lastHeader = header;
         }
       }
-
-      print(listHeader);
 
       /// loop to sum total amount each year
       for (var i = 0; i < listHeader.length; i++) {
@@ -55,8 +52,6 @@ class _ListFormState extends State<ListFormWidget> {
         listTotal.add(totalAmount);
         totalAmount = 0.0;
       }
-
-      print(listTotal);
     });
 
     return Column(
@@ -67,7 +62,7 @@ class _ListFormState extends State<ListFormWidget> {
               child: ExpenseToggle(
                 defaultIndex: toggleIndex,
                 onToggle: (int index) {
-                    print("selected index $index");
+                  if (toggleIndex != index) {
                     setState(() {
                       listHeader.clear();
                       listItem.clear();
@@ -75,10 +70,10 @@ class _ListFormState extends State<ListFormWidget> {
                       lastHeader = "";
                       totalAmount = 0.0;
                       toggleIndex = index;
-                      status = index == 0 ? '' : index.toString();
-                      print("set status $status");
-                      context.read<ListExpenseBloc>().add(ListExpenseLoad(status));
+                      context.read<ListExpenseBloc>().add(
+                          ListExpenseLoad(index == 0 ? '' : index.toString()));
                     });
+                  }
                 },
               ),
             ),
@@ -102,9 +97,10 @@ class _ListFormState extends State<ListFormWidget> {
                       ),
                       content: SingleChildScrollView(
                           physics: const ScrollPhysics(),
-                          child: Column(
-                              children: [
-                                ListView.builder(
+                          child: ColoredBox(
+                              color: MyColors.white,
+                              child:
+                              ListView.builder(
                                     physics: const NeverScrollableScrollPhysics(),
                                     shrinkWrap: true,
                                     itemCount: listItem.length,
@@ -113,7 +109,13 @@ class _ListFormState extends State<ListFormWidget> {
                                       return listHeader.elementAt(index) == Utils.dateFormatYear(Utils.dateTimeFormat("${childItem.createDate}")) ?
                                       Column(
                                         children: [
-                                          ListItem(item: childItem),
+                                          ListItem(
+                                              item: childItem,
+                                              onItemSelected: (Expenses? value) {
+                                                  print(value);
+                                                 _navigationRoute(context, value);
+                                              },
+                                          ),
                                           childItem == listItem.last ? const SizedBox()
                                               : Container(
                                               padding: const EdgeInsets.only(left: 70),
@@ -125,7 +127,6 @@ class _ListFormState extends State<ListFormWidget> {
                                       ) : const SizedBox();
                                     }
                                 )
-                              ]
                           )
                       )
                   );
@@ -135,4 +136,29 @@ class _ListFormState extends State<ListFormWidget> {
     );
   }
 
+}
+
+/// call back route page
+Future<void> _navigationRoute(BuildContext context, Expenses? param) async {
+  Navigator.of(context).push(_createRoute(param));
+}
+
+/// animation route page
+Route _createRoute(Expenses? param) {
+  return PageRouteBuilder(
+      settings: RouteSettings(arguments: param),
+      pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+        return SlideTransition(
+          position: animation.drive(tween),
+          child: child,
+        );
+      }
+  );
 }

@@ -7,6 +7,15 @@ abstract class CreateExpenseEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ExpensesIDChanged extends CreateExpenseEvent {
+  const ExpensesIDChanged(this.id);
+
+  final int id;
+
+  @override
+  List<Object> get props => [id];
+}
+
 class ExpensesTypeChanged extends CreateExpenseEvent {
   const ExpensesTypeChanged(this.expensesType);
 
@@ -23,6 +32,15 @@ class IssueDateChanged extends CreateExpenseEvent {
 
   @override
   List<Object> get props => [issueDate];
+}
+
+class CreateDateChanged extends CreateExpenseEvent {
+  const CreateDateChanged(this.createDate);
+
+  final DateTime createDate;
+
+  @override
+  List<Object> get props => [createDate];
 }
 
 class CategoryChanged extends CreateExpenseEvent {
@@ -62,6 +80,28 @@ class RemarkChanged extends CreateExpenseEvent {
   List<Object> get props => [remark];
 }
 
+class IsNewChanged extends CreateExpenseEvent {
+  const IsNewChanged(this.isNew);
+
+  final bool isNew;
+
+  @override
+  List<Object> get props => [isNew];
+}
+
+class IsUpdateChanged extends CreateExpenseEvent {
+  const IsUpdateChanged(this.isUpdate);
+
+  final bool isUpdate;
+
+  @override
+  List<Object> get props => [isUpdate];
+}
+
 class SaveEvent extends CreateExpenseEvent {
   const SaveEvent();
+}
+
+class UpdateEvent extends CreateExpenseEvent {
+  const UpdateEvent();
 }

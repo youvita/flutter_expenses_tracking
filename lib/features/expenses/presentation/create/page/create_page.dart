@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/bloc/create_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/widget/create_form.dart';
 import 'package:expenses_tracking/widgets/app_topbar.dart';
@@ -15,15 +16,18 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final params = ModalRoute.of(context)?.settings.arguments as Expenses;
+    final isNew = params.statusType == null;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppTopBarWidget(title: "Create", onActionRight: () {
+      appBar: AppTopBarWidget(title: isNew ? "Create" : "View", onActionRight: () {
         Navigator.pop(context);
       }),
       backgroundColor: MyColors.white,
       body: BlocProvider(
         create: (_) => sl<CreateExpenseBloc>(),
-        child: const CreateFormWidget(),
+        child: CreateFormWidget(expenses: params, isNew: isNew),
       ),
     );
   }

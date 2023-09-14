@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/bloc/list_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/page/list_page.dart';
@@ -129,6 +130,7 @@ Future<void> _navigationRoute(BuildContext context) async {
 /// animation route page
 Route _createRoute() {
   return PageRouteBuilder(
+      settings: const RouteSettings(arguments: Expenses()),
       pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);

@@ -1,11 +1,11 @@
-
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/material.dart';
 
 class StatusSwitch extends StatefulWidget {
   final bool value;
+  final bool enable;
   final ValueChanged<bool> onChanged;
-  const StatusSwitch({Key? key, required this.value, required this.onChanged}): super(key: key);
+  const StatusSwitch({Key? key, this.enable = true, required this.value, required this.onChanged}): super(key: key);
 
   @override
   State<StatefulWidget> createState() => _CustomSwitchState();
@@ -30,12 +30,15 @@ class _CustomSwitchState extends State<StatusSwitch> with SingleTickerProviderSt
     return AnimatedBuilder(animation: _animationController!, builder: (context, child) {
       return GestureDetector(
         onTap: () {
-          if (_animationController!.isCompleted) {
-            _animationController!.reverse();
-          } else {
-            _animationController!.forward();
+          if (widget.enable) {
+            if (_animationController!.isCompleted) {
+              _animationController!.reverse();
+            } else {
+              _animationController!.forward();
+            }
+            widget.value == false ? widget.onChanged(true) : widget.onChanged(
+                false);
           }
-          widget.value == false ? widget.onChanged(true) : widget.onChanged(false);
         },
         child: Stack(
             children: [

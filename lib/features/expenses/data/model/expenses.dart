@@ -1,7 +1,7 @@
 import '../../../../core/db/expenses_database.dart';
 
 class Expenses {
-
+  final int? id;
   final String? statusType;
   final String? issueDate;
   final String? createDate;
@@ -12,6 +12,7 @@ class Expenses {
   final String? remark;
 
   const Expenses({
+    this.id,
     this.statusType,
     this.issueDate,
     this.createDate,
@@ -24,6 +25,7 @@ class Expenses {
 
   Map<String, dynamic> toMap() {
     return {
+      ExpensesDatabase.columnID: id,
       ExpensesDatabase.columnStatusType: statusType,
       ExpensesDatabase.columnIssueDate: issueDate,
       ExpensesDatabase.columnCreateDate: createDate,
@@ -38,6 +40,7 @@ class Expenses {
   @override
   String toString() {
     return 'Expenses { '
+        'id: $id, '
         'statusType: $statusType, '
         'issueDate: $issueDate, '
         'createDate: $createDate, '

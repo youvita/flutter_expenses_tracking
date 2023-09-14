@@ -6,10 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CategoryItemWidget extends StatefulWidget {
   final String image;
   final String label;
+  final bool enable;
   final ValueChanged<Expenses> onValueChanged;
 
   const CategoryItemWidget({
     Key? key,
+    this.enable = true,
     required this.image,
     required this.label,
     required this.onValueChanged
@@ -36,7 +38,10 @@ class _CategoryItemState extends State<CategoryItemWidget> {
               child: InkWell(
                   borderRadius: BorderRadius.circular(16),
                   onTap: () {
-                    widget.onValueChanged(Expenses(categoryImage: widget.image, category: widget.label));
+                    if (widget.enable) {
+                      widget.onValueChanged(Expenses(
+                          categoryImage: widget.image, category: widget.label));
+                    }
                   },
                   child: Container(
                       padding: const EdgeInsets.all(20),

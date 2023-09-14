@@ -8,10 +8,12 @@ class TextRemarkInputWidget extends StatefulWidget {
   final String value;
   final double horSpace;
   final bool isVisible;
+  final bool enable;
   final ValueChanged<String> onValueChanged;
 
   const TextRemarkInputWidget({
     Key? key,
+    this.enable = true,
     required this.label,
     required this.placeholder,
     required this.value,
@@ -28,11 +30,14 @@ class TextRemarkInputWidget extends StatefulWidget {
 class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTickerProviderStateMixin {
   late AnimationController expandController;
   late Animation<double> animation;
+  final _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     prepareAnimations();
+    _controller.text = widget.value;
+    _controller.addListener(_latestValue);
   }
 
   void prepareAnimations() {
@@ -58,6 +63,7 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
   @override
   void dispose() {
     expandController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -80,6 +86,8 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
                   ),
                   const SizedBox(height: 30),
                   TextField(
+                    controller: _controller,
+                    enabled: widget.enable,
                     key: const Key('createForm_remarkInput_textField'),
                     onChanged: (amount) => {
                       widget.onValueChanged(amount)
@@ -100,6 +108,9 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
         ],
       ),
     );
+  }
+
+  void _latestValue() {
   }
 
 }

@@ -7,6 +7,7 @@ import '../../../../core/db/expenses_database.dart';
 
 abstract class LocalDataSource {
   Future<void> save(Expenses expenses);
+  Future<void> update(Expenses expenses);
   Future<Categories> readCategories();
   Future<List<Expenses>> getExpenses(String status);
 }
@@ -19,6 +20,11 @@ class LocalDataSourceImpl extends LocalDataSource {
   @override
   Future<void> save(Expenses expenses) async {
     db.insert(expenses);
+  }
+
+  @override
+  Future<void> update(Expenses expenses) async {
+    db.update(expenses);
   }
 
   @override

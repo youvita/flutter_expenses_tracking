@@ -19,4 +19,9 @@ class CreateRepositoryImpl implements CreateRepository {
     return await localDataSource.readCategories();
   }
 
+  @override
+  Future<void> update(Expenses expenses) async {
+    await localDataSource.update(expenses);
+  }
+
 }
