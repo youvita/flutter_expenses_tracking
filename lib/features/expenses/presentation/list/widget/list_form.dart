@@ -6,6 +6,7 @@ import 'package:expenses_tracking/features/expenses/presentation/list/widget/lis
 import 'package:expenses_tracking/widgets/toggle_swich.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 
 import '../../create/page/create_page.dart';
@@ -19,13 +20,17 @@ class ListFormWidget extends StatefulWidget {
 }
 
 class _ListFormState extends State<ListFormWidget> {
-  var lastHeader = "";
-  var totalAmount = 0.0;
+  var lastHeaderYear = "";
+  var lastHeaderMonth = "";
+  var totalAmountYear = 0.0;
+  var totalAmountMonth = 0.0;
   int toggleIndex = 0;
 
   List<Expenses> listItem = List.empty();
-  List<String> listHeader = List.empty(growable: true);
-  List<double> listTotal = List.empty(growable: true);
+  List<String> listHeaderYear = List.empty(growable: true);
+  List<DateTime> listHeaderMonth = List.empty(growable: true);
+  List<double> listTotalEachYear = List.empty(growable: true);
+  List<double> listTotalEachMonth = List.empty(growable: true);
 
   @override
   Widget build(BuildContext context) {
@@ -36,21 +41,38 @@ class _ListFormState extends State<ListFormWidget> {
       for (var i = 0; i < listItem.length; i++) {
         DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
         String header = Utils.dateFormatYear(dateTime);
-        if (lastHeader != header) {
-          listHeader.add(header);
-          lastHeader = header;
+        String headerMonth = Utils.dateFormatYearMonth(dateTime);
+        if (lastHeaderYear != header) {
+          listHeaderYear.add(header);
+          lastHeaderYear = header;
+        }
+
+        if (lastHeaderMonth != headerMonth) {
+          listHeaderMonth.add(dateTime);
+          lastHeaderMonth = headerMonth;
         }
       }
 
       /// loop to sum total amount each year
-      for (var i = 0; i < listHeader.length; i++) {
+      for (var i = 0; i < listHeaderYear.length; i++) {
         for(var j = i; j < listItem.length; j++) {
-          if (listHeader.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmount = totalAmount + double.parse(listItem.elementAt(j).amount ?? "");
+          if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
+            totalAmountYear = totalAmountYear + double.parse(listItem.elementAt(j).amount ?? "");
           }
         }
-        listTotal.add(totalAmount);
-        totalAmount = 0.0;
+        listTotalEachYear.add(totalAmountYear);
+        totalAmountYear = 0.0;
+      }
+
+      /// loop to sum total amount each month
+      for (var i = 0; i < listHeaderMonth.length; i++) {
+        for (var j = i; j < listItem.length; j++) {
+          if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
+            totalAmountMonth = totalAmountMonth + double.parse(listItem.elementAt(j).amount ?? "");
+          }
+        }
+        listTotalEachMonth.add(totalAmountMonth);
+        totalAmountMonth = 0.0;
       }
     });
 
@@ -64,11 +86,15 @@ class _ListFormState extends State<ListFormWidget> {
                 onToggle: (int index) {
                   if (toggleIndex != index) {
                     setState(() {
-                      listHeader.clear();
+                      listHeaderYear.clear();
                       listItem.clear();
-                      listTotal.clear();
-                      lastHeader = "";
-                      totalAmount = 0.0;
+                      listTotalEachYear.clear();
+                      listTotalEachMonth.clear();
+                      listHeaderMonth.clear();
+                      lastHeaderMonth = "";
+                      lastHeaderYear = "";
+                      totalAmountYear = 0.0;
+                      totalAmountMonth = 0.0;
                       toggleIndex = index;
                       context.read<ListExpenseBloc>().add(
                           ListExpenseLoad(index == 0 ? '' : index.toString()));
@@ -78,56 +104,93 @@ class _ListFormState extends State<ListFormWidget> {
               ),
             ),
             Expanded(child: ListView.builder(
-                itemCount: listHeader.length,
-                itemBuilder: (BuildContext context, int index) {
+                itemCount: listHeaderYear.length,
+                itemBuilder: (BuildContext context, int yearIndex) {
                   return StickyHeader(
                       header: ColoredBox(
-                        color: MyColors.greyBackground,
-                        child: Container(
-                            padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 7),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(listHeader.elementAt(index), style: MyTextStyles.textStyleMedium17),
-                                Text(listTotal.elementAt(index).toString(), style: MyTextStyles.textStyleMedium17Red),
-                              ],
-                            )
-                        ),
+                          color: MyColors.greyBackground,
+                          child: Container(
+                              padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 7),
+                              child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                      Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
+                                      Text(listTotalEachYear.elementAt(yearIndex).toString(), style: MyTextStyles.textStyleMedium17Red),
+                                  ],
+                              )
+                          ),
                       ),
-                      content: SingleChildScrollView(
-                          physics: const ScrollPhysics(),
-                          child: ColoredBox(
-                              color: MyColors.white,
-                              child:
-                              ListView.builder(
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: listItem.length,
-                                    itemBuilder: (context, indexChild) {
-                                      Expenses? childItem = listItem.elementAt(indexChild);
-                                      return listHeader.elementAt(index) == Utils.dateFormatYear(Utils.dateTimeFormat("${childItem.createDate}")) ?
-                                      Column(
-                                        children: [
-                                          ListItem(
-                                              item: childItem,
-                                              onItemSelected: (Expenses? value) {
-                                                  print(value);
-                                                 _navigationRoute(context, value);
-                                              },
-                                          ),
-                                          childItem == listItem.last ? const SizedBox()
-                                              : Container(
-                                              padding: const EdgeInsets.only(left: 70),
-                                              child: const Divider(
-                                                  height: 0,
-                                                  thickness: 1
-                                              ))
-                                        ],
-                                      ) : const SizedBox();
-                                    }
-                                )
-                          )
+                      content: Expanded(
+                        child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: listHeaderMonth.length,
+                            itemBuilder: (BuildContext context, int monthIndex) {
+                              return listHeaderYear.elementAt(yearIndex) == Utils.dateFormatYear(listHeaderMonth.elementAt(monthIndex)) ?
+                              Column(
+                                children: [
+                                  ExpansionTile(
+                                      leading: IntrinsicWidth(
+                                        stepWidth: 350,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.max,
+                                              children: [
+                                                Text(listTotalEachMonth.elementAt(monthIndex).toString(), style: MyTextStyles.textStyleMedium17Red),
+                                                SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ),
+                                      backgroundColor: MyColors.white,
+                                      collapsedBackgroundColor: MyColors.white,
+                                      trailing: const SizedBox(),
+                                      title: const Text(''),
+                                      children: [
+                                        SingleChildScrollView(
+                                            physics: const ScrollPhysics(),
+                                            child: ColoredBox(
+                                                color: MyColors.white,
+                                                child: ListView.builder(
+                                                    physics: const NeverScrollableScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemCount: listItem.length,
+                                                    itemBuilder: (context, itemIndex) {
+                                                      Expenses? childItem = listItem.elementAt(itemIndex);
+                                                      return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) ?
+                                                      Column(
+                                                        children: [
+                                                          ListItem(
+                                                            item: childItem,
+                                                            onItemSelected: (Expenses? value) {
+                                                              _navigationRoute(context, value);
+                                                            },
+                                                          ),
+                                                          childItem == listItem.last && Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) == Utils.dateFormatYearMonth(listHeaderMonth.last)? const SizedBox()
+                                                              : Container(
+                                                              padding: const EdgeInsets.only(left: 70),
+                                                              child: const Divider(
+                                                                  height: 0,
+                                                                  thickness: 1
+                                                              ))
+                                                        ],
+                                                      ) : const SizedBox();
+                                                    }
+                                                )
+                                            )
+                                        )
+                                      ]),
+                                  const SizedBox(height: 5)
+                                ],
+                              )
+                                  : const SizedBox();
+                            }),
                       )
                   );
                 }
@@ -135,7 +198,6 @@ class _ListFormState extends State<ListFormWidget> {
         ],
     );
   }
-
 }
 
 /// call back route page

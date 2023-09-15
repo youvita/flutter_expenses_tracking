@@ -28,4 +28,8 @@ class Utils {
     return DateFormat(DateUtil.DAY_MONTH_YEAR).format(date);
   }
 
+  static String dateFormatMonthYear(DateTime date) {
+    return DateFormat('MM/yyyy').format(date);
+  }
+
 }
