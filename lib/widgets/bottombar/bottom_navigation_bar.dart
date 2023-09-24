@@ -1,14 +1,11 @@
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
 import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
-import 'package:expenses_tracking/features/expenses/presentation/list/bloc/list_expense_bloc.dart';
 import 'package:expenses_tracking/features/expenses/presentation/list/page/list_page.dart';
 import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../di/injection_container.dart';
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});

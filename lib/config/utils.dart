@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:expenses_tracking/config/date_util.dart';
 
 class Utils {
 
@@ -25,7 +24,7 @@ class Utils {
   }
 
   static String dateFormat(DateTime date) {
-    return DateFormat(DateUtil.DAY_MONTH_YEAR).format(date);
+    return DateFormat('dd MMMM yyyy').format(date);
   }
 
   static String dateFormatMonthYear(DateTime date) {
