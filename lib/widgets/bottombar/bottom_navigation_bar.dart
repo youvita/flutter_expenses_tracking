@@ -1,11 +1,12 @@
 import 'package:expenses_tracking/constant/constant.dart';
-import 'package:expenses_tracking/features/expenses/data/model/expenses.dart';
-import 'package:expenses_tracking/features/expenses/presentation/create/page/create_page.dart';
-import 'package:expenses_tracking/features/expenses/presentation/list/page/list_page.dart';
-import 'package:expenses_tracking/features/reports/presentation/home/page/home_page.dart';
+import 'package:expenses_tracking/pages/create/create_page.dart';
+import 'package:expenses_tracking/pages/home/home_page.dart';
+import 'package:expenses_tracking/pages/report/report_page.dart';
+import 'package:expenses_tracking/pages/setting/setting_page.dart';
+import 'package:expenses_tracking/widgets/default_iOS_appbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class BottomNavigationBarWidget extends StatefulWidget {
   const BottomNavigationBarWidget({super.key});
@@ -17,7 +18,7 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[ListPage(), CreatePage(), ReportHomePage()];
+  static const List<Widget> _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,7 +30,20 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
+    return CupertinoPageScaffold(
+      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses'),
+      // navigationBar: CupertinoNavigationBar(
+      //   backgroundColor: MyColors.blue,
+      //   middle: const Text("Expenses", style: MyTextStyles.appBarTitle,),
+      //   trailing: CupertinoButton(
+      //     onPressed: (){
+      //       Navigator.push(context, CupertinoPageRoute(builder: (context) => const SettingPage()));
+      //     },
+      //     padding: EdgeInsets.zero,
+      //     child: SvgPicture.asset('assets/images/settings-04.svg')
+      //   )
+      // ),
+      child: Scaffold(
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
           // child: BlocProvider(
@@ -67,7 +81,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
               icon: InkWell(
                   borderRadius: BorderRadius.circular(100),
                   onTap: () {
-                    _navigationRoute(context);
+                  //  _navigationRoute(context);
                   },
                   child: Container(
                       height: 46,
@@ -114,7 +128,8 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
           currentIndex: _selectedIndex,
           onTap: _onItemTapped,
         )
-    );
+    )
+    ) ;
   }
 
 }
@@ -127,7 +142,7 @@ Future<void> _navigationRoute(BuildContext context) async {
 /// animation route page
 Route _createRoute() {
   return PageRouteBuilder(
-      settings: const RouteSettings(arguments: Expenses()),
+      settings: const RouteSettings(),
       pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);

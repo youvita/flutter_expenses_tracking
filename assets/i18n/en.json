@@ -2,5 +2,12 @@
   "All": "All",
   "Expense": "Expense",
   "Income": "Income",
-  "Report": "Report"
+  "Report": "Report",
+  "Language": "Language",
+  "Home": "Home",
+  "Currency": "Currency",
+  "Security": "Security",
+  "About us": "About us",
+  "App Version": "App Version",
+  "Exchange Rate": "Exchange Rate"
 }

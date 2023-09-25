@@ -14,6 +14,12 @@ class MyTextStyles {
     color: MyColors.white,
   );
 
+    static const TextStyle appBarTitleWhite = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: MyColors.black,
+  );
+
   static const TextStyle textStyleBold20 = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
