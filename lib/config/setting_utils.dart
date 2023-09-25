@@ -56,8 +56,8 @@ class Setting{
     Setting.save();
   }
 
-  Setting.updateCurrency(String currency){
-    currency = currency;
+  Setting.updateCurrency(String currencyChange){
+    currency = currencyChange;
     Setting.save();
   }
 
@@ -66,13 +66,13 @@ class Setting{
     Setting.save();
   }
 
-  Setting.updateFingerPrint(bool isFingerPrint){
-    isFingerPrint = isFingerPrint;
+  Setting.updateFingerPrint(bool isFinger){
+    isFingerPrint = isFinger;
     Setting.save();
   }
 
-  Setting.updatePin(bool isPin){
-    isPin = isPin;
+  Setting.updatePin(bool isPincode){
+    isPin = isPincode;
     Setting.save();
   }
 }

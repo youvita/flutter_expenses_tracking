@@ -14,12 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: Column(children: [
-        Text("Lange${Setting.language}"),
-        IconButton(onPressed: (){
-          setState(() {
-            Setting.changeLanguage("km");
-          });
-        }, icon: const Icon(Icons.chair))
+        
       ],)),
     );
   }

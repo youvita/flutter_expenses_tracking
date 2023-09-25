@@ -2,6 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/main.dart';
+import 'package:expenses_tracking/pages/setting/components/currency_change.dart';
+import 'package:expenses_tracking/pages/setting/components/exchange_change.dart';
+import 'package:expenses_tracking/pages/setting/components/language_change.dart';
+import 'package:expenses_tracking/pages/setting/security/security_page.dart';
 import 'package:expenses_tracking/widgets/iOS_setting_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,11 +32,11 @@ class _SettingPageState extends State<SettingPage> {
             item(
               title: 'Currency'.tr(), 
               iconPath: 'assets/images/coins-hand.svg', 
-              trailing: Setting.currency, onTap: () {
-       
-                showModalBottomSheet(context: context, builder: (_)=>Container(
-                  
-                ));
+              trailing: Setting.currency, onTap: ()=>{
+                showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context, 
+                  builder:(context) => changeCurrency(context, (){setState(() {});})),
               }
             ),
 
@@ -40,22 +44,32 @@ class _SettingPageState extends State<SettingPage> {
               title: 'Language'.tr(), 
               iconPath: 'assets/images/flage.svg', 
               trailing: Setting.language=="km" ? "ខ្មែរ" : "English", 
-              onTap: () {setState(() {
-              
-              });}
+              onTap: () {
+                showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context, 
+                  builder:(context) => changeLanguage(context, (){setState(() {});}));
+              }
             ),
 
             item(
               title: 'Exchange Rate'.tr(), 
               iconPath: 'assets/images/coins-swap-02.svg', 
               trailing: '៛​ ${Setting.exchangeRate!.toStringAsFixed(0)}',
-              onTap: (){}
+              onTap: (){
+                showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  context: context, 
+                  builder:(context) => changeExchangeRate(context, (){setState(() {});}));
+              }
             ),
 
             item(
               title: 'Security'.tr(), 
               iconPath: 'assets/images/lock.svg', 
-              onTap: () {}
+              onTap: () {
+                Navigator.push(context, CupertinoPageRoute(builder: (context) => const SecurityPage()));
+              }
             ),
 
             item(
