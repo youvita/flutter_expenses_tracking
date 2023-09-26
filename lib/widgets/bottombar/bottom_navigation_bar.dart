@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/database/models/expenses.dart';
 import 'package:expenses_tracking/pages/create/create_page.dart';
 import 'package:expenses_tracking/pages/home/home_page.dart';
 import 'package:expenses_tracking/pages/report/report_page.dart';
@@ -81,7 +82,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
               icon: InkWell(
                   borderRadius: BorderRadius.circular(100),
                   onTap: () {
-                  //  _navigationRoute(context);
+                   _navigationRoute(context);
                   },
                   child: Container(
                       height: 46,
@@ -142,7 +143,7 @@ Future<void> _navigationRoute(BuildContext context) async {
 /// animation route page
 Route _createRoute() {
   return PageRouteBuilder(
-      settings: const RouteSettings(),
+      settings: RouteSettings(arguments: Expenses()),
       pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
