@@ -1,7 +1,9 @@
 import 'package:expenses_tracking/database/models/account_model.dart';
 import 'package:expenses_tracking/database/repo/account_db.dart';
 import 'package:expenses_tracking/database/repo/category_db.dart';
+import 'package:expenses_tracking/database/repo/expenses_db.dart';
 import 'package:expenses_tracking/database/repo/ledger_db.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 class DatabaseService{
@@ -22,6 +24,7 @@ class DatabaseService{
   }
 
   Future<Database> _initialize() async {
+    WidgetsFlutterBinding.ensureInitialized();
     final path = await fullPath;
     var database = await openDatabase(
       path,
@@ -36,6 +39,7 @@ class DatabaseService{
     await LedgerDb().createTable(database);
     await AccountDb().createTable(database);
     await CategoryDb().createTable(database);
+    await ExpensesDb().createTable(database);
     await AccountDb().create(obj: Account(name: 'Cash', type: 'Cash', description: 'Cash'));
   }
 }

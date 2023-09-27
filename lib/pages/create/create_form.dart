@@ -1,6 +1,7 @@
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
-import 'package:expenses_tracking/pages/create/global_variables.dart';
+import 'package:expenses_tracking/database/repo/expenses_db.dart';
+import 'package:expenses_tracking/database/service/database_service.dart';
 import 'package:expenses_tracking/pages/create/status_switch.dart';
 import 'package:expenses_tracking/pages/create/text_remark_input.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
@@ -27,17 +28,13 @@ class CreateFormWidget extends StatefulWidget {
 }
 
 class CreateForm extends State<CreateFormWidget> {
-  bool isVisibleCategories = false;
-  callBack(isSelected) {
-    setState(() {
-      isVisibleCategories = isSelected;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
-    Expenses.updateChanged(widget.isNew ? true : false);
-    Expenses.newChanged(widget.isNew);
+    widget.expenses.updateChanged = widget.isNew ? true : false;
+    widget.expenses.newChanged = widget.isNew;
+    widget.expenses.statusTypeChanged = widget.expenses.statusType;
+    widget.expenses.expenseIDChanged = widget.expenses.id ?? -1;
     // context.read<CreateExpenseBloc>().add(IsNewChanged(widget.isNew));
     // context.read<CreateExpenseBloc>().add(IsUpdateChanged(widget.isNew ? true : false));
     // context.read<CreateExpenseBloc>().add(ExpensesIDChanged(widget.expenses.id ?? -1));
@@ -52,21 +49,25 @@ class CreateForm extends State<CreateFormWidget> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    _StatusTypeWidget(),
+                    _StatusTypeWidget(widget.expenses),
                     const SizedBox(height: 30),
-                    _IssueDateWidget(),
+                    _IssueDateWidget(widget.expenses),
                     const DividerWidget(),
-                    _CategoryWidget(),
+                    _CategoryWidget(widget.expenses),
                     const DividerWidget(),
-                    _AmountInputWidget(),
+                    _AmountInputWidget(widget.expenses),
                     const DividerWidget(),
-                    _RemarkInputWidget(),
-                    _CategoriesWidget()
+                    _RemarkInputWidget(widget.expenses),
+                    _CategoriesWidget(widget.expenses, () {
+                      setState(() {
+
+                      });
+                    })
                   ],
                 ),
               )
           ),
-          _SaveButton()
+          _SaveButton(widget.expenses)
         ]
     );
   }
@@ -75,11 +76,9 @@ class CreateForm extends State<CreateFormWidget> {
 
 class _StatusTypeWidget extends StatefulWidget {
 
-  // const _StatusTypeWidget(this.expenses);
-  //
-  // // final String? status;
-  // // final bool? isUpdate;
-  // final Expenses expenses;
+  const _StatusTypeWidget(this.expenses);
+
+  final Expenses expenses;
 
   @override
   State<StatefulWidget> createState() => _ExpenseTypeSelected();
@@ -88,20 +87,17 @@ class _StatusTypeWidget extends StatefulWidget {
 class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
   bool _enable = true;
 
-
   @override
   void initState() {
     super.initState();
-    // context.read<CreateExpenseBloc>().add(ExpensesTypeChanged(widget.status));
-    // Expenses.statusTypeChanged(Expenses.statusType);
-    _enable = Expenses.statusType == '1' ? true : false;
+    _enable = widget.expenses.statusType == '1' ? true : false;
   }
 
   @override
   Widget build(BuildContext context) {
 
     return StatusSwitch(
-        enable: Expenses.isUpdate ?? true,
+        enable: widget.expenses.isUpdate ?? true,
         value: _enable,
         onChanged: (bool val) {
             setState(() {
@@ -109,9 +105,9 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
             });
 
             if (_enable) {
-              Expenses.statusTypeChanged('1');
+              widget.expenses.statusTypeChanged = '1';
             } else {
-              Expenses.statusTypeChanged('2');
+              widget.expenses.statusTypeChanged = '2';
             }
     });
   }
@@ -119,11 +115,10 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
 }
 
 class _IssueDateWidget extends StatefulWidget {
-  //
-  // const _IssueDateWidget(this.expenses);
-  // //
-  // // final DateTime? dateTime;
-  // final Expenses expenses;
+
+  const _IssueDateWidget(this.expenses);
+
+  final Expenses expenses;
 
   @override
   State<StatefulWidget> createState() => _IssueDateSelected();
@@ -136,7 +131,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
   void initState() {
     super.initState();
     // context.read<CreateExpenseBloc>().add(IssueDateChanged(widget.dateTime));
-    newDateTime = Utils.dateTimeFormat(Expenses.issueDate);
+    newDateTime = Utils.dateTimeFormat(widget.expenses.issueDate);
   }
 
   @override
@@ -145,7 +140,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
     // bool isUpdate = context.select((CreateExpenseBloc bloc) => bloc.state.isUpdate ?? true);
 
     return TextSelectWidget(
-        enable: Expenses.isUpdate ?? true,
+        enable: widget.expenses.isUpdate ?? true,
         label: "Date",
         padding: const EdgeInsets.only(left: 20, top: 22, right: 20, bottom: 22),
         horSpace: 15,
@@ -163,7 +158,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
                   setState(() {
                     newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
                   });
-                  Expenses.issueDateChanged(newDateTime);
+                  widget.expenses.issueDateChanged = newDateTime;
                   // issueDate.add(IssueDateChanged(newDateTime));
                 }
         }
@@ -177,9 +172,9 @@ class _CategoryWidget extends StatefulWidget {
   // final String? categoryName;
   // final String? categoryImage;
 
-  // final Expenses expenses;
-  //
-  // const _CategoryWidget(this.expenses);
+  const _CategoryWidget(this.expenses);
+
+  final Expenses expenses;
 
   @override
   State<StatefulWidget> createState() => _CategoryInput();
@@ -189,6 +184,7 @@ class _CategoryInput extends State<_CategoryWidget> {
   String category = '';
   String categoryImage = '';
 
+
   @override
   void initState() {
     super.initState();
@@ -197,38 +193,43 @@ class _CategoryInput extends State<_CategoryWidget> {
     // categoryImage = GlobleVaraible.expenses.categoryImage ?? '';
   }
 
+  callBack() async {
+    Category category = await _navigationCategoryRoute(context);
+    setState(() {
+      widget.expenses.categoryImageChanged = category.image;
+      widget.expenses.categoryChanged = category.name;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // bool isUpdate = context.select((CreateExpenseBloc bloc) => bloc.state.isUpdate ?? true);
     // String category = context.select((CreateExpenseBloc bloc) => bloc.state.category ?? '');
     // String categoryImage = context.select((CreateExpenseBloc bloc) => bloc.state.categoryImage ?? '');
-    setState(() {
-      category = GlobalVariables.category ?? '';
-      categoryImage = GlobalVariables().categoryImage ?? '';
-      print(category);
-    });
+    // setState(() {
+    //   category = GlobalVariables.category ?? '';
+    //   categoryImage = Expenses.categoryImage ?? '';
+    //   print(category);
+    // });
 
     return TextSelectWidget(
-        enable: Expenses.isUpdate ?? true,
+        enable: widget.expenses.isUpdate ?? true,
         label: "Category",
-        value: GlobalVariables.category == null ? "Select" : "${GlobalVariables().categoryImage} ${GlobalVariables.category}",
+        value: widget.expenses.category == null ? "Select" : "${widget.expenses.categoryImage} ${widget.expenses.category}",
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (bool value) {
           // widget.onSelected(value);
-          _navigationCategoryRoute(context);
+          callBack();
         });
   }
 
 }
 
 class _AmountInputWidget extends StatefulWidget {
-  //
-  // const _AmountInputWidget(this.expenses);
-  // //
-  // // final String? amount;
-  // // final String? currency;
-  //
-  // final Expenses expenses;
+
+  const _AmountInputWidget(this.expenses);
+
+  final Expenses expenses;
 
   @override
   State<StatefulWidget> createState() => _AmountInput();
@@ -241,7 +242,7 @@ class _AmountInput extends State<_AmountInputWidget> {
   @override
   void initState() {
     super.initState();
-    amountInput = Expenses.amount ?? '0';
+    amountInput = widget.expenses.amount ?? '0';
     // context.read<CreateExpenseBloc>().add(CurrencyChanged(widget.currency));
     // context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amountInput.isEmpty ? "0.0" : amountInput)));
   }
@@ -251,19 +252,19 @@ class _AmountInput extends State<_AmountInputWidget> {
     // bool isUpdate = context.select((CreateExpenseBloc bloc) => bloc.state.isUpdate ?? true);
 
     return TextAmountInputWidget(
-        enable: Expenses.isUpdate ?? true,
+        enable: widget.expenses.isUpdate ?? true,
         placeholder: "Input",
         value: amountInput,
         onValueChanged: (String value) {
           setState(() {
             amountInput = value;
-            Expenses.amountChanged(value);
+            widget.expenses.amountChanged = value;
           });
           // context.read<CreateExpenseBloc>().add(CurrencyChanged(value.currencyCode ?? "USD"));
           // context.read<CreateExpenseBloc>().add(AmountChanged(double.parse(amountInput.isEmpty ? "0.0" : amountInput)));
         }, onCurrencyChanged: (String value) {
           setState(() {
-            Expenses.currencyCodeChanged(value);
+            widget.expenses.currencyCodeChanged = value;
           });
         }
     );
@@ -273,10 +274,9 @@ class _AmountInput extends State<_AmountInputWidget> {
 
 class _RemarkInputWidget extends StatefulWidget {
 
-  // const _RemarkInputWidget(this.expenses);
-  // //
-  // // final String? remark;
-  // final Expenses expenses;
+  const _RemarkInputWidget(this.expenses);
+
+  final Expenses expenses;
 
   @override
   State<StatefulWidget> createState() => _RemarkInputState();
@@ -289,16 +289,16 @@ class _RemarkInputState extends State<_RemarkInputWidget> {
   void initState() {
     super.initState();
     // context.read<CreateExpenseBloc>().add(RemarkChanged(widget.remark ?? ''));
-    remark = Expenses.remark ?? '';
+    remark = widget.expenses.remark ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    final isVisible = Expenses.amount;
+    final isVisible = widget.expenses.amount;
     // bool isUpdate = context.select((CreateExpenseBloc bloc) => bloc.state.isUpdate ?? true);
 
     return TextRemarkInputWidget(
-        enable: Expenses.isUpdate ?? true,
+        enable: widget.expenses.isUpdate ?? true,
         isVisible: isVisible != null && isVisible != '0.0',
         label: "Remark",
         placeholder: "Please Input",
@@ -306,7 +306,7 @@ class _RemarkInputState extends State<_RemarkInputWidget> {
         onValueChanged: (String value) {
           setState(() {
             remark = value;
-            Expenses.remarkChanged(value);
+            widget.expenses.remarkChanged = value;
           });
           // context.read<CreateExpenseBloc>().add(RemarkChanged(remark));
         }
@@ -316,9 +316,11 @@ class _RemarkInputState extends State<_RemarkInputWidget> {
 }
 
 class _CategoriesWidget extends StatefulWidget {
-  // final bool isVisibleCategories;
-  // const _CategoriesWidget(this.expenses);
-  // final Expenses expenses;
+
+  const _CategoriesWidget(this.expenses, this.callBack);
+
+  final Expenses expenses;
+  final Function callBack;
 
   @override
   State<StatefulWidget> createState() => _CategoryState();
@@ -328,7 +330,7 @@ class _CategoryState extends State<_CategoriesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool isUpdate = Expenses.isUpdate ?? true;
+    bool isUpdate = widget.expenses.isUpdate ?? true;
     return Column(
       children: [
         Container(
@@ -347,15 +349,13 @@ class _CategoryState extends State<_CategoriesWidget> {
               CategoryItemWidget(
                   enable: isUpdate,
                   image: Utils().getUnicodeCharacter("1F4B2"),
-                  label: "Salary",
+                  label: 'Salary',
                   onValueChanged: (String category) {
                     setState(() {
                       final item = category.split(' ');
-                      Expenses.categoryImageChanged(item[0]);
-                      // Expenses.categoryChanged(item[1]);
-                      GlobalVariables.category = item[1];
-                      // Expenses.categoryImageChanged(item[0]);
-                      // Expenses.categoryChanged(item[1]);
+                      widget.expenses.categoryImageChanged = item[0];
+                      widget.expenses.categoryChanged = item[1];
+                      widget.callBack();
                       // context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
                     });
                   }
@@ -367,8 +367,9 @@ class _CategoryState extends State<_CategoriesWidget> {
                 onValueChanged: (String category) {
                   setState(() {
                     final item = category.split(' ');
-                    Expenses.categoryImageChanged(item[0]);
-                    Expenses.categoryChanged(item[1]);
+                    widget.expenses.categoryImageChanged = item[0];
+                    widget.expenses.categoryChanged = item[1];
+                    widget.callBack();
                     // context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
                   });
                 },
@@ -380,8 +381,9 @@ class _CategoryState extends State<_CategoriesWidget> {
                 onValueChanged: (String category) {
                   setState(() {
                     final item = category.split(' ');
-                    Expenses.categoryImageChanged(item[0]);
-                    Expenses.categoryChanged(item[1]);
+                    widget.expenses.categoryImageChanged = item[0];
+                    widget.expenses.categoryChanged = item[1];
+                    widget.callBack();
                     // context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
                   });
                 },
@@ -393,8 +395,9 @@ class _CategoryState extends State<_CategoriesWidget> {
                 onValueChanged: (String category) {
                   setState(() {
                     final item = category.split(' ');
-                    Expenses.categoryImageChanged(item[0]);
-                    Expenses.categoryChanged(item[1]);
+                    widget.expenses.categoryImageChanged = item[0];
+                    widget.expenses.categoryChanged = item[1];
+                    widget.callBack();
                     // context.read<CreateExpenseBloc>().add(CategoryChanged(category.categoryImage ?? "", category.category ?? ""));
                   });
                 },
@@ -410,8 +413,8 @@ class _CategoryState extends State<_CategoriesWidget> {
 
 class _SaveButton extends StatefulWidget {
 
-  // const _SaveButton(this.expenses);
-  // final Expenses expenses;
+  const _SaveButton(this.expenses);
+  final Expenses expenses;
   @override
   State<StatefulWidget> createState() => _ButtonState();
 }
@@ -419,10 +422,12 @@ class _SaveButton extends StatefulWidget {
 class _ButtonState extends State<_SaveButton> {
   String editButton = 'Edit';
   String saveButton = 'Save';
+  ExpensesDb db = ExpensesDb();
 
   @override
   Widget build(BuildContext context) {
-    bool isNew = Expenses.isNew ?? true;
+    bool isNew = widget.expenses.isNew ?? true;
+
     return Container(
         padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
         child: ElevatedButton(
@@ -433,8 +438,10 @@ class _ButtonState extends State<_SaveButton> {
                   borderRadius: BorderRadius.circular(6)
               )
           ),
-          onPressed: () {
+          onPressed: ()  {
             if (isNew) {
+              print(widget.expenses);
+             db.insert(widget.expenses);
               // context.read<CreateExpenseBloc>().add(const SaveEvent());
               _navigationListRoute(context);
             } else {
@@ -457,8 +464,9 @@ class _ButtonState extends State<_SaveButton> {
 }
 
 /// call back route page
-Future<void> _navigationCategoryRoute(BuildContext context) async {
+Future<Category> _navigationCategoryRoute(BuildContext context) async {
   final Category result = await Navigator.of(context).push(_categoryRoute());
+  return result;
   // context.read<CreateExpenseBloc>().add(CategoryChanged(result.image, result.name));
 }
 

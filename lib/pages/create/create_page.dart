@@ -15,7 +15,7 @@ class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final params = ModalRoute.of(context)?.settings.arguments as Expenses;
-    final isNew = Expenses.statusType == null;
+    final isNew = params.statusType == null;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

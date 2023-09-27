@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/pages/category/category_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class CategoryPage extends StatelessWidget {
       },
       ),
       backgroundColor: MyColors.white,
-      body: const Placeholder()
+      body: const CategoryFormWidget()
     );
   }
 
