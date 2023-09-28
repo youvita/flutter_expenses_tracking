@@ -23,7 +23,7 @@ class ExpensesDb {
   // }
 
   Future createTable(Database database) async {
-    await database.execute(''' 
+    await database.execute('''
       CREATE TABLE $tableName (
         _id INTEGER PRIMARY KEY autoincrement,
         status_type TEXT,

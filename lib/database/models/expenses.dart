@@ -24,8 +24,8 @@ class Expenses {
       'category_image': _categoryImage,
       'category': _category,
       'currency_code': _currencyCode ?? 'USD',
-      'amount': _amount,
-      'remark': _remark
+      'amount': _amount ?? '',
+      'remark': _remark ?? ''
     };
   }
 

@@ -422,7 +422,12 @@ class _SaveButton extends StatefulWidget {
 class _ButtonState extends State<_SaveButton> {
   String editButton = 'Edit';
   String saveButton = 'Save';
-  ExpensesDb db = ExpensesDb();
+  // ExpensesDb db = ExpensesDb();
+
+  save() async {
+    var result = await ExpensesDb().insert(widget.expenses);
+    print(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -440,8 +445,9 @@ class _ButtonState extends State<_SaveButton> {
           ),
           onPressed: ()  {
             if (isNew) {
-              print(widget.expenses);
-             db.insert(widget.expenses);
+              // print(widget.expenses);
+              save();
+             // db.insert(widget.expenses);
               // context.read<CreateExpenseBloc>().add(const SaveEvent());
               _navigationListRoute(context);
             } else {
