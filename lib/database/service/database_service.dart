@@ -29,8 +29,7 @@ class DatabaseService{
     var database = await openDatabase(
       path,
       version: 1,
-      onCreate: create,
-      // singleInstance: true
+      onCreate: create
       );
       return database;
   }

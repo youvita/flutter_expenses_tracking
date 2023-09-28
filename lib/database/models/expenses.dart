@@ -5,6 +5,7 @@ class Expenses {
   int? _id;
   String? _statusType;
   String? _issueDate;
+  String? _createDate;
   String? _categoryImage;
   String? _category;
   String? _currencyCode;
@@ -13,14 +14,14 @@ class Expenses {
   bool? isUpdate;
   bool? isNew;
 
-  Expenses();
+  Expenses(this._id, this._statusType, this._issueDate, this._createDate, this._categoryImage, this._category, this._currencyCode, this._amount, this._remark);
 
   Map<String, dynamic> toMap() {
     return {
       '_id': _id,
       'status_type': _statusType,
-      'issue_datetime': _issueDate,
-      'create_datetime': DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
+      'issue_datetime': _issueDate ?? DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
+      'create_datetime': _createDate = DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
       'category_image': _categoryImage,
       'category': _category,
       'currency_code': _currencyCode ?? 'USD',
@@ -46,6 +47,7 @@ class Expenses {
   int? get id => _id;
   String? get statusType => _statusType;
   String? get issueDate => _issueDate;
+  String? get createDate => _createDate;
   String? get categoryImage => _categoryImage;
   String? get category => _category;
   String? get currencyCode => _currencyCode;
@@ -77,7 +79,7 @@ class Expenses {
   }
 
   set amountChanged(String? value) {
-    _amount = value ?? '0.0';
+    _amount = value;
   }
 
   set remarkChanged(String? value) {

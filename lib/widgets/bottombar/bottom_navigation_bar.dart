@@ -143,7 +143,7 @@ Future<void> _navigationRoute(BuildContext context) async {
 /// animation route page
 Route _createRoute() {
   return PageRouteBuilder(
-      settings: RouteSettings(arguments: Expenses()),
+      settings: RouteSettings(arguments: Expenses(null, null, null, null, null, null, null, null, null)),
       pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);
