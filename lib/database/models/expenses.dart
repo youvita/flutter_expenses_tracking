@@ -1,6 +1,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 
+import '../../config/utils.dart';
+
 class Expenses {
   int? _id;
   String? _statusType;
@@ -11,8 +13,8 @@ class Expenses {
   String? _currencyCode;
   String? _amount;
   String? _remark;
-  bool? isUpdate;
-  bool? isNew;
+  bool? _isUpdate;
+  bool? _isNew;
 
   Expenses(this._id, this._statusType, this._issueDate, this._createDate, this._categoryImage, this._category, this._currencyCode, this._amount, this._remark);
 
@@ -22,10 +24,10 @@ class Expenses {
       'status_type': _statusType,
       'issue_datetime': _issueDate ?? DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
       'create_datetime': _createDate = DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
-      'category_image': _categoryImage,
-      'category': _category,
+      'category_image': _categoryImage ?? Utils().getUnicodeCharacter("2753"),
+      'category': _category ?? 'N/A',
       'currency_code': _currencyCode ?? 'USD',
-      'amount': _amount ?? '',
+      'amount': _amount ?? '0',
       'remark': _remark ?? ''
     };
   }
@@ -53,6 +55,8 @@ class Expenses {
   String? get currencyCode => _currencyCode;
   String? get amount => _amount;
   String? get remark => _remark;
+  bool? get isUpdate => _isUpdate;
+  bool? get isNew => _isNew;
 
   set expenseIDChanged(int? value) {
     _id = value;
@@ -87,11 +91,11 @@ class Expenses {
   }
 
   set updateChanged(bool? value) {
-    isUpdate = value;
+    _isUpdate = value;
   }
 
   set newChanged(bool? value) {
-    isNew = value;
+    _isNew = value;
   }
 
 }

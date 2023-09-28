@@ -273,6 +273,7 @@ class _SaveButton extends StatelessWidget {
         child: ElevatedButton(
           key: const Key('createForm_saveButton'),
           style: ElevatedButton.styleFrom(
+              backgroundColor: MyColors.blue,
               minimumSize: const Size.fromHeight(50),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)

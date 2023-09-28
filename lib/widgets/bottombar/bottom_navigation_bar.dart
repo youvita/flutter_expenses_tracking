@@ -23,7 +23,6 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   void _onItemTapped(int index) {
     setState(() {
-      print("selected index:: $index");
       _selectedIndex = index;
     });
   }
@@ -88,11 +87,10 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
                       height: 46,
                       width: 46,
                       decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [0.6, 1.0],
-                            tileMode: TileMode.mirror,
+                        gradient: SweepGradient(
+                          center: Alignment.topRight,
+                            stops: [0.1, 0.8],
+                            tileMode: TileMode.clamp,
                             colors: [MyColors.blue, MyColors.white]
                         ),
                         color: MyColors.blue,

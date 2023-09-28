@@ -1,7 +1,6 @@
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
-import 'package:expenses_tracking/database/service/database_service.dart';
 import 'package:expenses_tracking/pages/create/status_switch.dart';
 import 'package:expenses_tracking/pages/create/text_remark_input.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
@@ -30,15 +29,15 @@ class CreateFormWidget extends StatefulWidget {
 class CreateForm extends State<CreateFormWidget> {
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     widget.expenses.updateChanged = widget.isNew ? true : false;
     widget.expenses.newChanged = widget.isNew;
     widget.expenses.statusTypeChanged = widget.expenses.statusType;
-    // widget.expenses.expenseIDChanged = widget.expenses.id ?? -1;
-    // context.read<CreateExpenseBloc>().add(IsNewChanged(widget.isNew));
-    // context.read<CreateExpenseBloc>().add(IsUpdateChanged(widget.isNew ? true : false));
-    // context.read<CreateExpenseBloc>().add(ExpensesIDChanged(widget.expenses.id ?? -1));
-    // context.read<CreateExpenseBloc>().add(CreateDateChanged(Utils.dateTimeFormat(widget.expenses.createDate ?? '')));
+  }
+
+  @override
+  Widget build(BuildContext context) {
 
     return Column(
         mainAxisSize: MainAxisSize.max,
@@ -71,7 +70,11 @@ class CreateForm extends State<CreateFormWidget> {
                 ),
               )
           ),
-          _SaveButton(widget.expenses)
+          _SaveButton(widget.expenses, (){
+            setState(() {
+
+            });
+          })
         ]
     );
   }
@@ -198,7 +201,6 @@ class _CategoryInput extends State<_CategoryWidget> {
         value: widget.expenses.category == null ? "Select" : "${widget.expenses.categoryImage} ${widget.expenses.category}",
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (bool value) {
-          // widget.onSelected(value);
           callBack();
         });
   }
@@ -383,8 +385,9 @@ class _CategoryState extends State<_CategoriesWidget> {
 
 class _SaveButton extends StatefulWidget {
 
-  const _SaveButton(this.expenses);
+  const _SaveButton(this.expenses, this.callBack);
   final Expenses expenses;
+  final Function callBack;
   @override
   State<StatefulWidget> createState() => _ButtonState();
 }
@@ -402,6 +405,7 @@ class _ButtonState extends State<_SaveButton> {
         child: ElevatedButton(
           key: const Key('createForm_saveButton'),
           style: ElevatedButton.styleFrom(
+              backgroundColor: MyColors.blue,
               minimumSize: const Size.fromHeight(50),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)
@@ -413,12 +417,13 @@ class _ButtonState extends State<_SaveButton> {
               _navigationListRoute(context);
             } else {
               if (editButton == 'Save') {
-                  // context.read<CreateExpenseBloc>().add(const UpdateEvent());
+                  ExpensesDb().update(widget.expenses);
                   _navigationListRoute(context);
               } else {
                 setState(() {
                   editButton = saveButton;
-                  // context.read<CreateExpenseBloc>().add(const IsUpdateChanged(true));
+                  widget.expenses.updateChanged = true;
+                  widget.callBack();
                 });
               }
             }
