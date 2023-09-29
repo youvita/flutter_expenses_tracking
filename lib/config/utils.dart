@@ -31,4 +31,32 @@ class Utils {
     return DateFormat('MM/yyyy').format(date);
   }
 
+  static String formatCurrency(String? currency, String? amount) {
+    String value = '';
+    if(currency == 'USD') {
+      value = '\$${NumberFormat('#,###.00', 'en_US').format(double.parse(amount ?? '0'))}';
+    } else {
+      value = '៛${NumberFormat.decimalPattern().format(double.parse(amount ?? '0'))}';
+    }
+    return value;
+  }
+
+  static String formatSymbol(int value) {
+    String strValue;
+    if (value == 0) {
+      strValue = '';
+    } else if (value == 1) {
+      strValue = '-';
+    } else {
+      strValue = '+';
+    }
+    return strValue;
+  }
+
+  static double convertToDouble(String? value) {
+    return double.parse(value ?? '');
+  }
+
+
+
 }

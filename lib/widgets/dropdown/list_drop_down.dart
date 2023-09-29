@@ -67,6 +67,7 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(_selected == null ? '' : _selected!.title, style: widget.textStyle),
+                const SizedBox(width: 11),
                 SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
               ],
             ),

@@ -37,6 +37,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
         print("000"+ value.toString());
         setState(() {
           _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
+          _onItemTapped(0);
       });
       },
       ),

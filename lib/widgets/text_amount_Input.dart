@@ -80,7 +80,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
               },
               textAlign: TextAlign.right,
               decoration: const InputDecoration(
-                  hintText: "0.00",
+                  hintText: 'Please Input',
                   border: InputBorder.none,
                   isCollapsed: true
               ),

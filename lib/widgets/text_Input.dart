@@ -9,7 +9,7 @@ class TextInputWidget extends StatefulWidget {
 
   const TextInputWidget({
     Key? key,
-    this.placeholder = "Enter here",
+    this.placeholder = "Please Input",
     required this.label,
     this.padding = const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
     required this.onValueChanged

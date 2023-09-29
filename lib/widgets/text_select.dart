@@ -16,7 +16,7 @@ class TextSelectWidget extends StatefulWidget {
     required this.label,
     required this.value,
     required this.imagePath,
-    this.padding = const EdgeInsets.only(left: 20, top: 15, right: 14, bottom: 15),
+    this.padding = const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
     this.horSpace = 8,
     this.enable = true,
     required this.onTap

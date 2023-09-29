@@ -6,6 +6,7 @@ import 'package:expenses_tracking/widgets/toggle_swich.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sticky_headers/sticky_headers.dart';
+import '../../config/setting_utils.dart';
 import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
 
@@ -18,6 +19,7 @@ class ListFormWidget extends StatefulWidget {
 }
 
 class _ListFormState extends State<ListFormWidget> {
+
   var lastHeaderYear = "";
   var lastHeaderMonth = "";
   var totalAmountYear = 0.0;
@@ -54,7 +56,7 @@ class _ListFormState extends State<ListFormWidget> {
       for (var i = 0; i < listHeaderYear.length; i++) {
         for(var j = i; j < listItem.length; j++) {
           if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountYear = totalAmountYear + double.parse(listItem.elementAt(j).amount ?? "");
+            totalAmountYear = totalAmountYear + double.parse((listItem.elementAt(j).currencyCode == 'USD' ? listItem.elementAt(j).amount : (Utils.convertToDouble(listItem.elementAt(j).amount) / Setting.exchangeRate!)).toString());
           }
         }
         listTotalEachYear.add(totalAmountYear);
@@ -65,7 +67,7 @@ class _ListFormState extends State<ListFormWidget> {
       for (var i = 0; i < listHeaderMonth.length; i++) {
         for (var j = i; j < listItem.length; j++) {
           if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountMonth = totalAmountMonth + double.parse(listItem.elementAt(j).amount ?? "");
+            totalAmountMonth = totalAmountMonth + double.parse((listItem.elementAt(j).currencyCode == 'USD' ? listItem.elementAt(j).amount : (Utils.convertToDouble(listItem.elementAt(j).amount) / Setting.exchangeRate!)).toString());
           }
         }
         listTotalEachMonth.add(totalAmountMonth);
@@ -83,6 +85,7 @@ class _ListFormState extends State<ListFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -123,7 +126,7 @@ class _ListFormState extends State<ListFormWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
-                              Text(listTotalEachYear.elementAt(yearIndex).toString(), style: MyTextStyles.textStyleMedium17Red),
+                              Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                             ],
                           )
                       ),
@@ -136,7 +139,8 @@ class _ListFormState extends State<ListFormWidget> {
                               return listHeaderYear.elementAt(yearIndex) == Utils.dateFormatYear(listHeaderMonth.elementAt(monthIndex)) ?
                               Column(
                                 children: [
-                                  ExpansionTile(
+                                  Theme(data: theme, child: ExpansionTile(
+                                      tilePadding: const EdgeInsets.only(right: 20, left: 20),
                                       leading: IntrinsicWidth(
                                           stepWidth: 350,
                                           child: Row(
@@ -147,7 +151,8 @@ class _ListFormState extends State<ListFormWidget> {
                                               Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
-                                                  Text(listTotalEachMonth.elementAt(monthIndex).toString(), style: MyTextStyles.textStyleMedium17Red),
+                                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                                  const SizedBox(width: 11),
                                                   SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                                 ],
                                               )
@@ -178,10 +183,11 @@ class _ListFormState extends State<ListFormWidget> {
                                                               _navigationRoute(context, value);
                                                             },
                                                           ),
-                                                          childItem == listItem.last && Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) == Utils.dateFormatYearMonth(listHeaderMonth.last)? const SizedBox()
+                                                          childItem == listItem.last && Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) == Utils.dateFormatYearMonth(listHeaderMonth.last) ? const SizedBox()
                                                               : Container(
                                                               padding: const EdgeInsets.only(left: 70),
                                                               child: const Divider(
+                                                                  color: MyColors.greyBackground,
                                                                   height: 0,
                                                                   thickness: 1
                                                               ))
@@ -191,7 +197,7 @@ class _ListFormState extends State<ListFormWidget> {
                                                 )
                                             )
                                         )
-                                      ]),
+                                      ])),
                                   const SizedBox(height: 5)
                                 ],
                               )

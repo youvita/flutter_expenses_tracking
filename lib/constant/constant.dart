@@ -79,6 +79,12 @@ class MyTextStyles {
     color: MyColors.green,
   );
 
+  static const TextStyle textStyleMedium17Blue = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w500,
+    color: MyColors.blue,
+  );
+
   static const TextStyle textStyleBold17 = TextStyle(
     fontSize: 17,
     fontWeight: FontWeight.bold,
@@ -107,24 +113,24 @@ class MyColors {
 
 class MyMaterialColors {
   static const MaterialColor blue = MaterialColor(_bluePrimaryValue, <int, Color>{
-    50: Color(0xFFE7E8FD),
-    100: Color(0xFFC3C7F9),
-    200: Color(0xFF9BA1F6),
-    300: Color(0xFF737BF2),
-    400: Color(0xFF555FEF),
+    50: Color(0xFF0084FF),
+    100: Color(0xFF0084FF),
+    200: Color(0xFF0084FF),
+    300: Color(0xFF0084FF),
+    400: Color(0xFF0084FF),
     500: Color(_bluePrimaryValue),
-    600: Color(0xFF313DEA),
-    700: Color(0xFF2A34E7),
-    800: Color(0xFF232CE4),
-    900: Color(0xFF161EDF),
+    600: Color(0xFF0084FF),
+    700: Color(0xFF0084FF),
+    800: Color(0xFF0084FF),
+    900: Color(0xFF0084FF),
   });
-  static const int _bluePrimaryValue = 0xFF3743EC;
+  static const int _bluePrimaryValue = 0xFF0084FF;
 
   static const MaterialColor blueAccent = MaterialColor(_blueAccentValue, <int, Color>{
-    100: Color(0xFFFFFFFF),
+    100: Color(0xFF0084FF),
     200: Color(_blueAccentValue),
-    400: Color(0xFFA9ACFF),
-    700: Color(0xFF9093FF),
+    400: Color(0xFF0084FF),
+    700: Color(0xFF0084FF),
   });
-  static const int _blueAccentValue = 0xFFDCDDFF;
+  static const int _blueAccentValue = 0xFF0084FF;
 }
