@@ -14,7 +14,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: Column(children: [
-        
+         Text(Setting.currency.toString()),
       ],)),
     );
   }

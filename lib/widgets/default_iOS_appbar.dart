@@ -5,7 +5,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class DefaultIOSAppBar extends StatefulWidget implements ObstructingPreferredSizeWidget{
   final String title;
-  const DefaultIOSAppBar({super.key, required this.title});
+  final Function? callBack;
+  const DefaultIOSAppBar({super.key, required this.title, this.callBack});
 
   @override
   State<DefaultIOSAppBar> createState() => _DefaultIOSAppBarState();
@@ -29,7 +30,10 @@ class _DefaultIOSAppBarState extends State<DefaultIOSAppBar> {
         middle: Text(widget.title, style: MyTextStyles.appBarTitle,),
         trailing: CupertinoButton(
           onPressed: (){
-            Navigator.push(context, CupertinoPageRoute(builder: (context) => const SettingPage()));
+            Navigator.push(context, CupertinoPageRoute(builder: (context) => const SettingPage())).then((value){
+              print(">>>>>>> " + value.toString());
+              widget.callBack!(value);
+            });
           },
           padding: EdgeInsets.zero,
           child: SvgPicture.asset('assets/images/settings-04.svg')

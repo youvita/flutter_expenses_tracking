@@ -83,6 +83,9 @@ class _SettingPageState extends State<SettingPage> {
               iconPath: 'assets/images/target-05.svg', 
               trailing: appInfo!.version,
             ),
+            CupertinoButton(onPressed: (){
+              Navigator.pop(context, true);
+            }, child: Text("click"))
           ],
         ),
       )

@@ -18,7 +18,7 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   int _selectedIndex = 0;
-  static const List<Widget> _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
+  static List<Widget> _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -31,7 +31,15 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
   Widget build(BuildContext context) {
 
     return CupertinoPageScaffold(
-      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses'),
+      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses'
+      ,
+      callBack: (value){
+        print("000"+ value.toString());
+        setState(() {
+          _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
+      });
+      },
+      ),
       // navigationBar: CupertinoNavigationBar(
       //   backgroundColor: MyColors.blue,
       //   middle: const Text("Expenses", style: MyTextStyles.appBarTitle,),
