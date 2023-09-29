@@ -1,15 +1,29 @@
+import 'package:expenses_tracking/pages/create/create_form.dart';
 import 'package:flutter/material.dart';
 
-class CreatePage extends StatefulWidget {
+import '../../constant/constant.dart';
+import '../../database/models/expenses.dart';
+import '../../widgets/app_topbar.dart';
+
+class CreatePage extends StatelessWidget {
   const CreatePage({super.key});
 
-  @override
-  State<CreatePage> createState() => _CreatePageState();
-}
+  static Route<void> route() {
+    return MaterialPageRoute<void>(builder: (_) => const CreatePage());
+  }
 
-class _CreatePageState extends State<CreatePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final params = ModalRoute.of(context)?.settings.arguments as Expenses;
+    final isNew = params.statusType == null;
+
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppTopBarWidget(title: isNew ? "Create" : "View", onActionRight: () {
+        Navigator.pop(context);
+      }),
+      backgroundColor: MyColors.white,
+      body: CreateFormWidget(expenses: params, isNew: isNew)
+    );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/database/models/expenses.dart';
 import 'package:expenses_tracking/pages/create/create_page.dart';
 import 'package:expenses_tracking/pages/home/home_page.dart';
 import 'package:expenses_tracking/pages/report/report_page.dart';
@@ -22,7 +23,6 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   void _onItemTapped(int index) {
     setState(() {
-      print("selected index:: $index");
       _selectedIndex = index;
     });
   }
@@ -89,17 +89,16 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
               icon: InkWell(
                   borderRadius: BorderRadius.circular(100),
                   onTap: () {
-                  //  _navigationRoute(context);
+                   _navigationRoute(context);
                   },
                   child: Container(
                       height: 46,
                       width: 46,
                       decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                            begin: Alignment.bottomCenter,
-                            end: Alignment.topCenter,
-                            stops: [0.6, 1.0],
-                            tileMode: TileMode.mirror,
+                        gradient: SweepGradient(
+                          center: Alignment.topRight,
+                            stops: [0.1, 0.8],
+                            tileMode: TileMode.clamp,
                             colors: [MyColors.blue, MyColors.white]
                         ),
                         color: MyColors.blue,
@@ -150,7 +149,7 @@ Future<void> _navigationRoute(BuildContext context) async {
 /// animation route page
 Route _createRoute() {
   return PageRouteBuilder(
-      settings: const RouteSettings(),
+      settings: RouteSettings(arguments: Expenses(null, null, null, null, null, null, null, null, null)),
       pageBuilder: (context, animation, secondaryAnimation) => const CreatePage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(0.0, 1.0);

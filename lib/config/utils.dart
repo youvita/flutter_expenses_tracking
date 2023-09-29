@@ -9,9 +9,9 @@ class Utils {
     return unicode;
   }
 
-  static DateTime dateTimeFormat(String stringDateTime) {
-    if (stringDateTime.length != 14) return DateTime.now();
-      String format = '${stringDateTime.substring(0, 8)}T${stringDateTime.substring(8)}';
+  static DateTime dateTimeFormat(String? stringDateTime) {
+    if (stringDateTime?.length != 14) return DateTime.now();
+      String format = '${stringDateTime?.substring(0, 8)}T${stringDateTime?.substring(8)}';
     return DateTime.parse(format);
   }
 
