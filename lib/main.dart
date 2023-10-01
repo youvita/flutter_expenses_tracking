@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     context.setLocale(Locale(Setting.language.toString()));
     return MaterialApp(
       title: 'Flutter Demo',

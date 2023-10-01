@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/main.dart';
-import 'package:expenses_tracking/pages/setting/components/currency_change.dart';
-import 'package:expenses_tracking/pages/setting/components/exchange_change.dart';
-import 'package:expenses_tracking/pages/setting/components/language_change.dart';
+import 'package:expenses_tracking/pages/setting/widget/currency_change.dart';
+import 'package:expenses_tracking/pages/setting/widget/exchange_change.dart';
+import 'package:expenses_tracking/pages/setting/widget/language_change.dart';
 import 'package:expenses_tracking/pages/setting/security/security_page.dart';
 import 'package:expenses_tracking/widgets/iOS_setting_appbar.dart';
 import 'package:flutter/cupertino.dart';
@@ -83,9 +83,6 @@ class _SettingPageState extends State<SettingPage> {
               iconPath: 'assets/images/target-05.svg', 
               trailing: appInfo!.version,
             ),
-            CupertinoButton(onPressed: (){
-              Navigator.pop(context, true);
-            }, child: Text("click"))
           ],
         ),
       )

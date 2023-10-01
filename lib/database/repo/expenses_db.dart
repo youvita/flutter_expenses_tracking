@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:sqflite/sqflite.dart';
 
 import '../models/expenses.dart';
@@ -59,5 +61,13 @@ class ExpensesDb {
     });
   }
 
+  Future<double> getTotalExpensesIncome(bool isIncome,String year) async {
+    var statusType = isIncome ? '2' : '1';
+    final db = await DatabaseService().database;
+    var result = await db.rawQuery("SELECT coalesce(sum(amount),0) as amount FROM $tableName WHERE status_type = '$statusType' AND substr(create_datetime, 1, 4) = '$year'");
+  
+    var total = result[0]['amount'];
+    return double.parse(total.toString());
+  }
 
 }

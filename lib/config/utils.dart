@@ -57,6 +57,12 @@ class Utils {
     return double.parse(value ?? '');
   }
 
-
+  static String findPrcentage(double value, double income, double expenses) {
+    double total = income + expenses;
+    if(value==0){
+      return '0';
+    }
+    return ((value / total) * 100).toStringAsFixed(2);
+  }
 
 }
