@@ -19,7 +19,7 @@ class BottomNavigationBarWidget extends StatefulWidget {
 class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
 
   int _selectedIndex = 0;
-  static List<Widget> _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
+  static List<Widget> _widgetOptions = <Widget>[HomePage(callBack: () {}), CreatePage(), ReportPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -36,8 +36,9 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
       callBack: (value){
         print("000"+ value.toString());
         setState(() {
-          _widgetOptions = <Widget>[HomePage(), CreatePage(), ReportPage()];
-          _onItemTapped(0);
+          _selectedIndex = 0;
+          _widgetOptions = <Widget>[HomePage(callBack: () {
+          }), CreatePage(), ReportPage()];
       });
       },
       ),

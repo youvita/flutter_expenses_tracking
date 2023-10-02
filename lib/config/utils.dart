@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
+import 'package:flutter/material.dart';
 
 class Utils {
 
@@ -32,13 +33,45 @@ class Utils {
     return DateFormat('MM/yyyy').format(date);
   }
 
-  static String formatCurrency(String? currency, String? amount) {
+  static String formatCurrency(String? amount) {
     String value = '';
-    if(currency == 'USD') {
+    if(Setting.currency == 'USD') {
       value = '\$${NumberFormat('#,###.00', 'en_US').format(double.parse(amount ?? '0'))}';
     } else {
       value = '៛${NumberFormat.decimalPattern().format(double.parse(amount ?? '0'))}';
     }
+    return value;
+  }
+
+  static String formatDecimal(String? currency, String? amount) {
+    String value = '';
+    if (amount != null) {
+      if (currency == 'USD' || currency == null) {
+        value = NumberFormat('#,###.00', 'en_US').format(
+            double.parse(amount));
+      } else {
+        value =
+            NumberFormat.decimalPattern().format(double.parse(amount));
+      }
+    }
+    return value;
+  }
+
+  static String exchangeAmount(String? currency, String? amount) {
+    String value = '';
+      if (Setting.currency == 'USD') {
+        if (currency == 'KHR') {
+          value = (convertToDouble(amount) / Setting.exchangeRate!).toString();
+        } else {
+          value = amount ?? '';
+        }
+      } else  {
+        if (currency == 'USD') {
+          value = (convertToDouble(amount) * Setting.exchangeRate!).toString();
+        } else {
+          value = amount ?? '';
+        }
+      }
     return value;
   }
 

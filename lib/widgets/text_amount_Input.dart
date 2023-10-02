@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 class TextAmountInputWidget extends StatefulWidget {
   final String placeholder;
   final String value;
+  final String defaultCurrency;
   final EdgeInsets? padding;
   final double horSpace;
   final bool enable;
@@ -17,6 +18,7 @@ class TextAmountInputWidget extends StatefulWidget {
     this.enable = true,
     required this.placeholder,
     required this.value,
+    this.defaultCurrency = '1',
     this.padding = const EdgeInsets.only(left: 10, top: 15, right: 20, bottom: 15),
     this.horSpace = 8,
     required this.onValueChanged,
@@ -29,12 +31,13 @@ class TextAmountInputWidget extends StatefulWidget {
 }
 
 class _CustomTextSelect extends State<TextAmountInputWidget> {
-  String _selectedValue = "1";
+  String _selectedValue = '';
   final _controller = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _selectedValue = widget.defaultCurrency;
     _controller.text = widget.value;
     _controller.addListener(_latestValue);
   }
@@ -65,7 +68,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
               value: _selectedValue,
               onChange: (value) => setState(() {
               _selectedValue = value!;
-              widget.onCurrencyChanged(value);
+              widget.onCurrencyChanged(value == '1' ? 'USD' : 'KHR');
               })
             )
           ),

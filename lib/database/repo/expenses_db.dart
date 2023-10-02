@@ -71,20 +71,19 @@ class ExpensesDb {
       coalesce(CASE
         WHEN '${Setting.currency}' = 'USD' THEN
           SUM(CASE
-            WHEN currency_code = '1' THEN amount
-            WHEN currency_code = '2' THEN amount / ${Setting.exchangeRate}
+            WHEN currency_code = 'USD' THEN amount
+            WHEN currency_code = 'KHR' THEN amount / ${Setting.exchangeRate}
           END)
         WHEN '${Setting.currency}' = 'KHR' THEN
           SUM(CASE
-            WHEN currency_code = '1' THEN amount * ${Setting.exchangeRate}
-            WHEN currency_code = '2' THEN amount
+            WHEN currency_code = 'USD' THEN amount * ${Setting.exchangeRate}
+            WHEN currency_code = 'KHR' THEN amount
           END)
       END, 0) AS amount
     FROM $tableName 
     WHERE status_type = '$statusType' AND substr(create_datetime, 1, 4) = '$year'
     """;
     var result = await db.rawQuery(query);
-    print(result);
     var total = result[0]['amount'];
    return double.parse(total.toString());
   }
