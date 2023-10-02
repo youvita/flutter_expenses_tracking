@@ -138,30 +138,24 @@ class _ListFormState extends State<ListFormWidget> {
                             itemBuilder: (BuildContext context, int monthIndex) {
                               return listHeaderYear.elementAt(yearIndex) == Utils.dateFormatYear(listHeaderMonth.elementAt(monthIndex)) ?
                               Column(
+                                mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Theme(data: theme, child: ExpansionTile(
+                                  Theme(data: theme, child:
+                                  ExpansionTile(
                                       tilePadding: const EdgeInsets.only(right: 20, left: 20),
-                                      leading: IntrinsicWidth(
-                                          stepWidth: 350,
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
-                                                  const SizedBox(width: 11),
-                                                  SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
-                                                ],
-                                              )
-                                            ],
-                                          )
-                                      ),
+                                      leading: Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
                                       backgroundColor: MyColors.white,
                                       collapsedBackgroundColor: MyColors.white,
-                                      trailing: const SizedBox(),
+                                      trailing: IntrinsicWidth(
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                            const SizedBox(width: 11),
+                                            SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
+                                          ],
+                                        )
+                                      ),
                                       title: const Text(''),
                                       children: [
                                         SingleChildScrollView(
