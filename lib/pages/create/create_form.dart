@@ -234,7 +234,8 @@ class _AmountInput extends State<_AmountInputWidget> {
     return TextAmountInputWidget(
         enable: widget.expenses.isUpdate ?? true,
         placeholder: "Input",
-        value: amountInput,
+        value: Utils.formatDecimal(widget.expenses.currencyCode, amountInput),
+        defaultCurrency: widget.expenses.currencyCode == 'USD' || widget.expenses.currencyCode == null ? '1' : '2',
         onValueChanged: (String value) {
           setState(() {
             amountInput = value;

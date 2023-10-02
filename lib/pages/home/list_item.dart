@@ -18,7 +18,7 @@ class ListItem extends StatefulWidget {
 class _ListItemState extends State<ListItem> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: () {
           widget.onItemSelected(widget.item);
       },
@@ -40,7 +40,7 @@ class _ListItemState extends State<ListItem> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(Utils.dateFormat(Utils.dateTimeFormat("${widget.item?.issueDate}")), style: MyTextStyles.textStyleNormal15),
-                      Text('${widget.item?.statusType == '1' ? '-' : '+'}${Utils.formatCurrency(widget.item?.currencyCode, widget.item?.amount)}', style: widget.item?.statusType == '1' ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green)
+                      Text('${widget.item?.statusType == '1' ? '-' : '+'}${Utils.formatCurrency(Utils.exchangeAmount(widget.item?.currencyCode, widget.item?.amount))}', style: widget.item?.statusType == '1' ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green)
                     ],
                   )
                 ])

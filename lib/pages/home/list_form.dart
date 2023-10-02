@@ -6,7 +6,6 @@ import 'package:expenses_tracking/widgets/toggle_swich.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sticky_headers/sticky_headers.dart';
-import '../../config/setting_utils.dart';
 import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
 
@@ -56,7 +55,7 @@ class _ListFormState extends State<ListFormWidget> {
       for (var i = 0; i < listHeaderYear.length; i++) {
         for(var j = i; j < listItem.length; j++) {
           if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountYear = totalAmountYear + double.parse((listItem.elementAt(j).currencyCode == 'USD' ? listItem.elementAt(j).amount : (Utils.convertToDouble(listItem.elementAt(j).amount) / Setting.exchangeRate!)).toString());
+            totalAmountYear = totalAmountYear + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
           }
         }
         listTotalEachYear.add(totalAmountYear);
@@ -67,7 +66,7 @@ class _ListFormState extends State<ListFormWidget> {
       for (var i = 0; i < listHeaderMonth.length; i++) {
         for (var j = i; j < listItem.length; j++) {
           if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountMonth = totalAmountMonth + double.parse((listItem.elementAt(j).currencyCode == 'USD' ? listItem.elementAt(j).amount : (Utils.convertToDouble(listItem.elementAt(j).amount) / Setting.exchangeRate!)).toString());
+            totalAmountMonth = totalAmountMonth + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
           }
         }
         listTotalEachMonth.add(totalAmountMonth);
@@ -126,7 +125,7 @@ class _ListFormState extends State<ListFormWidget> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
-                              Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                              Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                             ],
                           )
                       ),
@@ -150,7 +149,7 @@ class _ListFormState extends State<ListFormWidget> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency('USD', listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                             const SizedBox(width: 11),
                                             SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                           ],
