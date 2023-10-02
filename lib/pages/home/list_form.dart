@@ -10,7 +10,10 @@ import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
 
 class ListFormWidget extends StatefulWidget {
-  const ListFormWidget({super.key});
+
+  const ListFormWidget({super.key, required this.callBack});
+
+  final Function callBack;
 
   @override
   State<StatefulWidget> createState() => _ListFormState();
@@ -85,6 +88,10 @@ class _ListFormState extends State<ListFormWidget> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
+
+    // setState(() {
+    //   widget.callBack();
+    // });
 
     return Column(
       mainAxisSize: MainAxisSize.max,

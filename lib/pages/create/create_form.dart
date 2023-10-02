@@ -220,12 +220,12 @@ class _AmountInputWidget extends StatefulWidget {
 }
 
 class _AmountInput extends State<_AmountInputWidget> {
-  String amountInput = '';
+  String? amountInput;
 
   @override
   void initState() {
     super.initState();
-    amountInput = widget.expenses.amount ?? '';
+    amountInput = widget.expenses.amount;
   }
 
   @override

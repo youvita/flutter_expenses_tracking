@@ -45,10 +45,14 @@ class Utils {
 
   static String formatDecimal(String? currency, String? amount) {
     String value = '';
-    if(currency == 'USD') {
-      value = NumberFormat('#,###.00', 'en_US').format(double.parse(amount ?? '0'));
-    } else {
-      value = NumberFormat.decimalPattern().format(double.parse(amount ?? '0'));
+    if (amount != null) {
+      if (currency == 'USD' || currency == null) {
+        value = NumberFormat('#,###.00', 'en_US').format(
+            double.parse(amount));
+      } else {
+        value =
+            NumberFormat.decimalPattern().format(double.parse(amount));
+      }
     }
     return value;
   }
