@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/material.dart';
@@ -119,7 +120,7 @@ class _LabelChart extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Column(children: [
-          Text("-\$${expenses.toStringAsFixed(2)}", style: MyTextStyles.textStyleBold20Red,),
+          Text("-${Utils.currencyToString(expenses)}", style: MyTextStyles.textStyleBold20Red,),
           const SizedBox(height: 10,),
           Text("Expense".tr(), style: MyTextStyles.textStyleMedium17,),
           const SizedBox(height: 15,),
@@ -128,7 +129,7 @@ class _LabelChart extends StatelessWidget {
 
 
         Column(children: [
-          Text("+\$${income.toStringAsFixed(2)}", style: MyTextStyles.textStyleBold20Green,),
+          Text("+${Utils.currencyToString(income)}", style: MyTextStyles.textStyleBold20Green,),
           const SizedBox(height: 10,),
           Text("Income".tr(), style: MyTextStyles.textStyleMedium17,),
           const SizedBox(height: 15,),

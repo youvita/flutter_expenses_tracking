@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expenses_tracking/config/setting_utils.dart';
 
 class Utils {
 
@@ -65,4 +66,11 @@ class Utils {
     return ((value / total) * 100).toStringAsFixed(2);
   }
 
+  static String currencyToString(double amount){
+    if(Setting.currency=='USD') {
+      return '\$${NumberFormat('#,###.00', 'en_US').format(amount)}';
+    }else {
+      return '៛${NumberFormat.decimalPattern().format(amount)}';
+    }
+  }
 }

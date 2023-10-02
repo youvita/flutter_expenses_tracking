@@ -1,6 +1,7 @@
 
 import 'dart:math';
 
+import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/expenses.dart';
@@ -64,10 +65,27 @@ class ExpensesDb {
   Future<double> getTotalExpensesIncome(bool isIncome,String year) async {
     var statusType = isIncome ? '2' : '1';
     final db = await DatabaseService().database;
-    var result = await db.rawQuery("SELECT coalesce(sum(amount),0) as amount FROM $tableName WHERE status_type = '$statusType' AND substr(create_datetime, 1, 4) = '$year'");
-  
+    var query = """
+    SELECT
+      max(currency_code), min(currency_code), max(status_type), min(status_type),
+      coalesce(CASE
+        WHEN '${Setting.currency}' = 'USD' THEN
+          SUM(CASE
+            WHEN currency_code = '1' THEN amount
+            WHEN currency_code = '2' THEN amount / ${Setting.exchangeRate}
+          END)
+        WHEN '${Setting.currency}' = 'KHR' THEN
+          SUM(CASE
+            WHEN currency_code = '1' THEN amount * ${Setting.exchangeRate}
+            WHEN currency_code = '2' THEN amount
+          END)
+      END, 0) AS amount
+    FROM $tableName 
+    WHERE status_type = '$statusType' AND substr(create_datetime, 1, 4) = '$year'
+    """;
+    var result = await db.rawQuery(query);
+    print(result);
     var total = result[0]['amount'];
-    return double.parse(total.toString());
+   return double.parse(total.toString());
   }
-
 }

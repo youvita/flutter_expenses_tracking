@@ -22,6 +22,7 @@ class _ReportPageState extends State<ReportPage> {
   load(String year)async{
     income = await ExpensesDb().getTotalExpensesIncome(true, year);
     expenses = await ExpensesDb().getTotalExpensesIncome(false, year);
+    
     setState(() {});
   }
 

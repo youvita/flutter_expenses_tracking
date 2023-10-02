@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
@@ -89,7 +90,7 @@ class _ExpenseRow extends StatelessWidget {
     return Row(children: [
       const Row(children: [CircleAvatar(radius: 8, backgroundColor: MyColors.red,),SizedBox(width: 10,), Text("Expense", style: MyTextStyles.textStyleMedium17)],),
       const Spacer(),
-      Text('\$${expenses.toStringAsFixed(2)}', style: MyTextStyles.textStyleMedium17Red),
+      Text(Utils.currencyToString(expenses), style: MyTextStyles.textStyleMedium17Red),
     ],);
   }
 }
@@ -103,7 +104,7 @@ class _IncomeRow extends StatelessWidget {
     return Row(children: [
       Row(children: [const CircleAvatar(radius: 8, backgroundColor: MyColors.green,),const SizedBox(width: 10,), Text("Income".tr(), style: MyTextStyles.textStyleMedium17)],),
       const Spacer(),
-      Text( '\$${income.toStringAsFixed(2)}', style: MyTextStyles.textStyleMedium17Green),
+      Text(Utils.currencyToString(income), style: MyTextStyles.textStyleMedium17Green),
     ],);
   }
 }
@@ -119,7 +120,7 @@ class _BalanceRow extends StatelessWidget {
     return Row(children: [
       Text("Balance".tr(), style: MyTextStyles.textStyle26,),
       const Spacer(),
-      Text( '\$${balance.toStringAsFixed(2)}', style: MyTextStyles.textStyleBold26Blue),
+      Text(Utils.currencyToString(balance), style: MyTextStyles.textStyleBold26Blue),
     ],);
   }
 }
