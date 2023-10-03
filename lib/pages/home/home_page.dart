@@ -19,7 +19,6 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(top: 20),
-        color: MyColors.greyBackground,
         child: ListFormWidget(callBack: () {}),
       ),
     );

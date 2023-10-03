@@ -31,8 +31,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
   Widget build(BuildContext context) {
 
     return CupertinoPageScaffold(
-      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses'
-      ,
+      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses',
       callBack: (value){
         setState(() {
           _selectedIndex = 0;
@@ -52,6 +51,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
       //   )
       // ),
       child: Scaffold(
+        backgroundColor: MyColors.greyBackground,
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
           // child: BlocProvider(

@@ -1,5 +1,6 @@
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/database/models/year_header.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
 import 'package:expenses_tracking/pages/home/list_item.dart';
 import 'package:expenses_tracking/widgets/toggle_swich.dart';
@@ -27,12 +28,15 @@ class _ListFormState extends State<ListFormWidget> {
   var totalAmountYear = 0.0;
   var totalAmountMonth = 0.0;
   int toggleIndex = 0;
+  bool isExpanded = false;
+  String yearSelected = '';
 
   List<Expenses> listItem = List.empty();
   List<String> listHeaderYear = List.empty(growable: true);
   List<DateTime> listHeaderMonth = List.empty(growable: true);
   List<double> listTotalEachYear = List.empty(growable: true);
   List<double> listTotalEachMonth = List.empty(growable: true);
+  List<YearHeader> listVisibleHeader = List.empty(growable: true);
 
   /// load from db
   loadExpense(String status) async {
@@ -51,6 +55,8 @@ class _ListFormState extends State<ListFormWidget> {
       if (lastHeaderYear != header) {
         listHeaderYear.add(header);
         lastHeaderYear = header;
+
+        listVisibleHeader.add(YearHeader(header, false));
       }
 
       if (lastHeaderMonth != headerMonth) {
@@ -113,7 +119,7 @@ class _ListFormState extends State<ListFormWidget> {
       mainAxisSize: MainAxisSize.max,
       children: [
         Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
           child: ExpenseToggle(
             defaultIndex: toggleIndex,
             onToggle: (int index) {
@@ -132,17 +138,29 @@ class _ListFormState extends State<ListFormWidget> {
                 itemCount: listHeaderYear.length,
                 itemBuilder: (BuildContext context, int yearIndex) {
                   return StickyHeader(
-                      header: Container(
-                          color: MyColors.greyBackground,
-                          padding: const EdgeInsets.only(left: 20, top: 7, right: 20, bottom: 7),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
-                              Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
-                            ],
+                      header: Column(
+                        children: [
+                          Container(
+                              color: MyColors.greyBackground,
+                              padding: const EdgeInsets.only(left: 20, top: 17, right: 20, bottom: 7),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
+                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                ],
+                              )
+                          ),
+                          Visibility(
+                              visible: listVisibleHeader.elementAt(yearIndex).visible,
+                              child: const Divider(
+                                color: MyColors.blue,
+                                height: 0,
+                                thickness: 2
+                              )
                           )
+                        ],
                       ),
                       content: Expanded(
                         child: ListView.builder(
@@ -170,6 +188,20 @@ class _ListFormState extends State<ListFormWidget> {
                                           ],
                                         )
                                       ),
+                                      onExpansionChanged: (value) {
+                                        setState(() {
+                                          if (value == false) {
+
+                                          }
+                                          // isExpanded = value;
+                                          // yearSelected = listHeaderYear.elementAt(yearIndex);
+                                          listVisibleHeader.removeAt(yearIndex);
+                                          listVisibleHeader.add(YearHeader(
+                                              listHeaderYear.elementAt(
+                                                  yearIndex), value));
+                                          print(listVisibleHeader);
+                                        });
+                                      },
                                       title: const Text(''),
                                       children: [
                                         SingleChildScrollView(
@@ -191,14 +223,15 @@ class _ListFormState extends State<ListFormWidget> {
                                                               _navigationRoute(context, value);
                                                             },
                                                           ),
-                                                          childItem == listItem.last && Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) == Utils.dateFormatYearMonth(listHeaderMonth.last) ? const SizedBox()
-                                                              : Container(
+                                                          Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
+                                                              : childItem == listItem.last ? const SizedBox() : Container(
                                                               padding: const EdgeInsets.only(left: 70),
                                                               child: const Divider(
                                                                   color: MyColors.greyBackground,
                                                                   height: 0,
                                                                   thickness: 1
-                                                              ))
+                                                              )
+                                                          )
                                                         ],
                                                       ) : const SizedBox();
                                                     }

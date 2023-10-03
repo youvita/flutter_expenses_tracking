@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
@@ -153,19 +155,44 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
         value: DateFormat('dd MMMM yyyy').format(newDateTime),
         imagePath: "assets/images/ic_calendar.svg",
         onTap: (_) async {
+          if (Platform.isIOS) {
+            showCupertinoModalPopup(context: context, builder: (BuildContext context) => Container(
+              height: 216,
+              color: CupertinoColors.systemBackground.resolveFrom(context),
+              padding: const EdgeInsets.only(top: 6.0),
+              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SafeArea(
+                top: false,
+                child: CupertinoDatePicker(
+                  initialDateTime: DateTime.now(),
+                  mode: CupertinoDatePickerMode.date,
+                  use24hFormat: true,
+                  showDayOfWeek: true,
+                  onDateTimeChanged: (DateTime newDate) {
+                    setState(() {
+                      DateTime currentTime = DateTime.now();
+                      newDateTime = DateTime(newDate.year, newDate.month, newDate.day, currentTime.hour, currentTime.minute, currentTime.second);
+                      widget.expenses.issueDateChanged = newDateTime;
+                    });
+                  },
+                ),
+              ),
+            ));
+          } else {
             DateTime? selectedDateTime = await showDatePicker(
                 context: context,
                 initialDate: DateTime.now(),
                 firstDate: DateTime(2023),
                 lastDate: DateTime(2100));
 
-                if (selectedDateTime != null) {
-                  DateTime currentTime = DateTime.now();
-                  setState(() {
-                    newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
-                  });
-                  widget.expenses.issueDateChanged = newDateTime;
-                }
+            if (selectedDateTime != null) {
+              DateTime currentTime = DateTime.now();
+              setState(() {
+                newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
+              });
+              widget.expenses.issueDateChanged = newDateTime;
+            }
+          }
         }
     );
   }

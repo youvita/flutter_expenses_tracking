@@ -96,7 +96,7 @@ class Utils {
     if(value==0){
       return '0';
     }
-    return ((value / total) * 100).toStringAsFixed(2);
+    return ((value / total) * 100).toStringAsFixed(0);
   }
 
   static String currencyToString(double amount){
