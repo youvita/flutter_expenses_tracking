@@ -34,49 +34,64 @@ class _ListFormState extends State<ListFormWidget> {
   List<double> listTotalEachYear = List.empty(growable: true);
   List<double> listTotalEachMonth = List.empty(growable: true);
 
+  /// load from db
   loadExpense(String status) async {
     listItem = await ExpensesDb().query(status);
-
     setState(() {
-      /// loop to filter header each year
-      for (var i = 0; i < listItem.length; i++) {
-        DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
-        String header = Utils.dateFormatYear(dateTime);
-        String headerMonth = Utils.dateFormatYearMonth(dateTime);
-        if (lastHeaderYear != header) {
-          listHeaderYear.add(header);
-          lastHeaderYear = header;
-        }
 
-        if (lastHeaderMonth != headerMonth) {
-          listHeaderMonth.add(dateTime);
-          lastHeaderMonth = headerMonth;
-        }
-      }
-
-      /// loop to sum total amount each year
-      for (var i = 0; i < listHeaderYear.length; i++) {
-        for(var j = i; j < listItem.length; j++) {
-          if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountYear = totalAmountYear + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
-          }
-        }
-        listTotalEachYear.add(totalAmountYear);
-        totalAmountYear = 0.0;
-      }
-
-      /// loop to sum total amount each month
-      for (var i = 0; i < listHeaderMonth.length; i++) {
-        for (var j = i; j < listItem.length; j++) {
-          if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-            totalAmountMonth = totalAmountMonth + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
-          }
-        }
-        listTotalEachMonth.add(totalAmountMonth);
-        totalAmountMonth = 0.0;
-      }
     });
+  }
 
+  /// load to from list
+  loadForm() {
+    for (var i = 0; i < listItem.length; i++) {
+      DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
+      String header = Utils.dateFormatYear(dateTime);
+      String headerMonth = Utils.dateFormatYearMonth(dateTime);
+      if (lastHeaderYear != header) {
+        listHeaderYear.add(header);
+        lastHeaderYear = header;
+      }
+
+      if (lastHeaderMonth != headerMonth) {
+        listHeaderMonth.add(dateTime);
+        lastHeaderMonth = headerMonth;
+      }
+    }
+
+    /// loop to sum total amount each year
+    for (var i = 0; i < listHeaderYear.length; i++) {
+      for(var j = i; j < listItem.length; j++) {
+        if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
+          totalAmountYear = totalAmountYear + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
+        }
+      }
+      listTotalEachYear.add(totalAmountYear);
+      totalAmountYear = 0.0;
+    }
+
+    /// loop to sum total amount each month
+    for (var i = 0; i < listHeaderMonth.length; i++) {
+      for (var j = i; j < listItem.length; j++) {
+        if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
+          totalAmountMonth = totalAmountMonth + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
+        }
+      }
+      listTotalEachMonth.add(totalAmountMonth);
+      totalAmountMonth = 0.0;
+    }
+  }
+
+  /// reset all data form list
+  resetForm() {
+    listHeaderYear.clear();
+    listTotalEachYear.clear();
+    listTotalEachMonth.clear();
+    listHeaderMonth.clear();
+    lastHeaderMonth = "";
+    lastHeaderYear = "";
+    totalAmountYear = 0.0;
+    totalAmountMonth = 0.0;
   }
 
   @override
@@ -89,9 +104,10 @@ class _ListFormState extends State<ListFormWidget> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).copyWith(dividerColor: Colors.transparent);
 
-    // setState(() {
-    //   widget.callBack();
-    // });
+    setState(() {
+      resetForm();
+      loadForm();
+    });
 
     return Column(
       mainAxisSize: MainAxisSize.max,
@@ -103,15 +119,7 @@ class _ListFormState extends State<ListFormWidget> {
             onToggle: (int index) {
               if (toggleIndex != index) {
                 setState(() {
-                  listHeaderYear.clear();
                   listItem.clear();
-                  listTotalEachYear.clear();
-                  listTotalEachMonth.clear();
-                  listHeaderMonth.clear();
-                  lastHeaderMonth = "";
-                  lastHeaderYear = "";
-                  totalAmountYear = 0.0;
-                  totalAmountMonth = 0.0;
                   toggleIndex = index;
                   loadExpense(index == 0 ? '' : index.toString());
                 });

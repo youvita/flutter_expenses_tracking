@@ -79,7 +79,7 @@ class _ChartReportState extends State<ChartReport> {
         case 0:
           return PieChartSectionData(
             color: MyColors.red,
-            value: 12,
+            value: widget.expenses,
             title: '${Utils.findPrcentage(widget.expenses, widget.income, widget.expenses)}%',
             radius: radius,
             titleStyle: TextStyle(
@@ -92,7 +92,7 @@ class _ChartReportState extends State<ChartReport> {
         case 1:
           return PieChartSectionData(
             color: MyColors.green,
-            value: 40,
+            value: widget.income,
             title: '${Utils.findPrcentage(widget.income, widget.income, widget.expenses)}%',
             radius: radius,
             titleStyle: TextStyle(

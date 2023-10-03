@@ -88,7 +88,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
                   isCollapsed: true
               ),
               keyboardType: TextInputType.number,
-              style: MyTextStyles.textStyleBold17,
+              style: MyTextStyles.textStyleBold26,
             )
           )
         ],

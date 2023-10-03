@@ -18,7 +18,7 @@ class DropDownList<T> extends StatefulWidget {
     required this.listItems,
     this.value,
     this.onChange,
-    this.textStyle=MyTextStyles.textStyleMedium17,
+    this.textStyle = MyTextStyles.textStyle26,
   }) : super(key: key);
 
   @override
@@ -49,11 +49,11 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
       link: _layerLink,
       child: InkWell(
         borderRadius: BorderRadius.circular(100),
-        onTap: () {
-          if (widget.enable) {
-            _onTap();
-          }
-        },
+        // onTap: () {
+        //   if (widget.enable) {
+        //     _onTap();
+        //   }
+        // },
         child: FocusableActionDetector(
           focusNode: _focusNode,
           mouseCursor: SystemMouseCursors.click,
@@ -67,8 +67,8 @@ class _DropDownListState<T> extends State<DropDownList<T>> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(_selected == null ? '' : _selected!.title, style: widget.textStyle),
-                const SizedBox(width: 11),
-                SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
+                // const SizedBox(width: 11),
+                // SvgPicture.asset("assets/images/ic_arrow_drop_down.svg")
               ],
             ),
           ),

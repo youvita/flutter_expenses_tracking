@@ -34,11 +34,9 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
       navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses'
       ,
       callBack: (value){
-        print("000"+ value.toString());
         setState(() {
           _selectedIndex = 0;
-          _widgetOptions = <Widget>[HomePage(callBack: () {
-          }), CreatePage(), ReportPage()];
+          _widgetOptions = <Widget>[HomePage(callBack: () {}), CreatePage(), ReportPage()];
       });
       },
       ),

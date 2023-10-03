@@ -1,5 +1,4 @@
 import 'package:expenses_tracking/pages/category/category_form.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../constant/constant.dart';
@@ -13,7 +12,7 @@ class CategoryPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppTopBarWidget(
-        title: "New Category", onActionRight: () {
+        title: "New Category", onActionLeft: () {
         Navigator.pop(context);
       },
       ),

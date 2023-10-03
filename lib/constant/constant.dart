@@ -43,6 +43,12 @@ class MyTextStyles {
     color: MyColors.black,
   );
 
+  static const TextStyle textStyleBold26 = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: MyColors.black,
+  );
+
   static const TextStyle textStyleBold26Blue = TextStyle(
     fontSize: 26,
     fontWeight: FontWeight.bold,

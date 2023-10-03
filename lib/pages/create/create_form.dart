@@ -1,3 +1,4 @@
+import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
@@ -6,6 +7,7 @@ import 'package:expenses_tracking/pages/create/text_remark_input.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
 import 'package:expenses_tracking/widgets/text_amount_Input.dart';
 import 'package:expenses_tracking/widgets/text_select.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -199,7 +201,7 @@ class _CategoryInput extends State<_CategoryWidget> {
         enable: widget.expenses.isUpdate ?? true,
         label: "Category",
         value: widget.expenses.category == null ? "Select" : "${widget.expenses.categoryImage} ${widget.expenses.category}",
-        imagePath: "assets/images/ic_arrow_drop_down.svg",
+        imagePath: "assets/images/ic_arrow_next.svg",
         onTap: (bool value) {
           callBack();
         });
@@ -221,11 +223,18 @@ class _AmountInputWidget extends StatefulWidget {
 
 class _AmountInput extends State<_AmountInputWidget> {
   String? amountInput;
+  String? currency;
 
   @override
   void initState() {
     super.initState();
     amountInput = widget.expenses.amount;
+
+    if (widget.expenses.isNew == true) {
+      currency = Setting.currency;
+    } else {
+      currency = widget.expenses.currencyCode;
+    }
   }
 
   @override
@@ -235,7 +244,7 @@ class _AmountInput extends State<_AmountInputWidget> {
         enable: widget.expenses.isUpdate ?? true,
         placeholder: "Input",
         value: Utils.formatDecimal(widget.expenses.currencyCode, amountInput),
-        defaultCurrency: widget.expenses.currencyCode == 'USD' || widget.expenses.currencyCode == null ? '1' : '2',
+        defaultCurrency: currency == 'USD' ? '1' : '2',
         onValueChanged: (String value) {
           setState(() {
             amountInput = value;
@@ -449,21 +458,22 @@ Future<void> _navigationListRoute(context) async {
 
 /// animation route page
 Route _categoryRoute() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const CategoryPage(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
-
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      }
-  );
+  return CupertinoPageRoute(builder: (context) => const CategoryPage());
+  // return PageRouteBuilder(
+  //     pageBuilder: (context, animation, secondaryAnimation) => const CategoryPage(),
+  //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+  //       const begin = Offset.zero;
+  //       const end = Offset.zero;
+  //       const curve = Curves.ease;
+  //
+  //       var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+  //
+  //       return SlideTransition(
+  //         position: animation.drive(tween),
+  //         child: child,
+  //       );
+  //     }
+  // );
 }
 
 /// animation route page
