@@ -276,12 +276,14 @@ class _AmountInput extends State<_AmountInputWidget> {
           setState(() {
             amountInput = value;
             widget.expenses.amountChanged = value;
+            widget.expenses.currencyCodeChanged = currency;
             widget.callBack();
           });
-        }, onCurrencyChanged: (String value) {
-          setState(() {
-            widget.expenses.currencyCodeChanged = value;
-          });
+        },
+        onCurrencyChanged: (String value) {
+          // setState(() {
+          //   widget.expenses.currencyCodeChanged = value;
+          // });
         }
     );
   }

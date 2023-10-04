@@ -28,8 +28,8 @@ class _ListFormState extends State<ListFormWidget> {
   var totalAmountYear = 0.0;
   var totalAmountMonth = 0.0;
   int toggleIndex = 0;
-  bool isExpanded = false;
-  String yearSelected = '';
+  int expandCounter = 0;
+  bool defaultExpand = false;
 
   List<Expenses> listItem = List.empty();
   List<String> listHeaderYear = List.empty(growable: true);
@@ -37,10 +37,13 @@ class _ListFormState extends State<ListFormWidget> {
   List<double> listTotalEachYear = List.empty(growable: true);
   List<double> listTotalEachMonth = List.empty(growable: true);
   List<YearHeader> listVisibleHeader = List.empty(growable: true);
+  List<int> listCounter = List.empty(growable: true);
 
   /// load from db
   loadExpense(String status) async {
     listItem = await ExpensesDb().query(status);
+
+    /// set for update UI while back from setting
     setState(() {
 
     });
@@ -124,11 +127,9 @@ class _ListFormState extends State<ListFormWidget> {
             defaultIndex: toggleIndex,
             onToggle: (int index) {
               if (toggleIndex != index) {
-                setState(() {
-                  listItem.clear();
-                  toggleIndex = index;
-                  loadExpense(index == 0 ? '' : index.toString());
-                });
+                listItem.clear();
+                toggleIndex = index;
+                loadExpense(index == 0 ? '' : index.toString());
               }
             },
           ),
@@ -162,23 +163,22 @@ class _ListFormState extends State<ListFormWidget> {
                           )
                         ],
                       ),
-                      content: Expanded(
-                        child: ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: listHeaderMonth.length,
-                            itemBuilder: (BuildContext context, int monthIndex) {
-                              return listHeaderYear.elementAt(yearIndex) == Utils.dateFormatYear(listHeaderMonth.elementAt(monthIndex)) ?
-                              Column(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Theme(data: theme, child:
-                                  ExpansionTile(
-                                      tilePadding: const EdgeInsets.only(right: 20, left: 20),
-                                      leading: Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
-                                      backgroundColor: MyColors.white,
-                                      collapsedBackgroundColor: MyColors.white,
-                                      trailing: IntrinsicWidth(
+                      content: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: listHeaderMonth.length,
+                          itemBuilder: (BuildContext context, int monthIndex) {
+                            return listHeaderYear.elementAt(yearIndex) == Utils.dateFormatYear(listHeaderMonth.elementAt(monthIndex)) ?
+                            Column(
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Theme(data: theme, child:
+                                ExpansionTile(
+                                    tilePadding: const EdgeInsets.only(right: 20, left: 20),
+                                    leading: Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
+                                    backgroundColor: MyColors.white,
+                                    collapsedBackgroundColor: MyColors.white,
+                                    trailing: IntrinsicWidth(
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
@@ -187,64 +187,65 @@ class _ListFormState extends State<ListFormWidget> {
                                             SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                           ],
                                         )
-                                      ),
-                                      onExpansionChanged: (value) {
-                                        setState(() {
-                                          if (value == false) {
-
-                                          }
-                                          // isExpanded = value;
-                                          // yearSelected = listHeaderYear.elementAt(yearIndex);
+                                    ),
+                                    onExpansionChanged: (value) {
+                                      /// set to draw line while item was expand
+                                      setState(() {
+                                        if (value) {
+                                          listCounter.add(yearIndex);
                                           listVisibleHeader.removeAt(yearIndex);
-                                          listVisibleHeader.add(YearHeader(
-                                              listHeaderYear.elementAt(
-                                                  yearIndex), value));
-                                          print(listVisibleHeader);
-                                        });
-                                      },
-                                      title: const Text(''),
-                                      children: [
-                                        SingleChildScrollView(
-                                            physics: const ScrollPhysics(),
-                                            child: ColoredBox(
-                                                color: MyColors.white,
-                                                child: ListView.builder(
-                                                    physics: const NeverScrollableScrollPhysics(),
-                                                    shrinkWrap: true,
-                                                    itemCount: listItem.length,
-                                                    itemBuilder: (context, itemIndex) {
-                                                      Expenses? childItem = listItem.elementAt(itemIndex);
-                                                      return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) ?
-                                                      Column(
-                                                        children: [
-                                                          ListItem(
-                                                            item: childItem,
-                                                            onItemSelected: (Expenses? value) {
-                                                              _navigationRoute(context, value);
-                                                            },
-                                                          ),
-                                                          Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
-                                                              : childItem == listItem.last ? const SizedBox() : Container(
-                                                              padding: const EdgeInsets.only(left: 70),
-                                                              child: const Divider(
-                                                                  color: MyColors.greyBackground,
-                                                                  height: 0,
-                                                                  thickness: 1
-                                                              )
-                                                          )
-                                                        ],
-                                                      ) : const SizedBox();
-                                                    }
-                                                )
-                                            )
-                                        )
-                                      ])),
-                                  const SizedBox(height: 5)
-                                ],
-                              )
-                                  : const SizedBox();
-                            }),
-                      )
+                                          listVisibleHeader.insert(yearIndex, YearHeader(listHeaderYear.elementAt(yearIndex), true));
+                                        } else {
+                                          listCounter.remove(yearIndex);
+                                          if (!listCounter.contains(yearIndex)) {
+                                            listVisibleHeader.removeAt(yearIndex);
+                                            listVisibleHeader.insert(yearIndex, YearHeader(listHeaderYear.elementAt(yearIndex), false));
+                                          }
+                                        }
+                                      });
+                                    },
+                                    title: const Text(''),
+                                    children: [
+                                      SingleChildScrollView(
+                                          physics: const ScrollPhysics(),
+                                          child: ColoredBox(
+                                              color: MyColors.white,
+                                              child: ListView.builder(
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  shrinkWrap: true,
+                                                  itemCount: listItem.length,
+                                                  itemBuilder: (context, itemIndex) {
+                                                    Expenses? childItem = listItem.elementAt(itemIndex);
+                                                    return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) ?
+                                                    Column(
+                                                      children: [
+                                                        ListItem(
+                                                          item: childItem,
+                                                          onItemSelected: (Expenses? value) {
+                                                            _navigationRoute(context, value);
+                                                          },
+                                                        ),
+                                                        Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
+                                                            : childItem == listItem.last ? const SizedBox() : Container(
+                                                            padding: const EdgeInsets.only(left: 70),
+                                                            child: const Divider(
+                                                                color: MyColors.greyBackground,
+                                                                height: 0,
+                                                                thickness: 1
+                                                            )
+                                                        )
+                                                      ],
+                                                    ) : const SizedBox();
+                                                  }
+                                              )
+                                          )
+                                      )
+                                    ])),
+                                const SizedBox(height: 5)
+                              ],
+                            )
+                                : const SizedBox();
+                          })
                   );
                 }
             )
