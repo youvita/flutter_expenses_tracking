@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/database/models/category_popular.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
 import 'package:expenses_tracking/pages/create/status_switch.dart';
 import 'package:expenses_tracking/pages/create/text_remark_input.dart';
@@ -343,78 +344,254 @@ class _CategoriesWidget extends StatefulWidget {
 
 class _CategoryState extends State<_CategoriesWidget> {
 
+  List<CategoryPopular> popular = List.empty(growable: true);
+
+  loadCategoryPopular() async {
+    var pop = await ExpensesDb().getPopular();
+
+    if (pop.isNotEmpty) {
+      setState(() {
+        popular = pop;
+        // for (int i = 0; i < pop.length; i++) {
+        //   print(pop.elementAt(i).image);
+        //   for (int j = i; j < popular.length; j++) {
+        //     if (popular.elementAt(j).name == pop.elementAt(i).name) {
+        //       popular.removeAt(j);
+        //       popular.insert(j, CategoryPopular(pop
+        //           .elementAt(i)
+        //           .image, pop
+        //           .elementAt(i)
+        //           .name, pop
+        //           .elementAt(i)
+        //           .count));
+        //     }
+        //   }
+        // }
+
+        // for (int i = 0; i < popular.length; i++) {
+        //   for (int j = i; j < pop.length; j++) {
+        //     if (popular.elementAt(i).name == pop.elementAt(j).name) {
+        //       popular.removeAt(i);
+        //       popular.insert(i, CategoryPopular(pop
+        //           .elementAt(j)
+        //           .image, pop
+        //           .elementAt(j)
+        //           .name, pop
+        //           .elementAt(j)
+        //           .count));
+        //     }
+        //   }
+        // }
+        //
+        // popular.sort((p1, p2) {
+        //   return Comparable.compare(p2.count, p1.count);
+        // });
+        //
+        // for (int i = 0; i < popular.length; i++) {
+        //   print(popular.elementAt(i).count);
+        // }
+        // if (pop.length == 1) {
+        //   popular.removeAt(0);
+        //   popular.insert(0,
+        //       (pop.elementAt(0).count > 1 ? isOverride(pop) ?
+        //       CategoryPopular(pop
+        //           .elementAt(0)
+        //           .image, pop
+        //           .elementAt(0)
+        //           .name, pop
+        //           .elementAt(0)
+        //           .count
+        //       ) : CategoryPopular(Utils().getUnicodeCharacter('1F4B2'), 'Salary', 0)
+        //       : CategoryPopular(Utils().getUnicodeCharacter('1F4B2'), 'Salary', 0)
+        //       )
+        //   );
+        // }
+        //
+        // if (pop.length == 2) {
+        //   popular.removeAt(1);
+        //   popular.insert(1, ((pop
+        //       .elementAt(1)
+        //       .count > 1 ? CategoryPopular(pop
+        //       .elementAt(1)
+        //       .image, pop
+        //       .elementAt(1)
+        //       .name, pop
+        //       .elementAt(1)
+        //       .count) : isOverride(pop) ? CategoryPopular(pop
+        //       .elementAt(1)
+        //       .image, pop
+        //       .elementAt(1)
+        //       .name, pop
+        //       .elementAt(1)
+        //       .count) : CategoryPopular(
+        //       Utils().getUnicodeCharacter('1F4B0'), 'Bonus', 0))));
+        // }
+        //
+        // if (pop.length == 3)
+        //   {
+        //     popular.removeAt(2);
+        //     popular.insert(2, (pop
+        //         .elementAt(2)
+        //         .count > 1 ? CategoryPopular(pop
+        //         .elementAt(2)
+        //         .image, pop
+        //         .elementAt(2)
+        //         .name, pop
+        //         .elementAt(2)
+        //         .count) : isOverride(pop) ? CategoryPopular(pop
+        //         .elementAt(2)
+        //         .image, pop
+        //         .elementAt(2)
+        //         .name, pop
+        //         .elementAt(2)
+        //         .count) : CategoryPopular(
+        //         Utils().getUnicodeCharacter('1F48A'), 'Health', 0)));
+        //   }
+        //
+        // if (pop.length == 4) {
+        //   popular.removeAt(3);
+        //   popular.insert(3, (pop
+        //       .elementAt(3)
+        //       .count > 1 ? CategoryPopular(pop
+        //       .elementAt(3)
+        //       .image, pop
+        //       .elementAt(3)
+        //       .name, pop
+        //       .elementAt(3)
+        //       .count) : isOverride(pop) ? CategoryPopular(pop
+        //       .elementAt(3)
+        //       .image, pop
+        //       .elementAt(3)
+        //       .name, pop
+        //       .elementAt(3)
+        //       .count) : CategoryPopular(
+        //       Utils().getUnicodeCharacter('1F68C'), 'Transport', 0)));
+        // }
+      });
+    }
+  }
+
+  isOverride(List<CategoryPopular> list) {
+    for (int i = 0; i < list.length; i++) {
+      if (list.elementAt(i).name == 'Salary' || list.elementAt(i).name == 'Bonus' || list.elementAt(i).name == 'Health' || list.elementAt(i).name == 'Transport') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F4B2'), 'Salary', 1));
+    // popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F4B0'), 'Bonus', 1));
+    // popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F48A'), 'Health', 1));
+    // popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F68C'), 'Transport', 1));
+    loadCategoryPopular();
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isUpdate = widget.expenses.isUpdate ?? true;
+
     return Column(
       children: [
         Container(
             padding: const EdgeInsets.only(left: 20, top: 30, bottom: 17, right: 20),
             child: const Align(
               alignment: Alignment.centerLeft,
-              child: Text("Popular Categories", style: MyTextStyles.textStyleBold20),
+              child: Text('Popular Categories', style: MyTextStyles.textStyleBold20),
             )
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CategoryItemWidget(
-                  enable: isUpdate,
-                  image: Utils().getUnicodeCharacter("1F4B2"),
-                  label: 'Salary',
-                  onValueChanged: (String category) {
-                    setState(() {
-                      final item = category.split(' ');
-                      widget.expenses.categoryImageChanged = item[0];
-                      widget.expenses.categoryChanged = item[1];
-                      widget.callBack();
-                    });
-                  }
-              ),
-              CategoryItemWidget(
-                enable: isUpdate,
-                image: Utils().getUnicodeCharacter("1F4B0"),
-                label: "Bonus",
-                onValueChanged: (String category) {
-                  setState(() {
-                    final item = category.split(' ');
-                    widget.expenses.categoryImageChanged = item[0];
-                    widget.expenses.categoryChanged = item[1];
-                    widget.callBack();
-                  });
-                },
-              ),
-              CategoryItemWidget(
-                enable: isUpdate,
-                image: Utils().getUnicodeCharacter("1F48A"),
-                label: "Health",
-                onValueChanged: (String category) {
-                  setState(() {
-                    final item = category.split(' ');
-                    widget.expenses.categoryImageChanged = item[0];
-                    widget.expenses.categoryChanged = item[1];
-                    widget.callBack();
-                  });
-                },
-              ),
-              CategoryItemWidget(
-                enable: isUpdate,
-                image: Utils().getUnicodeCharacter("1F68C"),
-                label: "Transport",
-                onValueChanged: (String category) {
-                  setState(() {
-                    final item = category.split(' ');
-                    widget.expenses.categoryImageChanged = item[0];
-                    widget.expenses.categoryChanged = item[1];
-                    widget.callBack();
-                  });
-                },
-              )
-            ],
-          ),
+        Visibility(
+            visible: popular.isNotEmpty,
+            child: Container(
+                padding: const EdgeInsets.only(left: 10, right: 10),
+                child: SingleChildScrollView(
+                  child: GridView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 4
+                      ),
+                      itemCount: popular.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return CategoryItemWidget(
+                            enable: isUpdate,
+                            image: popular.elementAt(index).image,
+                            label: popular.elementAt(index).name,
+                            onValueChanged: (String category) {
+                              setState(() {
+                                final item = category.split(' ');
+                                widget.expenses.categoryImageChanged = item[0];
+                                widget.expenses.categoryChanged = item[1];
+                                widget.callBack();
+                              });
+                            }
+                        );
+                      }
+                  ),
+                ),
+                // child: ,
+          //       child: Row(
+          //           mainAxisSize: MainAxisSize.max,
+          //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //           children: [
+          //             CategoryItemWidget(
+          //                 enable: isUpdate,
+          //                 image: popular.elementAt(0).image,
+          //                 label: popular.elementAt(0).name,
+          //                 onValueChanged: (String category) {
+          //                   setState(() {
+          //                     final item = category.split(' ');
+          //                     widget.expenses.categoryImageChanged = item[0];
+          //                     widget.expenses.categoryChanged = item[1];
+          //                     widget.callBack();
+          //                   });
+          //                 }
+          //             ),
+          //             CategoryItemWidget(
+          //               enable: isUpdate,
+          //               image: popular.elementAt(1).image,
+          //               label: popular.elementAt(1).name,
+          //               onValueChanged: (String category) {
+          //                 setState(() {
+          //                   final item = category.split(' ');
+          //                   widget.expenses.categoryImageChanged = item[0];
+          //                   widget.expenses.categoryChanged = item[1];
+          //                   widget.callBack();
+          //                 });
+          //               },
+          //             ),
+          //             CategoryItemWidget(
+          //               enable: isUpdate,
+          //               image: popular.elementAt(2).image,
+          //               label: popular.elementAt(2).name,
+          //               onValueChanged: (String category) {
+          //                 setState(() {
+          //                   final item = category.split(' ');
+          //                   widget.expenses.categoryImageChanged = item[0];
+          //                   widget.expenses.categoryChanged = item[1];
+          //                   widget.callBack();
+          //                 });
+          //               },
+          //             ),
+          //             CategoryItemWidget(
+          //               enable: isUpdate,
+          //               image: popular.elementAt(3).image,
+          //               label: popular.elementAt(3).name,
+          //               onValueChanged: (String category) {
+          //                 setState(() {
+          //                   final item = category.split(' ');
+          //                   widget.expenses.categoryImageChanged = item[0];
+          //                   widget.expenses.categoryChanged = item[1];
+          //                   widget.callBack();
+          //                 });
+          //               },
+          //             )
+          //   ],
+          // ),
+        )
         )
       ],
     );
@@ -439,35 +616,37 @@ class _ButtonState extends State<_SaveButton> {
   Widget build(BuildContext context) {
     bool isNew = widget.expenses.isNew ?? true;
 
-    return Container(
-        padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
-        child: ElevatedButton(
-          key: const Key('createForm_saveButton'),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: MyColors.blue,
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)
-              )
-          ),
-          onPressed: ()  {
-            if (isNew) {
-              ExpensesDb().insert(widget.expenses);
-              _navigationListRoute(context);
-            } else {
-              if (editButton == 'Save') {
-                  ExpensesDb().update(widget.expenses);
+    return SafeArea(
+        child: Container(
+            padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
+            child: ElevatedButton(
+              key: const Key('createForm_saveButton'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.blue,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)
+                  )
+              ),
+              onPressed: ()  {
+                if (isNew) {
+                  ExpensesDb().insert(widget.expenses);
                   _navigationListRoute(context);
-              } else {
-                setState(() {
-                  editButton = saveButton;
-                  widget.expenses.updateChanged = true;
-                  widget.callBack();
-                });
-              }
-            }
-          },
-          child: Text(isNew ? saveButton : editButton, style: MyTextStyles.textStyleMediumWhite15),
+                } else {
+                  if (editButton == 'Save') {
+                    ExpensesDb().update(widget.expenses);
+                    _navigationListRoute(context);
+                  } else {
+                    setState(() {
+                      editButton = saveButton;
+                      widget.expenses.updateChanged = true;
+                      widget.callBack();
+                    });
+                  }
+                }
+              },
+              child: Text(isNew ? saveButton : editButton, style: MyTextStyles.textStyleMediumWhite15),
+            )
         )
     );
   }

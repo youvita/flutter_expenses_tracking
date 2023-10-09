@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:expenses_tracking/config/setting_utils.dart';
+import 'package:expenses_tracking/database/models/category_popular.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../models/expenses.dart';
@@ -58,6 +59,19 @@ class ExpensesDb {
           maps[index]['currency_code'],
           maps[index]['amount'],
           maps[index]['remark']
+      );
+    });
+  }
+
+  Future<List<CategoryPopular>> getPopular() async {
+    final db = await DatabaseService().database;
+    List<Map<String, dynamic>> maps = List.empty();
+    maps = await db.rawQuery('SELECT category_image, category, COUNT(*) AS popular_count FROM expenses GROUP BY  category_image ORDER BY popular_count DESC LIMIT 4');
+    return List.generate(maps.length, (index) {
+      return CategoryPopular(
+          maps[index]['category_image'],
+          maps[index]['category'],
+          maps[index]['popular_count']
       );
     });
   }

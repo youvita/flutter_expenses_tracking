@@ -268,21 +268,23 @@ class _SaveButton extends StatelessWidget {
     // String? image = context.select((CategoryBloc bloc) => bloc.state.image);
     // String? name = context.select((CategoryBloc bloc) => bloc.state.name);
 
-    return Container(
-        padding: const EdgeInsets.all(20),
-        child: ElevatedButton(
-          key: const Key('createForm_saveButton'),
-          style: ElevatedButton.styleFrom(
-              backgroundColor: MyColors.blue,
-              minimumSize: const Size.fromHeight(50),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)
-              )
-          ),
-          onPressed: () {
-            Navigator.pop(context, Category(image ?? '', name ?? ''));
-          },
-          child: const Text('Save', style: MyTextStyles.textStyleMediumWhite15),
+    return SafeArea(
+        child: Container(
+            padding: const EdgeInsets.all(20),
+            child: ElevatedButton(
+              key: const Key('createForm_saveButton'),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: MyColors.blue,
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)
+                  )
+              ),
+              onPressed: () {
+                Navigator.pop(context, Category(image ?? '', name ?? ''));
+              },
+              child: const Text('Save', style: MyTextStyles.textStyleMediumWhite15),
+            )
         )
     );
   }

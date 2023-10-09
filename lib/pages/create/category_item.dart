@@ -26,6 +26,7 @@ class _CategoryItemState extends State<CategoryItemWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.max,
       children: [
         SizedBox(
           height: 85,
