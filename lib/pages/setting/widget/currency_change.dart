@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +12,7 @@ Widget changeCurrency(BuildContext context, Function callBack){
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-      const Center(child: Text("Change Currency"),),
+        Center(child: Text('Change Currency'.tr()),),
       const SizedBox(height: 20,),
       CupertinoListTile(
         title:const Text('Khmer riel'), 

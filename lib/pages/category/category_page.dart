@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/pages/category/category_form.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +13,7 @@ class CategoryPage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppTopBarWidget(
-        title: "New Category", onActionLeft: () {
+        title: 'New Category'.tr(), onActionLeft: () {
         Navigator.pop(context);
       },
       ),

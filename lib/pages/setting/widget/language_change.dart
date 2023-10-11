@@ -12,7 +12,7 @@ Widget changeLanguage(BuildContext context, Function callBack){
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-      const Center(child: Text("Change Language"),),
+      Center(child: Text('Change Language'.tr()),),
       const SizedBox(height: 20,),
       CupertinoListTile(
         title:const Text('Khmer'), 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -51,7 +52,7 @@ class _CustomSwitchState extends State<StatusSwitch> with SingleTickerProviderSt
                     color: Colors.white
                 ),
                 child: Container(
-                    alignment: widget.value ? ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerRight : Alignment.centerLeft ) : ((Directionality.of(context) == TextDirection.rtl) ? Alignment.centerLeft : Alignment.centerRight),
+                    alignment: widget.value ? ((Directionality.of(context) == TextDirection.RTL) ? Alignment.centerRight : Alignment.centerLeft ) : ((Directionality.of(context) == TextDirection.RTL) ? Alignment.centerLeft : Alignment.centerRight),
                     child: Container(
                         width: 143.0,
                         decoration: BoxDecoration(
@@ -69,12 +70,12 @@ class _CustomSwitchState extends State<StatusSwitch> with SingleTickerProviderSt
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text("Expense",textAlign: TextAlign.center, style: TextStyle(
+                        Text('Expense'.tr(),textAlign: TextAlign.center, style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: widget.value ? MyColors.white : MyColors.black
                         )),
-                        Text("Income",textAlign: TextAlign.center, style: TextStyle(
+                        Text('Income'.tr(),textAlign: TextAlign.center, style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: widget.value ? MyColors.black : MyColors.white

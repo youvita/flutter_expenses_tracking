@@ -88,7 +88,7 @@ class _ExpenseRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      const Row(children: [CircleAvatar(radius: 8, backgroundColor: MyColors.red,),SizedBox(width: 10,), Text("Expense", style: MyTextStyles.textStyleMedium17)],),
+      Row(children: [const CircleAvatar(radius: 8, backgroundColor: MyColors.red,),const SizedBox(width: 10,), Text("Expense".tr(), style: MyTextStyles.textStyleMedium17)],),
       const Spacer(),
       Text(Utils.currencyToString(expenses), style: MyTextStyles.textStyleMedium17Red),
     ],);

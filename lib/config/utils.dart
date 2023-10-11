@@ -45,7 +45,7 @@ class Utils {
 
   static String formatDecimal(String? currency, String? amount) {
     String value = '';
-    if (amount != null) {
+    if (amount != null && amount.isNotEmpty) {
       if (currency == 'USD' || currency == null) {
         value = NumberFormat('#,###.00', 'en_US').format(
             double.parse(amount));

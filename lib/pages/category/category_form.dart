@@ -1,6 +1,7 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/widgets/text_Input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -74,7 +75,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                     children: [
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Emoticons", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Emoticons'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -91,7 +92,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Dingbats", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Dingbats'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -109,7 +110,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Transports", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Transports'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -127,7 +128,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Foods", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Foods'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -145,7 +146,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Animals", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Animals'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -163,7 +164,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                       ),
                                       ExpansionTile(
                                         trailing: SvgPicture.asset('assets/images/ic_arrow_drop_down.svg'),
-                                        title: const Text("Other", style: MyTextStyles.textStyleMedium17),
+                                        title: Text('Other'.tr(), style: MyTextStyles.textStyleMedium17),
                                         shape: const Border(),
                                         children: <Widget>[
                                           CategoryGridviewWidget(
@@ -221,8 +222,8 @@ class _CategoryImageState extends State<_CategoryImageWidget> {
     // String? categoryImage = context.select((CategoryBloc bloc) => bloc.state.image);
 
     return TextSelectWidget(
-        label: "Image",
-        value: widget.image ?? "Select",
+        label: 'Image'.tr(),
+        value: widget.image ?? 'Select'.tr(),
         imagePath: "assets/images/ic_arrow_drop_down.svg",
         onTap: (bool value) {
           widget.onSelected(value);
@@ -247,7 +248,8 @@ class _CategoryNameState extends State<_CategoryNameWidget> {
   @override
   Widget build(BuildContext context) {
     return TextInputWidget(
-        label: "Name",
+        label: 'Name'.tr(),
+        placeholder: 'Please Input'.tr(),
         onValueChanged: (String value) {
           widget.onTextChange(value);
           // context.read<CategoryBloc>().add(CategoryNameChanged(value));
@@ -283,7 +285,7 @@ class _SaveButton extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context, Category(image ?? '', name ?? ''));
               },
-              child: const Text('Save', style: MyTextStyles.textStyleMediumWhite15),
+              child: Text('Save'.tr(), style: MyTextStyles.textStyleMediumWhite15),
             )
         )
     );

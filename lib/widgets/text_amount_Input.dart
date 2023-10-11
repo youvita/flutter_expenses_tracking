@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_item.dart';
@@ -82,8 +83,8 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
                 widget.onValueChanged(amount)
               },
               textAlign: TextAlign.right,
-              decoration: const InputDecoration(
-                  hintText: 'Please Input',
+              decoration: InputDecoration(
+                  hintText: 'Please Input'.tr(),
                   border: InputBorder.none,
                   isCollapsed: true
               ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +94,8 @@ class _TextRemarkInputState extends State<TextRemarkInputWidget> with SingleTick
                       widget.onValueChanged(amount)
                     },
                     textAlign: TextAlign.left,
-                    decoration: const InputDecoration(
-                        hintText: "Enter here",
+                    decoration: InputDecoration(
+                        hintText: 'Please Input'.tr(),
                         border: InputBorder.none,
                         isCollapsed: true
                     ),

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,7 +16,7 @@ Widget changeExchangeRate(BuildContext context, Function callBack){
     child: Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-      const Center(child: Text("Change Exchange Rate"),),
+      Center(child: Text('Change Exchange Rate'.tr()),),
       const SizedBox(height: 30,),
       Padding(
         padding: const EdgeInsets.only(left: 20, right: 20),
@@ -37,7 +38,7 @@ Widget changeExchangeRate(BuildContext context, Function callBack){
         ),
       ),
       const SizedBox(height: 10,),
-      CupertinoButton(child: const Text('Change'), onPressed: (){
+      CupertinoButton(child: Text('Change'.tr()), onPressed: (){
         Setting.updateExchangeRate(_text);
         callBack();
         Navigator.pop(context);

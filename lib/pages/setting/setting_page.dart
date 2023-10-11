@@ -23,7 +23,7 @@ class _SettingPageState extends State<SettingPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       backgroundColor: MyColors.white,
-      navigationBar: const IosSettingAppBar(title: 'Setting'),
+      navigationBar: IosSettingAppBar(title: 'Setting'.tr()),
       child: Padding(
         padding: const EdgeInsets.only(top: 110),
         child: CupertinoListSection.insetGrouped(

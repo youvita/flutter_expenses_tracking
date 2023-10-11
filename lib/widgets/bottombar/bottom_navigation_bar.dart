@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/models/expenses.dart';
 import 'package:expenses_tracking/pages/create/create_page.dart';
@@ -31,7 +32,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
   Widget build(BuildContext context) {
 
     return CupertinoPageScaffold(
-      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? "Home" : _selectedIndex == 1 ? "Create" : 'Expenses',
+      navigationBar: DefaultIOSAppBar(title: _selectedIndex == 0 ? 'Home'.tr() : _selectedIndex == 1 ? 'Create'.tr() : 'Expense'.tr(),
       callBack: (value){
         setState(() {
           _selectedIndex = 0;
@@ -81,7 +82,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
                         child: SvgPicture.asset('assets/images/ic_list.svg', height: 19, width: 19)
                     )
                 ),
-                Text("Expense", style: TextStyle(fontSize: 11, color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey))
+                Text('Expense'.tr(), style: TextStyle(fontSize: 11, color: _selectedIndex == 0 ? MyColors.blue : MyColors.grey))
               ]),
               label: '',
             ),
@@ -127,7 +128,7 @@ class _BottomNavigationBarState extends State<BottomNavigationBarWidget> {
                         child: SvgPicture.asset('assets/images/ic_pie-chart.svg', height: 19, width: 19)
                     )
                 ),
-                Text("Report", style: TextStyle(fontSize: 11, color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey))
+                Text('Report'.tr(), style: TextStyle(fontSize: 11, color: _selectedIndex == 2 ? MyColors.blue : MyColors.grey))
               ]),
               label: '',
             ),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/widgets/iOS_setting_appbar.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -12,7 +13,7 @@ class _SecurityPageState extends State<SecurityPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: const IosSettingAppBar(title: 'Security'),
+      navigationBar: IosSettingAppBar(title: 'Security'.tr()),
       child: Container());
   }
 }

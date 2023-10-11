@@ -46,48 +46,72 @@ class _ListFormState extends State<ListFormWidget> {
     /// set for update UI while back from setting
     setState(() {
 
+      /// remove line if list no data
+      if (listItem.isEmpty) {
+        listVisibleHeader.clear();
+      }
     });
   }
 
   /// load to from list
   loadForm() {
-    for (var i = 0; i < listItem.length; i++) {
-      DateTime dateTime = Utils.dateTimeFormat("${listItem.elementAt(i).createDate}");
-      String header = Utils.dateFormatYear(dateTime);
-      String headerMonth = Utils.dateFormatYearMonth(dateTime);
-      if (lastHeaderYear != header) {
-        listHeaderYear.add(header);
-        lastHeaderYear = header;
+    if (listItem.isNotEmpty) {
+      for (var i = 0; i < listItem.length; i++) {
+        DateTime dateTime = Utils.dateTimeFormat("${listItem
+            .elementAt(i)
+            .createDate}");
+        String header = Utils.dateFormatYear(dateTime);
+        String headerMonth = Utils.dateFormatYearMonth(dateTime);
+        if (lastHeaderYear != header) {
+          listHeaderYear.add(header);
+          lastHeaderYear = header;
 
-        listVisibleHeader.add(YearHeader(header, false));
-      }
+          listVisibleHeader.add(YearHeader(header, false));
+        }
 
-      if (lastHeaderMonth != headerMonth) {
-        listHeaderMonth.add(dateTime);
-        lastHeaderMonth = headerMonth;
-      }
-    }
-
-    /// loop to sum total amount each year
-    for (var i = 0; i < listHeaderYear.length; i++) {
-      for(var j = i; j < listItem.length; j++) {
-        if (listHeaderYear.elementAt(i) == Utils.dateFormatYear(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-          totalAmountYear = totalAmountYear + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
+        if (lastHeaderMonth != headerMonth) {
+          listHeaderMonth.add(dateTime);
+          lastHeaderMonth = headerMonth;
         }
       }
-      listTotalEachYear.add(totalAmountYear);
-      totalAmountYear = 0.0;
-    }
 
-    /// loop to sum total amount each month
-    for (var i = 0; i < listHeaderMonth.length; i++) {
-      for (var j = i; j < listItem.length; j++) {
-        if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"))) {
-          totalAmountMonth = totalAmountMonth + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
+      /// loop to sum total amount each year
+      for (var i = 0; i < listHeaderYear.length; i++) {
+        for (var j = i; j < listItem.length; j++) {
+          if (listHeaderYear.elementAt(i) ==
+              Utils.dateFormatYear(Utils.dateTimeFormat("${listItem
+                  .elementAt(j)
+                  .createDate}"))) {
+            totalAmountYear =
+                totalAmountYear + double.parse(Utils.exchangeAmount(listItem
+                    .elementAt(j)
+                    .currencyCode, listItem
+                    .elementAt(j)
+                    .amount));
+          }
         }
+        listTotalEachYear.add(totalAmountYear);
+        totalAmountYear = 0.0;
       }
-      listTotalEachMonth.add(totalAmountMonth);
-      totalAmountMonth = 0.0;
+
+      /// loop to sum total amount each month
+      for (var i = 0; i < listHeaderMonth.length; i++) {
+        for (var j = i; j < listItem.length; j++) {
+          if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) ==
+              Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem
+                  .elementAt(j)
+                  .createDate}"))) {
+            totalAmountMonth =
+                totalAmountMonth + double.parse(Utils.exchangeAmount(listItem
+                    .elementAt(j)
+                    .currencyCode, listItem
+                    .elementAt(j)
+                    .amount));
+          }
+        }
+        listTotalEachMonth.add(totalAmountMonth);
+        totalAmountMonth = 0.0;
+      }
     }
   }
 

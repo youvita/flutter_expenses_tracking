@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/pages/create/create_form.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,7 @@ class CreatePage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppTopBarWidget(title: isNew ? "Create" : "View", onActionRight: () {
+      appBar: AppTopBarWidget(title: isNew ? 'Create'.tr() : 'View'.tr(), onActionRight: () {
         Navigator.pop(context);
       }),
       backgroundColor: MyColors.white,

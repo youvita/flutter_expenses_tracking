@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ class TextInputWidget extends StatefulWidget {
 
   const TextInputWidget({
     Key? key,
-    this.placeholder = "Please Input",
+    this.placeholder = 'Please Input',
     required this.label,
     this.padding = const EdgeInsets.only(left: 20, top: 15, right: 20, bottom: 15),
     required this.onValueChanged
