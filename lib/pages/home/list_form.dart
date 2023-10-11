@@ -49,6 +49,7 @@ class _ListFormState extends State<ListFormWidget> {
       /// remove line if list no data
       if (listItem.isEmpty) {
         listVisibleHeader.clear();
+        listCounter.clear();
       }
     });
   }
