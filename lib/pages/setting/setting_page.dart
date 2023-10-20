@@ -10,6 +10,7 @@ import 'package:expenses_tracking/widgets/iOS_setting_appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -55,7 +56,7 @@ class _SettingPageState extends State<SettingPage> {
             item(
               title: 'Exchange Rate'.tr(), 
               iconPath: 'assets/images/coins-swap-02.svg', 
-              trailing: '៛​ ${Setting.exchangeRate!.toStringAsFixed(0)}',
+              trailing: '៛ ${Setting.exchangeRate!.toStringAsFixed(0)}',
               onTap: (){
                 showModalBottomSheet(
                   backgroundColor: Colors.transparent,
@@ -68,14 +69,17 @@ class _SettingPageState extends State<SettingPage> {
               title: 'Security'.tr(), 
               iconPath: 'assets/images/lock.svg', 
               onTap: () {
-                Navigator.push(context, CupertinoPageRoute(builder: (context) => const SecurityPage()));
+                Fluttertoast.showToast(msg: 'Available for next version'.tr());
+                // Navigator.push(context, CupertinoPageRoute(builder: (context) => const SecurityPage()));
               }
             ),
 
             item(
               title: 'About us'.tr(), 
               iconPath: 'assets/images/info-square.svg', 
-              onTap: () {}
+              onTap: () {
+                Fluttertoast.showToast(msg: 'Available for next version'.tr());
+              }
             ),
 
             item(
