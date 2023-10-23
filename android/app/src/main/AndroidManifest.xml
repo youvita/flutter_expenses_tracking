@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.expense.expenses_tracking">
    <application
-        android:label="expenses_tracking"
+        android:label="Chom Nai"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
