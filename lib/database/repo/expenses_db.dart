@@ -66,7 +66,7 @@ class ExpensesDb {
   Future<List<CategoryPopular>> getPopular() async {
     final db = await DatabaseService().database;
     List<Map<String, dynamic>> maps = List.empty();
-    maps = await db.rawQuery('SELECT category_image, category, COUNT(*) AS popular_count FROM expenses GROUP BY  category_image ORDER BY popular_count DESC LIMIT 4');
+    maps = await db.rawQuery('SELECT category_image, category, COUNT(*) AS popular_count FROM expenses GROUP BY  category_image ORDER BY popular_count DESC');
     return List.generate(maps.length, (index) {
       return CategoryPopular(
           maps[index]['category_image'],

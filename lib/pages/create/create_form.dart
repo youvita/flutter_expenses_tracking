@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -22,9 +23,10 @@ import '../category/category_page.dart';
 import 'category_item.dart';
 
 class CreateFormWidget extends StatefulWidget {
-  const CreateFormWidget({super.key, required this.expenses, required this.isNew});
+  const CreateFormWidget({super.key, required this.expenses, required this.isNew, required this.onValueChanged});
 
   final Expenses expenses;
+  final ValueChanged<Expenses> onValueChanged;
   final bool isNew;
 
   @override
@@ -54,33 +56,39 @@ class CreateForm extends State<CreateFormWidget> {
                 child: Column(
                   children: [
                     const SizedBox(height: 20),
-                    _StatusTypeWidget(widget.expenses),
+                    _StatusTypeWidget(widget.expenses, (Expenses value) {
+                      widget.onValueChanged(value);
+                    }),
                     const SizedBox(height: 30),
-                    _IssueDateWidget(widget.expenses),
+                    _IssueDateWidget(widget.expenses, (Expenses value) {
+                      widget.onValueChanged(value);
+                    }),
                     const DividerWidget(),
-                    _CategoryWidget(widget.expenses),
+                    _CategoryWidget(widget.expenses, (Expenses value) {
+                      widget.onValueChanged(value);
+                    }),
                     const DividerWidget(),
                     _AmountInputWidget(widget.expenses, () {
                       setState(() {
-
+                        widget.onValueChanged(widget.expenses);
                       });
                     }),
                     const DividerWidget(),
                     _RemarkInputWidget(widget.expenses),
                     _CategoriesWidget(widget.expenses, () {
                       setState(() {
-
+                        widget.onValueChanged(widget.expenses);
                       });
                     })
                   ],
                 ),
               )
           ),
-          _SaveButton(widget.expenses, (){
-            setState(() {
-
-            });
-          })
+          // _SaveButton(widget.expenses, (){
+          //   setState(() {
+          //
+          //   });
+          // })
         ]
     );
   }
@@ -89,9 +97,10 @@ class CreateForm extends State<CreateFormWidget> {
 
 class _StatusTypeWidget extends StatefulWidget {
 
-  const _StatusTypeWidget(this.expenses);
+  const _StatusTypeWidget(this.expenses, this.onValueChanged);
 
   final Expenses expenses;
+  final ValueChanged<Expenses> onValueChanged;
 
   @override
   State<StatefulWidget> createState() => _ExpenseTypeSelected();
@@ -122,6 +131,8 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
             } else {
               widget.expenses.statusTypeChanged = '2';
             }
+
+            widget.onValueChanged(widget.expenses);
     });
   }
 
@@ -129,9 +140,10 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
 
 class _IssueDateWidget extends StatefulWidget {
 
-  const _IssueDateWidget(this.expenses);
+  const _IssueDateWidget(this.expenses, this.onValueChanged);
 
   final Expenses expenses;
+  final ValueChanged<Expenses> onValueChanged;
 
   @override
   State<StatefulWidget> createState() => _IssueDateSelected();
@@ -144,6 +156,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
   void initState() {
     super.initState();
     newDateTime = Utils.dateTimeFormat(widget.expenses.issueDate);
+    widget.onValueChanged(widget.expenses);
   }
 
   @override
@@ -175,6 +188,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
                       DateTime currentTime = DateTime.now();
                       newDateTime = DateTime(newDate.year, newDate.month, newDate.day, currentTime.hour, currentTime.minute, currentTime.second);
                       widget.expenses.issueDateChanged = newDateTime;
+                      widget.onValueChanged(widget.expenses);
                     });
                   },
                 ),
@@ -193,6 +207,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
                 newDateTime = DateTime(selectedDateTime.year, selectedDateTime.month, selectedDateTime.day, currentTime.hour, currentTime.minute, currentTime.second);
               });
               widget.expenses.issueDateChanged = newDateTime;
+              widget.onValueChanged(widget.expenses);
             }
           }
         }
@@ -203,9 +218,10 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
 
 class _CategoryWidget extends StatefulWidget {
 
-  const _CategoryWidget(this.expenses);
+  const _CategoryWidget(this.expenses, this.onValueChanged);
 
   final Expenses expenses;
+  final ValueChanged<Expenses> onValueChanged;
 
   @override
   State<StatefulWidget> createState() => _CategoryInput();
@@ -220,7 +236,16 @@ class _CategoryInput extends State<_CategoryWidget> {
     setState(() {
       widget.expenses.categoryImageChanged = category.image;
       widget.expenses.categoryChanged = category.name;
+      widget.onValueChanged(widget.expenses);
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    widget.expenses.categoryImageChanged = Utils().getUnicodeCharacter('1F35C');
+    widget.expenses.categoryChanged = 'Food'.tr();
   }
 
   @override
@@ -350,11 +375,14 @@ class _CategoryState extends State<_CategoriesWidget> {
   loadCategoryPopular() async {
     var pop = await ExpensesDb().getPopular();
 
-    if (pop.isNotEmpty) {
+    // if (pop.isNotEmpty) {
       setState(() {
         popular = pop;
+        popular.insert(0, CategoryPopular(Utils().getUnicodeCharacter('1F35C'), 'Food'.tr(), 0));
+        popular.insert(1, CategoryPopular(Utils().getUnicodeCharacter('1F379'), 'Drink'.tr(), 0));
+        popular.insert(2, CategoryPopular(Utils().getUnicodeCharacter('26FD'), 'Gasoline'.tr(),0));
       });
-    }
+    // }
   }
 
   @override
@@ -415,69 +443,64 @@ class _CategoryState extends State<_CategoriesWidget> {
 
 }
 
-class _SaveButton extends StatefulWidget {
-
-  const _SaveButton(this.expenses, this.callBack);
-  final Expenses expenses;
-  final Function callBack;
-  @override
-  State<StatefulWidget> createState() => _ButtonState();
-}
-
-class _ButtonState extends State<_SaveButton> {
-  String editButton = 'Edit'.tr();
-  String saveButton = 'Save'.tr();
-
-  @override
-  Widget build(BuildContext context) {
-    bool isNew = widget.expenses.isNew ?? true;
-
-    return SafeArea(
-        child: Container(
-            padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
-            child: ElevatedButton(
-              key: const Key('createForm_saveButton'),
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: MyColors.blue,
-                  minimumSize: const Size.fromHeight(50),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)
-                  )
-              ),
-              onPressed: ()  {
-                if (isNew) {
-                  ExpensesDb().insert(widget.expenses);
-                  _navigationListRoute(context);
-                } else {
-                  if (editButton == 'Save'.tr()) {
-                    ExpensesDb().update(widget.expenses);
-                    _navigationListRoute(context);
-                  } else {
-                    setState(() {
-                      editButton = saveButton;
-                      widget.expenses.updateChanged = true;
-                      widget.callBack();
-                    });
-                  }
-                }
-              },
-              child: Text(isNew ? saveButton : editButton, style: MyTextStyles.textStyleMediumWhite15),
-            )
-        )
-    );
-  }
-
-}
+// class _SaveButton extends StatefulWidget {
+//
+//   const _SaveButton(this.expenses, this.callBack);
+//   final Expenses expenses;
+//   final Function callBack;
+//   @override
+//   State<StatefulWidget> createState() => _ButtonState();
+// }
+//
+// class _ButtonState extends State<_SaveButton> {
+//   String editButton = 'Edit'.tr();
+//   String saveButton = 'Save'.tr();
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     bool isNew = widget.expenses.isNew ?? true;
+//
+//     return SafeArea(
+//         child: Container(
+//             padding: const EdgeInsets.only(left: 20, bottom: 20, right: 20),
+//             child: ElevatedButton(
+//               key: const Key('createForm_saveButton'),
+//               style: ElevatedButton.styleFrom(
+//                   backgroundColor: MyColors.blue,
+//                   minimumSize: const Size.fromHeight(50),
+//                   shape: RoundedRectangleBorder(
+//                       borderRadius: BorderRadius.circular(6)
+//                   )
+//               ),
+//               onPressed: ()  {
+//                 if (isNew) {
+//                   ExpensesDb().insert(widget.expenses);
+//                   // _navigationListRoute(context);
+//                 } else {
+//                   if (editButton == 'Save'.tr()) {
+//                     ExpensesDb().update(widget.expenses);
+//                     // _navigationListRoute(context);
+//                   } else {
+//                     setState(() {
+//                       editButton = saveButton;
+//                       widget.expenses.updateChanged = true;
+//                       widget.callBack();
+//                     });
+//                   }
+//                 }
+//               },
+//               child: Text(isNew ? saveButton : editButton, style: MyTextStyles.textStyleMediumWhite15),
+//             )
+//         )
+//     );
+//   }
+//
+// }
 
 /// call back route page
 Future<Category> _navigationCategoryRoute(BuildContext context) async {
   final Category result = await Navigator.of(context).push(_categoryRoute());
   return result;
-}
-
-/// call back route page
-Future<void> _navigationListRoute(context) async {
-  Navigator.of(context).pushAndRemoveUntil(_listRoute(), (r) { return false;} );
 }
 
 /// animation route page
@@ -500,22 +523,5 @@ Route _categoryRoute() {
   // );
 }
 
-/// animation route page
-Route _listRoute() {
-  return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => const BottomNavigationBarWidget(),
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(0.0, 1.0);
-        const end = Offset.zero;
-        const curve = Curves.ease;
 
-        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-        return SlideTransition(
-          position: animation.drive(tween),
-          child: child,
-        );
-      }
-  );
-}
 

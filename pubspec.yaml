@@ -72,6 +72,9 @@ dependencies:
 
   fluttertoast: ^8.0.8
 
+  # Google Mobile Ads Flutter plugin
+  google_mobile_ads: ^3.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
