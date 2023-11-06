@@ -56,7 +56,8 @@ class _ReportPageState extends State<ReportPage> {
     return SafeArea(
         child: Align(
               alignment: Alignment.topCenter,
-              child: SingleChildScrollView(
+              child: Column(children: [
+                Expanded(child: SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.all(20),
                   child: Column(
@@ -72,7 +73,12 @@ class _ReportPageState extends State<ReportPage> {
                         },),
 
                       ChartReport(income: income, expenses: expenses,),
-                      ColoredBox(
+                      
+                    ],
+                  ),
+                ),
+              ),),
+              ColoredBox(
                         color: Colors.white,
                         child: SizedBox(
                           height: bannerAd.size.height.toDouble(),
@@ -80,10 +86,7 @@ class _ReportPageState extends State<ReportPage> {
                           child: AdWidget(ad: bannerAd),
                         ),
                       )
-                    ],
-                  ),
-                ),
-              )
+              ],)
           ),
     );
   }
