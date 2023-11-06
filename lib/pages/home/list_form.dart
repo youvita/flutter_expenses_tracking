@@ -176,6 +176,7 @@ class _ListFormState extends State<ListFormWidget> {
           padding: const EdgeInsets.only(left: 10, top: 10, right: 10),
           child: ExpenseToggle(
             defaultIndex: toggleIndex,
+            isAll: false,
             onToggle: (int index) {
               if (toggleIndex != index) {
                 listItem.clear();
