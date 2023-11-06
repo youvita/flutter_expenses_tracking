@@ -57,7 +57,9 @@ class _SettingPageState extends State<SettingPage> {
       navigationBar: IosSettingAppBar(title: 'Setting'.tr()),
       child: Padding(
         padding: const EdgeInsets.only(top: 110),
-        child: CupertinoListSection.insetGrouped(
+        child: Column(
+          children: [
+            CupertinoListSection.insetGrouped(
           margin: EdgeInsets.zero,
           children: [
             item(
@@ -117,8 +119,12 @@ class _SettingPageState extends State<SettingPage> {
               iconPath: 'assets/images/target-05.svg', 
               trailing: appInfo!.version,
             ),
-
-            ColoredBox(
+            
+           
+          ],
+        ),
+        Expanded(child: Container()),
+         ColoredBox(
               color: Colors.white,
               child: SizedBox(
                 height: bannerAd.size.height.toDouble(),
@@ -127,7 +133,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             )
           ],
-        ),
+        )
       )
     );
   }
