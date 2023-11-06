@@ -62,7 +62,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
               child:
             DropDownList<String>(
               enable: widget.enable,
-              listItems: const [
+              listItems: const[
                 ListItem<String>('USD', value: '1'),
                 ListItem<String>('KHR', value: '2'),
               ],
@@ -76,6 +76,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
           Flexible(
             flex: 2,
             child: TextField(
+              autofocus: true,
               controller: _controller,
               enabled: widget.enable,
               key: const Key('createForm_amountInput_textField'),

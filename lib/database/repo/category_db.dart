@@ -9,11 +9,7 @@ class CategoryDb {
     await database.execute("""CREATE TABLE IF NOT EXISTS $tableName (
       "id" integer primary key autoincrement,
       "name" string,
-      "icon" string,
-      "budget" double,
-      "parent_id" integer,
-      "created_at" date not null default (datetime('now')),
-      "updated_at" date
+      "icon" string
     );""");
   }
 

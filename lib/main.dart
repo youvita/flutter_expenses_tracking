@@ -5,13 +5,21 @@ import 'package:expenses_tracking/database/service/database_service.dart';
 import 'package:expenses_tracking/widgets/bottombar/bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 PackageInfo? appInfo;
 void main() async {
+  var devices = ['6AF75C3100B45748B0BE4EFDBBA673BC'];
   DatabaseService db = DatabaseService();
   db.initialize();
   WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize();
+
+  /// for testing ads
+  // RequestConfiguration requestConfiguration = RequestConfiguration(testDeviceIds: devices);
+  // MobileAds.instance.updateRequestConfiguration(requestConfiguration);
+
   Setting.load();
   await EasyLocalization.ensureInitialized();
   appInfo = await PackageInfo.fromPlatform();

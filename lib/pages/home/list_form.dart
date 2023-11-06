@@ -6,6 +6,7 @@ import 'package:expenses_tracking/pages/home/list_item.dart';
 import 'package:expenses_tracking/widgets/toggle_swich.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
@@ -23,13 +24,17 @@ class ListFormWidget extends StatefulWidget {
 
 class _ListFormState extends State<ListFormWidget> {
 
+  late BannerAd bannerAd;
+  bool isAdLoaded = false;
+
   var lastHeaderYear = "";
   var lastHeaderMonth = "";
   var totalAmountYear = 0.0;
   var totalAmountMonth = 0.0;
   int toggleIndex = 0;
   int expandCounter = 0;
-  bool defaultExpand = false;
+  bool defaultExpand = true;
+  ScrollController scrollController = ScrollController();
 
   List<Expenses> listItem = List.empty();
   List<String> listHeaderYear = List.empty(growable: true);
@@ -38,6 +43,26 @@ class _ListFormState extends State<ListFormWidget> {
   List<double> listTotalEachMonth = List.empty(growable: true);
   List<YearHeader> listVisibleHeader = List.empty(growable: true);
   List<int> listCounter = List.empty(growable: true);
+
+  /// admob
+  initBannerAd() {
+    bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: 'ca-app-pub-9089823267744142/9527892306',
+        listener: AdManagerBannerAdListener(
+          onAdLoaded: (ad) {
+            setState(() {
+              isAdLoaded = true;
+            });
+          },
+          onAdFailedToLoad: (ad, error) {
+            ad.dispose();
+          }
+        ),
+        request: const AdRequest()
+    );
+    bannerAd.load();
+  }
 
   /// load from db
   loadExpense(String status) async {
@@ -67,7 +92,7 @@ class _ListFormState extends State<ListFormWidget> {
           listHeaderYear.add(header);
           lastHeaderYear = header;
 
-          listVisibleHeader.add(YearHeader(header, false));
+          listVisibleHeader.add(YearHeader(header, true)); // false: hide header blue line, true: show header blue line
         }
 
         if (lastHeaderMonth != headerMonth) {
@@ -132,6 +157,7 @@ class _ListFormState extends State<ListFormWidget> {
   void initState() {
     super.initState();
     loadExpense('');
+    initBannerAd();
   }
 
   @override
@@ -155,12 +181,18 @@ class _ListFormState extends State<ListFormWidget> {
                 listItem.clear();
                 toggleIndex = index;
                 loadExpense(index == 0 ? '' : index.toString());
+
+                if(scrollController.hasClients) {
+                  final position = scrollController.position.minScrollExtent;
+                  scrollController.jumpTo(position);
+                }
               }
             },
           ),
         ),
         Expanded(
             child: ListView.builder(
+                controller: scrollController,
                 itemCount: listHeaderYear.length,
                 itemBuilder: (BuildContext context, int yearIndex) {
                   return StickyHeader(
@@ -174,7 +206,7 @@ class _ListFormState extends State<ListFormWidget> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
-                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 || toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                 ],
                               )
                           ),
@@ -199,6 +231,7 @@ class _ListFormState extends State<ListFormWidget> {
                               children: [
                                 Theme(data: theme, child:
                                 ExpansionTile(
+                                    initiallyExpanded: defaultExpand,
                                     tilePadding: const EdgeInsets.only(right: 20, left: 20),
                                     leading: Text(Utils.dateFormatMonthYear(listHeaderMonth.elementAt(monthIndex)), style: MyTextStyles.textStyleMedium17),
                                     backgroundColor: MyColors.white,
@@ -207,7 +240,7 @@ class _ListFormState extends State<ListFormWidget> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Blue : toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 || toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                             const SizedBox(width: 11),
                                             SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                           ],
@@ -274,6 +307,14 @@ class _ListFormState extends State<ListFormWidget> {
                   );
                 }
             )
+        ),
+        ColoredBox(
+          color: Colors.white,
+          child: SizedBox(
+            height: bannerAd.size.height.toDouble(),
+            width: double.infinity,
+            child: AdWidget(ad: bannerAd),
+          ),
         )
       ],
     );

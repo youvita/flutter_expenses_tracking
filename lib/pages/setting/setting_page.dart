@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({super.key});
@@ -20,6 +21,35 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  late BannerAd bannerAd;
+  bool isAdLoaded = false;
+
+  /// admob
+  initBannerAd() {
+    bannerAd = BannerAd(
+        size: AdSize.banner,
+        adUnitId: 'ca-app-pub-9089823267744142/9759277857',
+        listener: AdManagerBannerAdListener(
+            onAdLoaded: (ad) {
+              setState(() {
+                isAdLoaded = true;
+              });
+            },
+            onAdFailedToLoad: (ad, error) {
+              ad.dispose();
+            }
+        ),
+        request: const AdRequest()
+    );
+    bannerAd.load();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initBannerAd();
+  }
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -87,6 +117,15 @@ class _SettingPageState extends State<SettingPage> {
               iconPath: 'assets/images/target-05.svg', 
               trailing: appInfo!.version,
             ),
+
+            ColoredBox(
+              color: Colors.white,
+              child: SizedBox(
+                height: bannerAd.size.height.toDouble(),
+                width: double.infinity,
+                child: AdWidget(ad: bannerAd),
+              ),
+            )
           ],
         ),
       )
