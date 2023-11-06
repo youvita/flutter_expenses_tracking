@@ -3,6 +3,7 @@ import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/service/database_service.dart';
 import 'package:expenses_tracking/widgets/bottombar/bottom_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -32,11 +33,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) 
   {
     context.setLocale(Locale(Setting.language.toString()));
-    return MaterialApp(
+    return CupertinoApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: MyMaterialColors.blue
-      ),
+      // theme: ThemeData(
+      //   primarySwatch: MyMaterialColors.blue
+      // ),
+      theme: const CupertinoThemeData(primaryColor: MyMaterialColors.blue),
       home: const BottomNavigationBarWidget(),
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
