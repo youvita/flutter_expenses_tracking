@@ -22,7 +22,7 @@ class _MyToggleSwitchState extends State<ExpenseToggle> {
       initialLabelIndex: widget.defaultIndex,
       borderWidth: 1,
       borderColor: const [MyColors.black10],
-      activeBgColors:const [[MyColors.blue], [MyColors.red], [MyColors.green]],
+      activeBgColors: widget.isAll ? [[MyColors.blue], [MyColors.red], [MyColors.green]] : [[MyColors.red], [MyColors.green]],
       inactiveBgColor: MyColors.white,
       radiusStyle: true,
       minWidth: widget.width,

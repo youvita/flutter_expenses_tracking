@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
@@ -28,7 +30,7 @@ class _SettingPageState extends State<SettingPage> {
   initBannerAd() {
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: 'ca-app-pub-9089823267744142/9759277857',
+        adUnitId: Platform.isAndroid ? 'ca-app-pub-9089823267744142/9759277857' : 'ca-app-pub-9089823267744142/9098670980',
         listener: AdManagerBannerAdListener(
             onAdLoaded: (ad) {
               setState(() {

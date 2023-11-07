@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/models/year_header.dart';
@@ -10,6 +12,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
+import '../create/status_switch.dart';
 
 class ListFormWidget extends StatefulWidget {
 
@@ -48,7 +51,7 @@ class _ListFormState extends State<ListFormWidget> {
   initBannerAd() {
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: 'ca-app-pub-9089823267744142/9527892306',
+        adUnitId: Platform.isAndroid ? 'ca-app-pub-9089823267744142/9527892306' : 'ca-app-pub-9089823267744142/8292801878',
         listener: AdManagerBannerAdListener(
           onAdLoaded: (ad) {
             setState(() {
@@ -156,7 +159,7 @@ class _ListFormState extends State<ListFormWidget> {
   @override
   void initState() {
     super.initState();
-    loadExpense('');
+    loadExpense('1');
     initBannerAd();
   }
 
@@ -181,7 +184,8 @@ class _ListFormState extends State<ListFormWidget> {
               if (toggleIndex != index) {
                 listItem.clear();
                 toggleIndex = index;
-                loadExpense(index == 0 ? '' : index.toString());
+                // loadExpense(index == 0 ? '' : index.toString());
+                loadExpense(index == 0 ? '1' : '2');
 
                 if(scrollController.hasClients) {
                   final position = scrollController.position.minScrollExtent;

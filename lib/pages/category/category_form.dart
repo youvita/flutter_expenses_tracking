@@ -15,7 +15,9 @@ import '../../database/models/category.dart';
 import 'category_gridview.dart';
 
 class CategoryFormWidget extends StatefulWidget {
-  const CategoryFormWidget({super.key});
+  const CategoryFormWidget({super.key, required this.onValueChanged});
+
+  final ValueChanged<Category> onValueChanged;
 
   @override
   State<StatefulWidget> createState() => _CategoryFormState();
@@ -83,6 +85,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
                                               Navigator.pop(context);
@@ -100,6 +103,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // category?.imageChange = value;
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
@@ -118,6 +122,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // category?.imageChange = value;
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
@@ -136,6 +141,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // category?.imageChange = value;
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
@@ -154,6 +160,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // category?.imageChange = value;
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
@@ -172,6 +179,7 @@ class _CategoryFormState extends State<CategoryFormWidget> {
                                             onValueChanged: (String value) {
                                               setState(() {
                                                 image = value;
+                                                widget.onValueChanged(Category(value, name ?? ''));
                                                 // category?.imageChange = value;
                                                 // mainContext.read<CategoryBloc>().add(CategoryImageChanged(value));
                                               });
@@ -193,12 +201,13 @@ class _CategoryFormState extends State<CategoryFormWidget> {
             _CategoryNameWidget(onTextChange: (String value) {
                setState(() {
                  name = value;
+                 widget.onValueChanged(Category(image ?? '', value));
                });
             }),
             const DividerWidget()
           ],
         ),
-        _SaveButton(image, name)
+        // _SaveButton(image, name)
       ],
     );
   }

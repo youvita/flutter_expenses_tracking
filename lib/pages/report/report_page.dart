@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
 import 'package:expenses_tracking/pages/report/widget/chart.dart';
 import 'package:expenses_tracking/pages/report/widget/summary_report.dart';
@@ -21,7 +23,7 @@ class _ReportPageState extends State<ReportPage> {
   initBannerAd() {
     bannerAd = BannerAd(
         size: AdSize.banner,
-        adUnitId: 'ca-app-pub-9089823267744142/9559929319',
+        adUnitId: Platform.isAndroid ? 'ca-app-pub-9089823267744142/9559929319' : 'ca-app-pub-9089823267744142/1411752654',
         listener: AdManagerBannerAdListener(
             onAdLoaded: (ad) {
               setState(() {
