@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/config/utils.dart';
@@ -116,11 +118,31 @@ class _BalanceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    print("balance: $balance");
     return Row(children: [
       Text("Balance".tr(), style: MyTextStyles.textStyle26,),
       const Spacer(),
-      Text(Utils.currencyToString(balance), style: MyTextStyles.textStyleBold26Blue),
+      Text(getBalanceText(balance), style: getTextStyle(balance)),
     ],);
+  }
+}
+
+TextStyle getTextStyle(balance){
+  if(balance < 0){
+    return MyTextStyles.textStyleBold20Red;
+  }else if(balance > 0){
+    return MyTextStyles.textStyleBold26Green;
+  }else{
+    return MyTextStyles.textStyleBold26Blue;
+  }
+}
+
+String getBalanceText(balance){
+  if(balance < 0){
+    return "-${Utils.currencyToString(balance).replaceFirst('-', '')}";
+  }else if(balance > 0){
+    return "+${Utils.currencyToString(balance)}";
+  }else{
+    return Utils.currencyToString(balance);
   }
 }

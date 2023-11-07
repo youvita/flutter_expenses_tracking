@@ -55,6 +55,18 @@ class MyTextStyles {
     color: MyColors.blue,
   );
 
+  static const TextStyle textStyleBold26Red = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: MyColors.red,
+  );
+
+  static const TextStyle textStyleBold26Green = TextStyle(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: MyColors.green,
+  );
+
   static const TextStyle textStyleNormal15 = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.normal,

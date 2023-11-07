@@ -99,7 +99,7 @@ class Utils {
 
   static String currencyToString(double amount){
     if(Setting.currency=='USD') {
-      return '\$${NumberFormat('#,###.00', 'en_US').format(amount)}';
+      return '\$${NumberFormat('#,##0.00', 'en_US').format(amount)}';
     }else {
       return '៛${NumberFormat.decimalPattern().format(amount)}';
     }
