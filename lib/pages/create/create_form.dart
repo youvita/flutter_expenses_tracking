@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 import '../../../../../widgets/bottombar/bottom_navigation_bar.dart';
 import '../../database/models/category.dart';
 import '../../database/models/expenses.dart';
+import '../../widgets/toggle_swich.dart';
 import '../category/category_page.dart';
 import 'category_item.dart';
 
@@ -55,11 +56,11 @@ class CreateForm extends State<CreateFormWidget> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     _StatusTypeWidget(widget.expenses, (Expenses value) {
                       widget.onValueChanged(value);
                     }),
-                    const SizedBox(height: 30),
+                    const SizedBox(height: 10),
                     _IssueDateWidget(widget.expenses, (Expenses value) {
                       widget.onValueChanged(value);
                     }),
@@ -112,28 +113,36 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
   @override
   void initState() {
     super.initState();
-    _enable = widget.expenses.statusType == '1' ? true : false;
+    // _enable = widget.expenses.statusType == '1' ? true : false;
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return StatusSwitch(
-        enable: widget.expenses.isUpdate ?? true,
-        value: _enable,
-        onChanged: (bool val) {
-            setState(() {
-              _enable = val;
-            });
-
-            if (_enable) {
-              widget.expenses.statusTypeChanged = '1';
-            } else {
-              widget.expenses.statusTypeChanged = '2';
-            }
-
-            widget.onValueChanged(widget.expenses);
-    });
+    return ExpenseToggle(
+        defaultIndex: 0,
+        isAll: false,
+        isEnable: widget.expenses.isUpdate ?? true,
+        onToggle: (int index) {
+          widget.expenses.statusTypeChanged = index == 0 ? '1' : '2';
+          widget.onValueChanged(widget.expenses);
+        }
+    );
+    // return StatusSwitch(
+    //     enable: widget.expenses.isUpdate ?? true,
+    //     value: _enable,
+    //     onChanged: (bool val) {
+    //         setState(() {
+    //           _enable = val;
+    //         });
+    //
+    //         if (_enable) {
+    //           widget.expenses.statusTypeChanged = '1';
+    //         } else {
+    //           widget.expenses.statusTypeChanged = '2';
+    //         }
+    //
+    //         widget.onValueChanged(widget.expenses);
+    // });
   }
 
 }
@@ -244,8 +253,8 @@ class _CategoryInput extends State<_CategoryWidget> {
   void initState() {
     super.initState();
 
-    widget.expenses.categoryImageChanged = Utils().getUnicodeCharacter('1F35C');
-    widget.expenses.categoryChanged = 'Food'.tr();
+    widget.expenses.categoryImageChanged = widget.expenses.categoryImage;
+    widget.expenses.categoryChanged = widget.expenses.category;
   }
 
   @override
@@ -364,6 +373,7 @@ class _CategoriesWidget extends StatefulWidget {
   final Expenses expenses;
   final Function callBack;
 
+
   @override
   State<StatefulWidget> createState() => _CategoryState();
 }
@@ -378,9 +388,13 @@ class _CategoryState extends State<_CategoriesWidget> {
     // if (pop.isNotEmpty) {
       setState(() {
         popular = pop;
-        popular.insert(0, CategoryPopular(Utils().getUnicodeCharacter('1F35C'), 'Food'.tr(), 0));
-        popular.insert(1, CategoryPopular(Utils().getUnicodeCharacter('1F379'), 'Drink'.tr(), 0));
-        popular.insert(2, CategoryPopular(Utils().getUnicodeCharacter('26FD'), 'Gasoline'.tr(),0));
+        popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F35C'), 'Food'.tr(), 0));
+        popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F379'), 'Drink'.tr(), 0));
+        popular.add(CategoryPopular(Utils().getUnicodeCharacter('26FD'), 'Gasoline'.tr(),0));
+        popular.add(CategoryPopular(Utils().getUnicodeCharacter('1F4B2'), 'Salary'.tr(),0));
+        widget.expenses.categoryImageChanged = popular[0].image;
+        widget.expenses.categoryChanged = popular[0].name;
+        widget.callBack();
       });
     // }
   }
@@ -396,7 +410,7 @@ class _CategoryState extends State<_CategoriesWidget> {
     bool isUpdate = widget.expenses.isUpdate ?? true;
 
     return Visibility(
-        visible: popular.isNotEmpty,
+        visible: true,
         child: Column(
             children: [
               Container(

@@ -85,7 +85,7 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
               },
               textAlign: TextAlign.right,
               decoration: InputDecoration(
-                  hintText: 'Please Input'.tr(),
+                  hintText: widget.defaultCurrency == '1' ? '0.00' : '0',
                   border: InputBorder.none,
                   isCollapsed: true
               ),

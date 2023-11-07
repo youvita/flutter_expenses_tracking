@@ -7,8 +7,9 @@ class ExpenseToggle extends StatefulWidget {
   final Function onToggle;
   final double width;
   final bool isAll;
+  final bool isEnable;
   final int defaultIndex;
-  const ExpenseToggle({super.key, required this.onToggle, this.isAll=true, this.width=double.infinity, this.defaultIndex=0});
+  const ExpenseToggle({super.key, required this.onToggle, this.isAll=true, this.isEnable = true,this.width=double.infinity, this.defaultIndex=0});
 
   @override
   State<ExpenseToggle> createState() => _MyToggleSwitchState();
@@ -18,6 +19,7 @@ class _MyToggleSwitchState extends State<ExpenseToggle> {
   @override
   Widget build(BuildContext context) {
     return ToggleSwitch(
+      changeOnTap: widget.isEnable,
       cornerRadius: 7,
       initialLabelIndex: widget.defaultIndex,
       borderWidth: 1,
