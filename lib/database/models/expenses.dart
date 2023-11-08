@@ -10,13 +10,14 @@ class Expenses {
   String? _createDate;
   String? _categoryImage;
   String? _category;
+  String? _categoryDefault;
   String? _currencyCode;
   String? _amount;
   String? _remark;
   bool? _isUpdate;
   bool? _isNew;
 
-  Expenses(this._id, this._statusType, this._issueDate, this._createDate, this._categoryImage, this._category, this._currencyCode, this._amount, this._remark);
+  Expenses(this._id, this._statusType, this._issueDate, this._createDate, this._categoryImage, this._category, this._categoryDefault, this._currencyCode, this._amount, this._remark);
 
   Map<String, dynamic> toMap() {
     return {
@@ -26,6 +27,7 @@ class Expenses {
       'create_datetime': _createDate = DateFormat('yyyyMMddHHmmss').format(DateTime.now()),
       'category_image': _categoryImage ?? Utils().getUnicodeCharacter("2753"),
       'category': _category ?? 'N/A',
+      'category_default': _categoryDefault,
       'currency_code': _currencyCode ?? 'USD',
       'amount': _amount ?? '0',
       'remark': _remark ?? ''
@@ -40,6 +42,7 @@ class Expenses {
         'issueDate: $_issueDate, '
         'categoryImage: $_categoryImage, '
         'category: $_category, '
+        'category: $_categoryDefault, '
         'currencyCode: $_currencyCode, '
         'amount: $_amount, '
         'remark: $_remark'
@@ -52,6 +55,7 @@ class Expenses {
   String? get createDate => _createDate;
   String? get categoryImage => _categoryImage;
   String? get category => _category;
+  String? get categoryDefault => _categoryDefault;
   String? get currencyCode => _currencyCode;
   String? get amount => _amount;
   String? get remark => _remark;
@@ -76,6 +80,10 @@ class Expenses {
 
   set categoryChanged(String? value) {
     _category = value;
+  }
+
+  set categoryDefaultChanged(String? value) {
+    _categoryDefault = value;
   }
 
   set currencyCodeChanged(String? value) {

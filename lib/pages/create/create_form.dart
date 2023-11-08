@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -7,7 +6,6 @@ import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/models/category_popular.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
-import 'package:expenses_tracking/pages/create/status_switch.dart';
 import 'package:expenses_tracking/pages/create/text_remark_input.dart';
 import 'package:expenses_tracking/widgets/divider_widget.dart';
 import 'package:expenses_tracking/widgets/text_amount_Input.dart';
@@ -16,7 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../widgets/bottombar/bottom_navigation_bar.dart';
 import '../../database/models/category.dart';
 import '../../database/models/expenses.dart';
 import '../../widgets/toggle_swich.dart';
@@ -108,7 +105,7 @@ class _StatusTypeWidget extends StatefulWidget {
 }
 
 class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
-  bool _enable = true;
+  // bool _enable = true;
 
   @override
   void initState() {
@@ -119,12 +116,14 @@ class _ExpenseTypeSelected extends State<_StatusTypeWidget> {
   @override
   Widget build(BuildContext context) {
     return ExpenseToggle(
-        defaultIndex: 0,
+        defaultIndex: widget.expenses.statusType == '1' ? 0 : 1,
         isAll: false,
         isEnable: widget.expenses.isUpdate ?? true,
         onToggle: (int index) {
-          widget.expenses.statusTypeChanged = index == 0 ? '1' : '2';
-          widget.onValueChanged(widget.expenses);
+          if (widget.expenses.isUpdate ?? true) {
+              widget.expenses.statusTypeChanged = index == 0 ? '1' : '2';
+              widget.onValueChanged(widget.expenses);
+          }
         }
     );
     // return StatusSwitch(
@@ -245,6 +244,7 @@ class _CategoryInput extends State<_CategoryWidget> {
     setState(() {
       widget.expenses.categoryImageChanged = category.image;
       widget.expenses.categoryChanged = category.name;
+      widget.expenses.categoryDefaultChanged = null;
       widget.onValueChanged(widget.expenses);
     });
   }
@@ -253,8 +253,10 @@ class _CategoryInput extends State<_CategoryWidget> {
   void initState() {
     super.initState();
 
+    // set default selected
     widget.expenses.categoryImageChanged = widget.expenses.categoryImage;
     widget.expenses.categoryChanged = widget.expenses.category;
+    widget.expenses.categoryDefaultChanged = '1'; // default category set
   }
 
   @override
@@ -442,6 +444,7 @@ class _CategoryState extends State<_CategoriesWidget> {
                                   final item = category.split(' ');
                                   widget.expenses.categoryImageChanged = item[0];
                                   widget.expenses.categoryChanged = item[1];
+                                  widget.expenses.categoryDefaultChanged = '1'; // default category set
                                   widget.callBack();
                                 });
                               }

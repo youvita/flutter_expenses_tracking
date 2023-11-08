@@ -73,7 +73,6 @@ class _ListFormState extends State<ListFormWidget> {
 
     /// set for update UI while back from setting
     setState(() {
-
       /// remove line if list no data
       if (listItem.isEmpty) {
         listVisibleHeader.clear();
@@ -211,7 +210,7 @@ class _ListFormState extends State<ListFormWidget> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(listHeaderYear.elementAt(yearIndex), style: MyTextStyles.textStyleBold17),
-                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 || toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                  Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachYear.elementAt(yearIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                 ],
                               )
                           ),
@@ -245,7 +244,7 @@ class _ListFormState extends State<ListFormWidget> {
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.end,
                                           children: [
-                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 || toggleIndex == 1 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                            Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachMonth.elementAt(monthIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                             const SizedBox(width: 11),
                                             SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                           ],

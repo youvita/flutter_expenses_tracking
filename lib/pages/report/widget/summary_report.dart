@@ -92,7 +92,7 @@ class _ExpenseRow extends StatelessWidget {
     return Row(children: [
       Row(children: [const CircleAvatar(radius: 8, backgroundColor: MyColors.red,),const SizedBox(width: 10,), Text("Expense".tr(), style: MyTextStyles.textStyleMedium17)],),
       const Spacer(),
-      Text(Utils.currencyToString(expenses), style: MyTextStyles.textStyleMedium17Red),
+      Text('-${Utils.currencyToString(expenses)}', style: MyTextStyles.textStyleMedium17Red),
     ],);
   }
 }
@@ -106,7 +106,7 @@ class _IncomeRow extends StatelessWidget {
     return Row(children: [
       Row(children: [const CircleAvatar(radius: 8, backgroundColor: MyColors.green,),const SizedBox(width: 10,), Text("Income".tr(), style: MyTextStyles.textStyleMedium17)],),
       const Spacer(),
-      Text(Utils.currencyToString(income), style: MyTextStyles.textStyleMedium17Green),
+      Text('+${Utils.currencyToString(income)}', style: MyTextStyles.textStyleMedium17Green),
     ],);
   }
 }

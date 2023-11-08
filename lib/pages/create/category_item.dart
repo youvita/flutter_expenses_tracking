@@ -50,7 +50,7 @@ class _CategoryItemState extends State<CategoryItemWidget> {
               )),
         ),
         const SizedBox(height: 12),
-        Text(widget.label, style: MyTextStyles.textStyleNormal15)
+        Text(widget.label, style: MyTextStyles.textStyleNormal15, overflow: TextOverflow.ellipsis)
       ],
     );
   }

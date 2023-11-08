@@ -77,7 +77,7 @@ class Utils {
 
   static String formatSymbol(int value) {
     String strValue;
-    if (value == 2) {
+    if (value == 1) {
       strValue = '+';
     } else {
       strValue = '-';

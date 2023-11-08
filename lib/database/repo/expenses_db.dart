@@ -1,6 +1,3 @@
-
-import 'dart:math';
-
 import 'package:expenses_tracking/config/setting_utils.dart';
 import 'package:expenses_tracking/database/models/category_popular.dart';
 import 'package:sqflite/sqflite.dart';
@@ -21,6 +18,7 @@ class ExpensesDb {
         create_datetime TEXT,
         category_image TEXT,
         category TEXT,
+        category_default TEXT,
         currency_code TEXT,
         amount TEXT,
         remark TEXT
@@ -56,6 +54,7 @@ class ExpensesDb {
           maps[index]['create_datetime'],
           maps[index]['category_image'],
           maps[index]['category'],
+          maps[index]['category_default'],
           maps[index]['currency_code'],
           maps[index]['amount'],
           maps[index]['remark']
@@ -66,7 +65,7 @@ class ExpensesDb {
   Future<List<CategoryPopular>> getPopular() async {
     final db = await DatabaseService().database;
     List<Map<String, dynamic>> maps = List.empty();
-    maps = await db.rawQuery('SELECT category_image, category, COUNT(*) AS popular_count FROM expenses GROUP BY  category_image ORDER BY popular_count DESC');
+    maps = await db.rawQuery('SELECT category_image, category, COUNT(*) AS popular_count FROM expenses WHERE category_default IS NULL GROUP BY category_image ORDER BY popular_count DESC');
     return List.generate(maps.length, (index) {
       return CategoryPopular(
           maps[index]['category_image'],
