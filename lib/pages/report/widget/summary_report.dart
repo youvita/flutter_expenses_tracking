@@ -14,7 +14,9 @@ class SummaryReport extends StatefulWidget {
   final double income;
   final double expenses;
   final Function callback;
-  const SummaryReport({super.key,required this.income, required this.expenses, required this.callback});
+  final String month;
+  final String year;
+  const SummaryReport({super.key,required this.year,required this.month, required this.income, required this.expenses, required this.callback});
 
   @override
   State<SummaryReport> createState() => _SummaryReportState();
@@ -33,7 +35,17 @@ class _SummaryReportState extends State<SummaryReport> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(padding:const EdgeInsets.all(10),child: _YearDrop(onSelected: (value) => widget.callback(value)),),
+          Padding(padding:const EdgeInsets.only(left: 20, top: 5),
+          child: Row(children: [
+            _YearDrop(onSelected: (value){
+               widget.callback(value, widget.month);
+            }),
+            const SizedBox(width: 10,),
+            _YearDrop(onSelected: (value){
+              widget.callback(widget.year, value);
+            }, isMonth: true,),
+          ],)
+          ),
           const SizedBox(height: 10),
           Padding(padding: const EdgeInsets.only(left: 20,right: 20), child: Column(children: [
             _ExpenseRow(expenses: widget.expenses,),
@@ -49,36 +61,60 @@ class _SummaryReportState extends State<SummaryReport> {
 }
 
 class _YearDrop extends StatefulWidget {
+  final bool isMonth;
   final Function onSelected;
-  const _YearDrop({Key? key, required this.onSelected}) : super(key: key);
+  const _YearDrop({Key? key, required this.onSelected, this.isMonth = false}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _YearDropDown();
 }
 
 class _YearDropDown extends State<_YearDrop> {
-  List<ListItem<String>> dropDownList = [];
+  List<DropdownMenuItem<String>> dropDownList = [];
   int currentYear = DateTime.now().year;
-  String selectedValue = DateTime.now().year.toString();
+  String selectedValue = "";
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.isMonth){
+      dropDownList=[
+        const DropdownMenuItem(value: "", child: Text("All Months")),
+        const DropdownMenuItem(value: "01", child: Text("January")),
+        const DropdownMenuItem(value: "02", child: Text("February")),
+        const DropdownMenuItem(value: "03", child: Text("March")),
+        const DropdownMenuItem(value: "04", child: Text("April")),
+        const DropdownMenuItem(value: "05", child: Text("May")),
+        const DropdownMenuItem(value: "06", child: Text("June")),
+        const DropdownMenuItem(value: "07", child: Text("July")),
+        const DropdownMenuItem(value: "08", child: Text("August")),
+        const DropdownMenuItem(value: "09", child: Text("September")),
+        const DropdownMenuItem(value: "10", child: Text("October")),
+        const DropdownMenuItem(value: "11", child: Text("November")),
+        const DropdownMenuItem(value: "12", child: Text("December")),
+      ];
+    }else{
+      selectedValue = Utils.dateFormatYear(DateTime.now());
+      currentYear = DateTime.now().year;
+      for (int i = currentYear - 5; i <= currentYear; i++) {
+        dropDownList.add(DropdownMenuItem(value: i.toString(), child: Text(i.toString())));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    dropDownList=[];
-    selectedValue = Utils.dateFormatYear(DateTime.now());
-    currentYear = DateTime.now().year;
-    for (int i = currentYear - 5; i <= currentYear; i++) {
-      dropDownList.add(ListItem<String>(i.toString(), value: i.toString()));
-    }
 
-    return DropDownList<String>(
-            listItems: dropDownList,
+    print("data " );
+    return DropdownButton(
+            underline: Container(),
+            items: dropDownList,
+            style: MyTextStyles.textStyleBold20,
             value: selectedValue,
-            textStyle: MyTextStyles.textStyleBold20,
-            onChange: (value) => setState(() {
+            onChanged: (value) => setState(() {
               selectedValue = value!;
-              DateTime date = DateTime.parse("$selectedValue-01-01");
-           
-              widget.onSelected(date);
+              widget.onSelected(value);
             }));
   }
 }

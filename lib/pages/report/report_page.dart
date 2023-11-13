@@ -18,6 +18,8 @@ class _ReportPageState extends State<ReportPage> {
 
   late BannerAd bannerAd;
   bool isAdLoaded = false;
+  String year = DateTime.now().year.toString();
+  String  month = "";
 
   /// admob
   initBannerAd() {
@@ -42,13 +44,13 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
-    load(DateTime.now().year.toString());
+    load(DateTime.now().year.toString(), "");
     initBannerAd();
   }
 
-  load(String year)async{
-    income = await ExpensesDb().getTotalExpensesIncome(true, year);
-    expenses = await ExpensesDb().getTotalExpensesIncome(false, year);
+  load(String year, String month)async{
+    income = await ExpensesDb().getTotalExpensesIncome(true, year, month);
+    expenses = await ExpensesDb().getTotalExpensesIncome(false, year, month);
     
     setState(() {});
   }
@@ -67,13 +69,18 @@ class _ReportPageState extends State<ReportPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SummaryReport(
+                        year: year,
+                        month: month,
                         income: income,
                         expenses: expenses,
-                        callback: (DateTime date){
-                          setState(() {});
-                          load(date.year.toString());
+                        callback: (year, month){
+                          setState(() {
+                            this.year = year;
+                            this.month = month;
+                          });
+                          load(year, month);
                         },),
-
+                      income == 0 && expenses == 0 ? const SizedBox() :
                       ChartReport(income: income, expenses: expenses,),
                       
                     ],

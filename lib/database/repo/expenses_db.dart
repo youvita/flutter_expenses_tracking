@@ -75,9 +75,13 @@ class ExpensesDb {
     });
   }
 
-  Future<double> getTotalExpensesIncome(bool isIncome,String year) async {
+  Future<double> getTotalExpensesIncome(bool isIncome,String year, String month) async {
     var statusType = isIncome ? '2' : '1';
     final db = await DatabaseService().database;
+    String filter = "AND substr(create_datetime, 1, 4) = '$year'";
+    if(month.isNotEmpty){
+      filter = "AND substr(create_datetime, 1, 6) = '$year$month'";
+    }
     var query = """
     SELECT
       max(currency_code), min(currency_code), max(status_type), min(status_type),
@@ -94,7 +98,8 @@ class ExpensesDb {
           END)
       END, 0) AS amount
     FROM $tableName 
-    WHERE status_type = '$statusType' AND substr(create_datetime, 1, 4) = '$year'
+    WHERE status_type = '$statusType' 
+    $filter
     """;
     var result = await db.rawQuery(query);
     var total = result[0]['amount'];
