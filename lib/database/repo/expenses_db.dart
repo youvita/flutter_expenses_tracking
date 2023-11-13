@@ -42,9 +42,9 @@ class ExpensesDb {
     final db = await DatabaseService().database;
     List<Map<String, dynamic>> maps = List.empty();
     if (status.isEmpty) {
-      maps = await db.query(tableName, orderBy: 'create_datetime DESC');
+      maps = await db.query(tableName, orderBy: 'issue_datetime DESC');
     } else {
-      maps = await db.query(tableName, where: 'status_type=?', whereArgs: [status], orderBy: 'create_datetime DESC');
+      maps = await db.query(tableName, where: 'status_type=?', whereArgs: [status], orderBy: 'issue_datetime DESC');
     }
     return List.generate(maps.length, (index) {
       return Expenses(
