@@ -34,7 +34,7 @@ class CreateForm extends State {
             actionLeftIcon: 'assets/images/ic_close.svg',
             actionRightIcon: isNew ? '' : 'Delete'.tr(),
             onActionRight: () {
-              if (expenses != null) {
+              if (expenses != null && !isNew) {
                 ExpensesDb().delete(expenses!);
                 _navigationListRoute(context);
               }

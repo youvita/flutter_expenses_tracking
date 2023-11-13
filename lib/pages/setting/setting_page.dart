@@ -62,6 +62,7 @@ class _SettingPageState extends State<SettingPage> {
         child: Column(
           children: [
             CupertinoListSection.insetGrouped(
+              clipBehavior: Clip.none,
           margin: EdgeInsets.zero,
           children: [
             item(
