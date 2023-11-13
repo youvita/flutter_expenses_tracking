@@ -3,6 +3,7 @@ import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_drop_down.dart';
 import 'package:expenses_tracking/widgets/dropdown/list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class TextAmountInputWidget extends StatefulWidget {
   final String placeholder;
@@ -89,7 +90,8 @@ class _CustomTextSelect extends State<TextAmountInputWidget> {
                   border: InputBorder.none,
                   isCollapsed: true
               ),
-              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}'))],
+              keyboardType: widget.defaultCurrency == '1' ? const TextInputType.numberWithOptions(decimal: true) : TextInputType.number,
               style: MyTextStyles.textStyleBold26,
             )
           )
