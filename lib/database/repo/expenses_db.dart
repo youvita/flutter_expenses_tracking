@@ -26,6 +26,10 @@ class ExpensesDb {
     ''');
   }
 
+  Future<int> delete(Expenses expenses) async {
+    final db = await DatabaseService().database;
+    return await db.delete(tableName, where: '_id=?', whereArgs: [expenses.id]);
+  }
 
   // inserted row.
   Future<int> insert(Expenses expenses) async {

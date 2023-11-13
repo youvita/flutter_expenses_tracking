@@ -18,11 +18,11 @@ class CategoryPage extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppTopBarWidget(
         title: 'New Category'.tr(),
-        actionRightIcon: 'Save'.tr(),
+        actionEndIcon: 'Save'.tr(),
         onActionLeft: () {
           Navigator.pop(context);
         },
-        onActionRight: () {
+        onActionEnd: () {
           Navigator.pop(context, Category(image ?? '', name ?? ''));
         },
       ),

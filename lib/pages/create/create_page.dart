@@ -30,12 +30,19 @@ class CreateForm extends State {
         resizeToAvoidBottomInset: false,
         appBar: AppTopBarWidget(
             title: isNew ? 'Create'.tr() : 'View'.tr(),
-            actionRightIcon: isNew ? saveButton : editButton,
+            actionEndIcon: isNew ? saveButton : editButton,
             actionLeftIcon: 'assets/images/ic_close.svg',
+            actionRightIcon: isNew ? '' : 'Delete'.tr(),
+            onActionRight: () {
+              if (expenses != null) {
+                ExpensesDb().delete(expenses!);
+                _navigationListRoute(context);
+              }
+            },
             onActionLeft: () {
               Navigator.pop(context);
             },
-            onActionRight: () {
+            onActionEnd: () {
               if(isNew) {
                 if (expenses != null) {
                   ExpensesDb().insert(expenses!);

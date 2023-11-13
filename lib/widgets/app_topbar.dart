@@ -9,8 +9,10 @@ class AppTopBarWidget extends StatefulWidget implements ObstructingPreferredSize
   final Color backgroundColor;
   final double elevation;
   final String actionLeftIcon;
+  final String actionEndIcon;
   final String actionRightIcon;
   final Function? onActionLeft;
+  final Function? onActionEnd;
   final Function? onActionRight;
 
   const AppTopBarWidget(
@@ -19,8 +21,10 @@ class AppTopBarWidget extends StatefulWidget implements ObstructingPreferredSize
         this.backgroundColor = MyColors.white,
         this.elevation = 0.0,
         this.actionLeftIcon = "assets/images/ic_arrow_back.svg",
+        this.actionEndIcon = "",
         this.actionRightIcon = "",
         this.onActionLeft,
+        this.onActionEnd,
         this.onActionRight
       }
       ) : super(key: key);
@@ -63,20 +67,41 @@ class _AppTopBarState extends State<AppTopBarWidget> {
                 // ),
               )
           ),
-          trailing: Visibility(
-              visible: widget.onActionRight != null,
-              child: CupertinoButton(
-                // borderRadius: BorderRadius.circular(100),
-                onPressed: () {
-                  widget.onActionRight!();
-                },
-                padding: EdgeInsets.zero,
-                child: Text(widget.actionRightIcon, style: MyTextStyles.textStyleMedium17Blue),
-                // child: Container(
-                //     padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
-                //     child: Text(widget.actionRightIcon, style: MyTextStyles.textStyleMedium17Blue)
-                // ),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Visibility(
+                  visible: widget.onActionRight != null,
+                  child: CupertinoButton(
+                    // borderRadius: BorderRadius.circular(100),
+                    onPressed: () {
+                      widget.onActionRight!();
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Text(widget.actionRightIcon, style: MyTextStyles.textStyleMedium17Red),
+                    // child: Container(
+                    //     padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                    //     child: Text(widget.actionRightIcon, style: MyTextStyles.textStyleMedium17Blue)
+                    // ),
+                  )
+              ),
+              const SizedBox(width: 10),
+              Visibility(
+                  visible: widget.onActionEnd != null,
+                  child: CupertinoButton(
+                    // borderRadius: BorderRadius.circular(100),
+                    onPressed: () {
+                      widget.onActionEnd!();
+                    },
+                    padding: EdgeInsets.zero,
+                    child: Text(widget.actionEndIcon, style: MyTextStyles.textStyleMedium17Blue),
+                    // child: Container(
+                    //     padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+                    //     child: Text(widget.actionRightIcon, style: MyTextStyles.textStyleMedium17Blue)
+                    // ),
+                  )
               )
+            ],
           )
       ),
     );
