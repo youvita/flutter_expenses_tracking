@@ -30,6 +30,7 @@ class _ListFormState extends State<ListFormWidget> {
   late BannerAd bannerAd;
   bool isAdLoaded = false;
 
+  var lastWeek = "";
   var lastHeaderYear = "";
   var lastHeaderMonth = "";
   var totalAmountYear = 0.0;
@@ -37,9 +38,11 @@ class _ListFormState extends State<ListFormWidget> {
   int toggleIndex = 0;
   int expandCounter = 0;
   bool defaultExpand = true;
+  bool isSameWeek = false;
   ScrollController scrollController = ScrollController();
 
   List<Expenses> listItem = List.empty();
+  List<String> listHeaderWeek = List.empty(growable: true);
   List<String> listHeaderYear = List.empty(growable: true);
   List<DateTime> listHeaderMonth = List.empty(growable: true);
   List<double> listTotalEachYear = List.empty(growable: true);
@@ -151,6 +154,7 @@ class _ListFormState extends State<ListFormWidget> {
     listHeaderMonth.clear();
     lastHeaderMonth = "";
     lastHeaderYear = "";
+    lastWeek = "";
     totalAmountYear = 0.0;
     totalAmountMonth = 0.0;
   }
@@ -278,26 +282,52 @@ class _ListFormState extends State<ListFormWidget> {
                                                   itemCount: listItem.length,
                                                   itemBuilder: (context, itemIndex) {
                                                     Expenses? childItem = listItem.elementAt(itemIndex);
+                                                    String? week = getWeekGroup(Utils.dateFormatDay(Utils.dateTimeFormat("${childItem.createDate}")));
+                                                    if (lastWeek != week) {
+                                                      print(week);
+                                                      lastWeek = week;
+                                                      isSameWeek = true;
+                                                    } else {
+                                                      isSameWeek = false;
+                                                    }
+                                                    print('>>>> $week');
                                                     return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) ?
-                                                    Column(
+                                                    isSameWeek? ExpansionTile(
+                                                      title: const Text(''),
+                                                      tilePadding: const EdgeInsets.only(right: 20, left: 20),
+                                                      leading: Text(week, style: MyTextStyles.textStyleMedium17),
+                                                      trailing: IntrinsicWidth(
+                                                          child: Row(
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              Text('', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                                              const SizedBox(width: 11),
+                                                              SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
+                                                            ],
+                                                          )
+                                                      ),
                                                       children: [
-                                                        ListItem(
-                                                          item: childItem,
-                                                          onItemSelected: (Expenses? value) {
-                                                            _navigationRoute(context, value);
-                                                          },
-                                                        ),
-                                                        Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
-                                                            : childItem == listItem.last ? const SizedBox() : Container(
-                                                            padding: const EdgeInsets.only(left: 70),
-                                                            child: const Divider(
-                                                                color: MyColors.greyBackground,
-                                                                height: 0,
-                                                                thickness: 1
+                                                        Column(
+                                                          children: [
+                                                            ListItem(
+                                                              item: childItem,
+                                                              onItemSelected: (Expenses? value) {
+                                                                _navigationRoute(context, value);
+                                                              },
+                                                            ),
+                                                            Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
+                                                                : childItem == listItem.last ? const SizedBox() : Container(
+                                                                padding: const EdgeInsets.only(left: 70),
+                                                                child: const Divider(
+                                                                    color: MyColors.greyBackground,
+                                                                    height: 0,
+                                                                    thickness: 1
+                                                                )
                                                             )
+                                                          ],
                                                         )
                                                       ],
-                                                    ) : const SizedBox();
+                                                    ) : const SizedBox() : const SizedBox();
                                                   }
                                               )
                                           )
@@ -323,6 +353,43 @@ class _ListFormState extends State<ListFormWidget> {
       ],
     );
   }
+}
+
+String getWeekGroup(String day) {
+  var week = '';
+  switch(day) {
+    case '01':
+    case '02':
+    case '03':
+    case '04':
+    case '05':
+    case '06':
+    case '07': {
+      week = 'Week 1';
+    } break;
+    case '08':
+    case '09':
+    case '10':
+    case '11':
+    case '12':
+    case '13':
+    case '14': {
+      week = 'Week 2';
+    } break;
+    case '15':
+    case '16':
+    case '17':
+    case '18':
+    case '19':
+    case '20':
+    case '21': {
+      week = 'Week 3';
+    } break;
+    default : {
+      week = 'Week 4';
+    } break;
+  }
+  return week;
 }
 
 /// call back route page

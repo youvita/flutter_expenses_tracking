@@ -25,6 +25,10 @@ class Utils {
     return DateFormat('yyyyMM').format(date);
   }
 
+  static String dateFormatDay(DateTime date) {
+    return DateFormat('dd').format(date);
+  }
+
   static String dateFormat(DateTime date) {
     return DateFormat('dd MMMM yyyy').format(date);
   }
