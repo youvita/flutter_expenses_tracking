@@ -26,7 +26,7 @@ class Utils {
   }
 
   static String dateFormatDay(DateTime date) {
-    return DateFormat('dd').format(date);
+    return DateFormat('yyyyMMdd').format(date);
   }
 
   static String dateFormat(DateTime date) {
@@ -34,7 +34,7 @@ class Utils {
   }
 
   static String dateFormatMonthYear(DateTime date) {
-    return DateFormat('MM/yyyy').format(date);
+    return DateFormat('MMMM').format(date);
   }
 
   static String formatCurrency(String? amount) {

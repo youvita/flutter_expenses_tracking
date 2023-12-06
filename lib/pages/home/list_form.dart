@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
 import 'package:expenses_tracking/database/models/year_header.dart';
@@ -93,6 +94,7 @@ class _ListFormState extends State<ListFormWidget> {
             .createDate}");
         String header = Utils.dateFormatYear(dateTime);
         String headerMonth = Utils.dateFormatYearMonth(dateTime);
+        String headerWeek = Utils.dateFormatDay(dateTime);
         if (lastHeaderYear != header) {
           listHeaderYear.add(header);
           lastHeaderYear = header;
@@ -104,7 +106,20 @@ class _ListFormState extends State<ListFormWidget> {
           listHeaderMonth.add(dateTime);
           lastHeaderMonth = headerMonth;
         }
+
+        for (var j = 0; j < lastHeaderMonth.length; j++) {
+          if (lastWeek != headerWeek) {
+            listHeaderWeek.add(headerWeek);
+            lastWeek = headerWeek;
+          }
+        }
       }
+
+
+
+      print(">>> Head Year:: $listHeaderYear");
+      print(">>> Head Month:: $listHeaderMonth");
+      print(">>> Head Week:: $listHeaderWeek");
 
       /// loop to sum total amount each year
       for (var i = 0; i < listHeaderYear.length; i++) {
@@ -148,6 +163,7 @@ class _ListFormState extends State<ListFormWidget> {
 
   /// reset all data form list
   resetForm() {
+    listHeaderWeek.clear();
     listHeaderYear.clear();
     listTotalEachYear.clear();
     listTotalEachMonth.clear();
@@ -279,59 +295,63 @@ class _ListFormState extends State<ListFormWidget> {
                                               child: ListView.builder(
                                                   physics: const NeverScrollableScrollPhysics(),
                                                   shrinkWrap: true,
-                                                  itemCount: listItem.length,
-                                                  itemBuilder: (context, itemIndex) {
-                                                    Expenses? childItem = listItem.elementAt(itemIndex);
-                                                    String? week = getWeekGroup(Utils.dateFormatDay(Utils.dateTimeFormat("${childItem.createDate}")));
-                                                    if (lastWeek != week) {
-                                                      print(week);
-                                                      lastWeek = week;
-                                                      isSameWeek = true;
-                                                    } else {
-                                                      isSameWeek = false;
-                                                    }
-                                                    print('>>>> $week');
-                                                    return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) ?
-                                                    isSameWeek? ExpansionTile(
-                                                      title: const Text(''),
-                                                      tilePadding: const EdgeInsets.only(right: 20, left: 20),
-                                                      leading: Text(week, style: MyTextStyles.textStyleMedium17),
-                                                      trailing: IntrinsicWidth(
-                                                          child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.end,
-                                                            children: [
-                                                              Text('', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
-                                                              const SizedBox(width: 11),
-                                                              SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
-                                                            ],
-                                                          )
-                                                      ),
-                                                      children: [
-                                                        Column(
-                                                          children: [
-                                                            ListItem(
-                                                              item: childItem,
-                                                              onItemSelected: (Expenses? value) {
-                                                                _navigationRoute(context, value);
-                                                              },
-                                                            ),
-                                                            Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
-                                                                : childItem == listItem.last ? const SizedBox() : Container(
-                                                                padding: const EdgeInsets.only(left: 70),
-                                                                child: const Divider(
-                                                                    color: MyColors.greyBackground,
-                                                                    height: 0,
-                                                                    thickness: 1
-                                                                )
+                                                  itemCount: listHeaderWeek.length,
+                                                  itemBuilder: (context, weekIndex) {
+                                                    String? week = listHeaderWeek.elementAt(weekIndex);
+                                                    String? month = Utils.dateFormatDay(listHeaderMonth.elementAt(monthIndex));
+
+                                                    return week.substring(0, 6) == month.substring(0, 6) ?
+                                                      ExpansionTile(
+                                                        title: const Text(''),
+                                                        tilePadding: const EdgeInsets.only(right: 20, left: 20),
+                                                        leading: Text(getWeekGroup(listHeaderWeek.elementAt(weekIndex).substring(listHeaderWeek.elementAt(weekIndex).length - 2)), style: MyTextStyles.textStyleMedium17),
+                                                        trailing: IntrinsicWidth(
+                                                            child: Row(
+                                                              mainAxisAlignment: MainAxisAlignment.end,
+                                                              children: [
+                                                                Text('', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                                                const SizedBox(width: 11),
+                                                                SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
+                                                              ],
                                                             )
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ) : const SizedBox() : const SizedBox();
-                                                  }
-                                              )
+                                                        ),
+                                                        children: [
+                                                          ListView.builder(
+                                                              physics: const NeverScrollableScrollPhysics(),
+                                                              shrinkWrap: true,
+                                                              itemCount: listItem.length,
+                                                              itemBuilder: (context, itemIndex) {
+                                                                Expenses? childItem = listItem.elementAt(itemIndex);
+                                                                return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) && week == Utils.dateFormatDay(Utils.dateTimeFormat("${childItem.createDate}")) ?
+                                                                Column(
+                                                                  children: [
+                                                                    ListItem(
+                                                                      item: childItem,
+                                                                      onItemSelected: (Expenses? value) {
+                                                                        _navigationRoute(context, value);
+                                                                      },
+                                                                    ),
+                                                                    Utils.dateFormatYearMonth(Utils.dateTimeFormat("${listItem.elementAt(itemIndex < listItem.length - 1 ? itemIndex + 1 : itemIndex).createDate}")) != Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) ? const SizedBox()
+                                                                        : childItem == listItem.last ? const SizedBox() : Container(
+                                                                        padding: const EdgeInsets.only(left: 70),
+                                                                        child: const Divider(
+                                                                            color: MyColors.greyBackground,
+                                                                            height: 0,
+                                                                            thickness: 1
+                                                                        )
+                                                                    )
+                                                                  ],
+                                                                  // )
+                                                                  // ],
+                                                                ) : const SizedBox();
+                                                              }
+                                                          )
+                                                        ]
+                                                    ) : const SizedBox();
+                                                  })
                                           )
                                       )
+
                                     ])),
                                 const SizedBox(height: 5)
                               ],
@@ -365,7 +385,7 @@ String getWeekGroup(String day) {
     case '05':
     case '06':
     case '07': {
-      week = 'Week 1';
+      week = 'Week 1'.tr();
     } break;
     case '08':
     case '09':
@@ -374,7 +394,7 @@ String getWeekGroup(String day) {
     case '12':
     case '13':
     case '14': {
-      week = 'Week 2';
+      week = 'Week 2'.tr();
     } break;
     case '15':
     case '16':
@@ -383,10 +403,10 @@ String getWeekGroup(String day) {
     case '19':
     case '20':
     case '21': {
-      week = 'Week 3';
+      week = 'Week 3'.tr();
     } break;
     default : {
-      week = 'Week 4';
+      week = 'Week 4'.tr();
     } break;
   }
   return week;
