@@ -1,8 +1,9 @@
-import 'dart:io';
 
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:expenses_tracking/config/utils.dart';
 import 'package:expenses_tracking/constant/constant.dart';
+import 'package:expenses_tracking/database/models/week.dart';
 import 'package:expenses_tracking/database/models/year_header.dart';
 import 'package:expenses_tracking/database/repo/expenses_db.dart';
 import 'package:expenses_tracking/pages/home/list_item.dart';
@@ -13,7 +14,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:sticky_headers/sticky_headers.dart';
 import '../../database/models/expenses.dart';
 import '../create/create_page.dart';
-import '../create/status_switch.dart';
 
 class ListFormWidget extends StatefulWidget {
 
@@ -31,23 +31,30 @@ class _ListFormState extends State<ListFormWidget> {
   late BannerAd bannerAd;
   bool isAdLoaded = false;
 
+  var temYearMonth = "";
+  var temDay = "";
   var lastWeek = "";
+  var lastWeekOfDay = "";
   var lastHeaderYear = "";
   var lastHeaderMonth = "";
   var totalAmountYear = 0.0;
   var totalAmountMonth = 0.0;
+  var totalAmountWeek = 0.0;
   int toggleIndex = 0;
   int expandCounter = 0;
   bool defaultExpand = true;
   bool isSameWeek = false;
   ScrollController scrollController = ScrollController();
-
+  
+  List<Week> listWeeks = List.empty(growable: true);
   List<Expenses> listItem = List.empty();
-  List<String> listHeaderWeek = List.empty(growable: true);
+  List<String> listDateWeek = List.empty(growable: true);
+  List<Week> listHeaderWeek = List.empty(growable: true);
   List<String> listHeaderYear = List.empty(growable: true);
   List<DateTime> listHeaderMonth = List.empty(growable: true);
   List<double> listTotalEachYear = List.empty(growable: true);
   List<double> listTotalEachMonth = List.empty(growable: true);
+  List<double> listTotalEachWeek = List.empty(growable: true);
   List<YearHeader> listVisibleHeader = List.empty(growable: true);
   List<int> listCounter = List.empty(growable: true);
 
@@ -107,21 +114,31 @@ class _ListFormState extends State<ListFormWidget> {
           lastHeaderMonth = headerMonth;
         }
 
-        for (var j = 0; j < lastHeaderMonth.length; j++) {
-          if (lastWeek != headerWeek) {
-            listHeaderWeek.add(headerWeek);
-            lastWeek = headerWeek;
-          }
+        if (lastWeek != headerWeek) {
+          listDateWeek.add(headerWeek);
+          lastWeek = headerWeek;
         }
       }
 
+      
+      for(var i = 0; i < listDateWeek.length; i++) {
+        var item = listDateWeek.elementAt(i);
+        listWeeks.add(Week(item.substring(0, 6), getWeekGroup(item.substring(item.length - 2))));
+      }
 
 
-      print(">>> Head Year:: $listHeaderYear");
-      print(">>> Head Month:: $listHeaderMonth");
-      print(">>> Head Week:: $listHeaderWeek");
+      for (int i = 0; i < listWeeks.length; i++) {
+        if (i < listWeeks.length - 1) {
+          if (listWeeks[i].date != listWeeks[i + 1].date ||
+              listWeeks[i].week != listWeeks[i + 1].week) {
+            listHeaderWeek.add(listWeeks[i]);
+          }
+        } else {
+          listHeaderWeek.add(listWeeks[i]);
+        }
+      }
 
-      /// loop to sum total amount each year
+      /// loop to sum total amount each years
       for (var i = 0; i < listHeaderYear.length; i++) {
         for (var j = i; j < listItem.length; j++) {
           if (listHeaderYear.elementAt(i) ==
@@ -140,7 +157,7 @@ class _ListFormState extends State<ListFormWidget> {
         totalAmountYear = 0.0;
       }
 
-      /// loop to sum total amount each month
+      /// loop to sum total amount each months
       for (var i = 0; i < listHeaderMonth.length; i++) {
         for (var j = i; j < listItem.length; j++) {
           if (Utils.dateFormatYearMonth(listHeaderMonth.elementAt(i)) ==
@@ -158,11 +175,26 @@ class _ListFormState extends State<ListFormWidget> {
         listTotalEachMonth.add(totalAmountMonth);
         totalAmountMonth = 0.0;
       }
+
+      /// loop to sum total amount each weeks
+      for (var i = 0; i < listHeaderWeek.length; i++) {
+        var weekObj = listHeaderWeek.elementAt(i);
+        for (var j = i; j < listItem.length; j++) {
+          var createDate = Utils.dateFormatDay(Utils.dateTimeFormat("${listItem.elementAt(j).createDate}"));
+          if (weekObj.date == createDate.substring(0, 6) && weekObj.week == getWeekGroup(createDate.substring(createDate.length - 2))) {
+            totalAmountWeek = totalAmountWeek + double.parse(Utils.exchangeAmount(listItem.elementAt(j).currencyCode, listItem.elementAt(j).amount));
+          }
+        }
+        listTotalEachWeek.add(totalAmountWeek);
+        totalAmountWeek = 0.0;
+      }
     }
   }
 
   /// reset all data form list
   resetForm() {
+    listWeeks.clear();
+    listDateWeek.clear();
     listHeaderWeek.clear();
     listHeaderYear.clear();
     listTotalEachYear.clear();
@@ -297,19 +329,19 @@ class _ListFormState extends State<ListFormWidget> {
                                                   shrinkWrap: true,
                                                   itemCount: listHeaderWeek.length,
                                                   itemBuilder: (context, weekIndex) {
-                                                    String? week = listHeaderWeek.elementAt(weekIndex);
+                                                    Week weeks = listHeaderWeek.elementAt(weekIndex);
                                                     String? month = Utils.dateFormatDay(listHeaderMonth.elementAt(monthIndex));
-
-                                                    return week.substring(0, 6) == month.substring(0, 6) ?
+                                                    
+                                                    return weeks.date == month.substring(0, 6) ?
                                                       ExpansionTile(
                                                         title: const Text(''),
                                                         tilePadding: const EdgeInsets.only(right: 20, left: 20),
-                                                        leading: Text(getWeekGroup(listHeaderWeek.elementAt(weekIndex).substring(listHeaderWeek.elementAt(weekIndex).length - 2)), style: MyTextStyles.textStyleMedium17),
+                                                        leading: Text(listHeaderWeek.elementAt(weekIndex).week, style: MyTextStyles.textStyleMedium17),
                                                         trailing: IntrinsicWidth(
                                                             child: Row(
                                                               mainAxisAlignment: MainAxisAlignment.end,
                                                               children: [
-                                                                Text('', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
+                                                                Text('${Utils.formatSymbol(toggleIndex)}${Utils.formatCurrency(listTotalEachWeek.elementAt(weekIndex).toString())}', style: toggleIndex == 0 ? MyTextStyles.textStyleMedium17Red : MyTextStyles.textStyleMedium17Green),
                                                                 const SizedBox(width: 11),
                                                                 SvgPicture.asset('assets/images/ic_arrow_drop_down.svg')
                                                               ],
@@ -322,7 +354,8 @@ class _ListFormState extends State<ListFormWidget> {
                                                               itemCount: listItem.length,
                                                               itemBuilder: (context, itemIndex) {
                                                                 Expenses? childItem = listItem.elementAt(itemIndex);
-                                                                return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) && week == Utils.dateFormatDay(Utils.dateTimeFormat("${childItem.createDate}")) ?
+                                                                String? createDate = Utils.dateFormatDay(Utils.dateTimeFormat("${childItem.createDate}"));
+                                                                return Utils.dateFormatYearMonth(listHeaderMonth.elementAt(monthIndex)) == Utils.dateFormatYearMonth(Utils.dateTimeFormat("${childItem.createDate}")) && weeks.week == getWeekGroup(createDate.substring(createDate.length - 2)) ?
                                                                 Column(
                                                                   children: [
                                                                     ListItem(
@@ -410,6 +443,10 @@ String getWeekGroup(String day) {
     } break;
   }
   return week;
+}
+
+bool isSameWeek(String day1, String day2) {
+  return day1 == day2;
 }
 
 /// call back route page
