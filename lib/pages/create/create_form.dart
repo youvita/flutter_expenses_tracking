@@ -175,7 +175,7 @@ class _IssueDateSelected extends State<_IssueDateWidget> {
         label: 'Date'.tr(),
         padding: const EdgeInsets.only(left: 20, top: 22, right: 20, bottom: 22),
         horSpace: 15,
-        value: DateFormat('dd MMMM yyyy').format(newDateTime),
+        value: Utils.dateFormat(newDateTime),
         imagePath: "assets/images/ic_calendar.svg",
         onTap: (_) async {
           if (Platform.isIOS) {

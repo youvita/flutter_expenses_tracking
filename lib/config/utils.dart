@@ -18,23 +18,23 @@ class Utils {
   }
 
   static String dateFormatYear(DateTime date) {
-    return DateFormat('yyyy').format(date);
+    return DateFormat('yyyy', Setting.language).format(date);
   }
 
   static String dateFormatYearMonth(DateTime date) {
-    return DateFormat('yyyyMM').format(date);
+    return DateFormat('yyyyMM', Setting.language).format(date);
   }
 
   static String dateFormatDay(DateTime date) {
-    return DateFormat('yyyyMMdd').format(date);
+    return DateFormat('yyyyMMdd', Setting.language).format(date);
   }
 
   static String dateFormat(DateTime date) {
-    return DateFormat('dd MMMM yyyy').format(date);
+    return DateFormat('dd MMMM yyyy', Setting.language).format(date);
   }
 
   static String dateFormatMonthYear(DateTime date) {
-    return DateFormat('MMMM').format(date);
+    return DateFormat('MMMM', Setting.language).format(date);
   }
 
   static String formatCurrency(String? amount) {
